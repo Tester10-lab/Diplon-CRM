@@ -88,16 +88,17 @@ const DocsPage = lazy(() => import('./pages/DocsPage').then(m => ({ default: m.D
 
 export function App() {
   const { user, logout } = useAuthStore();
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return !!localStorage.getItem('diplon_auth_user');
-  });
+  const [authTick, setAuthTick] = useState(0);
   const [currentPath, setCurrentPath] = useState<string>('/');
 
-  if (!isAuthenticated || !user) {
+  // Derive authentication from the authStore user directly
+  const isAuthenticated = !!user;
+
+  if (!isAuthenticated) {
     return (
       <ErrorBoundary>
         <Suspense fallback={<PageSkeleton />}>
-          <LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />
+          <LoginPage onLoginSuccess={() => setAuthTick(t => t + 1)} />
         </Suspense>
       </ErrorBoundary>
     );
@@ -157,7 +158,7 @@ export function App() {
 
   return (
     <ErrorBoundary>
-      <AppLayout currentPath={currentPath} onNavigate={setCurrentPath} onLogout={() => { logout(); setIsAuthenticated(false); }}>
+      <AppLayout currentPath={currentPath} onNavigate={setCurrentPath} onLogout={() => { logout(); setAuthTick(t => t + 1); }}>
         <Suspense fallback={<PageSkeleton />}>
           {renderPage()}
         </Suspense>
