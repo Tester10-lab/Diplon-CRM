@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "npx.cmd vite",
-    "build": "npx.cmd vite build",
-    "preview": "npx.cmd vite preview"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/diplon-crm?replicaSet=rs0';
+const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/diplon-crm?replicaSet=rs0';
 
 async function startServer() {
   try {

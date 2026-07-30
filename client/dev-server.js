@@ -13,7 +13,7 @@ const stitchDir = path.join(rootDir, 'stitch_diplon_premium_travel_erp (2)', 'st
 const PORT = 3000;
 
 // Start Tailwind CLI compiler in watch mode
-const twProcess = spawn('npx.cmd', ['tailwindcss', '-i', './src/index.css', '-o', './public/output.css', '--watch'], {
+const twProcess = spawn('npx', ['tailwindcss', '-i', './src/index.css', '-o', './public/output.css', '--watch'], {
   cwd: __dirname,
   stdio: 'inherit',
   shell: true,
