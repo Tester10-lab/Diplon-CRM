@@ -26,18 +26,18 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const { data: packages, createPackage } = usePackages();
 
   // Form State
-  const [packageName, setPackageName] = useState(initialPackageName || 'Sailung–Kalinchowk Tour Package');
-  const [customerName, setCustomerName] = useState('Nirvik Sapkota');
-  const [contactPhone, setContactPhone] = useState('9841876047');
-  const [departureDate, setDepartureDate] = useState(initialDepartureDate || '2026-08-02');
-  const [pickupPoint, setPickupPoint] = useState('Ratna Rajya School');
-  const [seatsReserved, setSeatsReserved] = useState<number>(7);
-  const [ratePerPerson, setRatePerPerson] = useState<number>(5500);
-  const [totalAmount, setTotalAmount] = useState<number>(38500);
-  const [advanceAmount, setAdvanceAmount] = useState<number>(5000);
-  const [paymentCollectionNote, setPaymentCollectionNote] = useState('33,500/- Rs Collect on scorpio(remaining)');
+  const [packageName, setPackageName] = useState(initialPackageName || '');
+  const [customerName, setCustomerName] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [departureDate, setDepartureDate] = useState(initialDepartureDate || '2026-08-01');
+  const [pickupPoint, setPickupPoint] = useState('');
+  const [seatsReserved, setSeatsReserved] = useState<number>(1);
+  const [ratePerPerson, setRatePerPerson] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [advanceAmount, setAdvanceAmount] = useState<number>(0);
+  const [paymentCollectionNote, setPaymentCollectionNote] = useState('');
   const [groupType, setGroupType] = useState<'private' | 'sharing'>('private');
-  const [roomDetails, setRoomDetails] = useState('2 room for 7 people');
+  const [roomDetails, setRoomDetails] = useState('');
   const [status, setStatus] = useState<'CONFIRMED' | 'PENDING' | 'WAITLISTED'>('CONFIRMED');
 
   // UI Helper States
@@ -48,8 +48,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [autoFillMessage, setAutoFillMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (initialPackageName) setPackageName(initialPackageName);
-    if (initialDepartureDate) setDepartureDate(initialDepartureDate);
+    if (isOpen) {
+      if (initialPackageName) setPackageName(initialPackageName);
+      if (initialDepartureDate) setDepartureDate(initialDepartureDate);
+    }
   }, [initialPackageName, initialDepartureDate, isOpen]);
 
   // Auto calculate total and remaining when seats or rate change

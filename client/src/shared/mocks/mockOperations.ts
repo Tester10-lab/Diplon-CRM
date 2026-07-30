@@ -14,7 +14,12 @@ export const mockVehicles: Vehicle[] = [
   { _id: 'veh_104', name: '4WD Prado Jeep D4', registrationNumber: 'BA-4-PA-4422', seatingCapacity: 5, status: 'Active', availability: true, bluebookExpiry: '2028-01-20', insuranceExpiry: '2027-12-10', taxExpiry: '2027-12-01' },
 ];
 
-export const mockDrivers: Driver[] = [];
+export const mockDrivers: Driver[] = [
+  { _id: 'drv_chandra_01', name: 'Sofa Bus Driver (Chandra Maharjan)', phone: '9802100125', licenseNumber: 'LIC-NP-88210', vehicleType: '28-Seater Sofa Bus', tripsCompleted: 14, remainingBalance: 85000, performanceRating: 4.9, leaveBalance: 10, status: 'Active', availability: true },
+  { _id: 'drv_tarak_02', name: 'Scorpio Driver (Tarak Panja)', phone: '9841142416', licenseNumber: 'LIC-NP-44912', vehicleType: '4WD Scorpio Jeep', tripsCompleted: 19, remainingBalance: 34000, performanceRating: 4.8, leaveBalance: 8, status: 'Active', availability: true },
+  { _id: 'drv_bishnu_03', name: 'Scorpio Driver (Bishnu Kafle)', phone: '9855045297', licenseNumber: 'LIC-NP-11029', vehicleType: '4WD Scorpio Jeep', tripsCompleted: 23, remainingBalance: 121000, performanceRating: 5.0, leaveBalance: 14, status: 'Active', availability: true },
+  { _id: 'drv_abhijit_04', name: 'Scorpio Driver (Abhijit Ghosh)', phone: '9841002211', licenseNumber: 'LIC-NP-99301', vehicleType: '4WD Scorpio Jeep', tripsCompleted: 11, remainingBalance: 24000, performanceRating: 4.7, leaveBalance: 12, status: 'Active', availability: true }
+];
 
 export const mockGuides: Guide[] = [
   { _id: 'gde_301', name: 'Pasang Sherpa', rating: 4.9, languages: ['English', 'Nepali', 'Japanese'], certifications: ['High Altitude Rescue', 'Wilderness First Aid'], status: 'Active', availability: true },

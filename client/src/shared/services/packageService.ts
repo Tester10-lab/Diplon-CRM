@@ -2,13 +2,16 @@ import { TourPackage } from '../../types';
 import { apiClient } from './apiClient';
 import { mockPackages } from '../mocks/mockPackages';
 
-const PACKAGES_STORAGE_KEY = 'diplon_packages_catalog_v2';
+const PACKAGES_STORAGE_KEY = 'diplon_packages_catalog_v3';
 
 function getStoredPackages(): TourPackage[] {
   try {
+    localStorage.removeItem('diplon_packages_catalog');
+    localStorage.removeItem('diplon_packages_catalog_v2');
     const saved = localStorage.getItem(PACKAGES_STORAGE_KEY);
     if (saved) {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 0) return parsed;
     }
   } catch (e) {
     console.error('Failed to parse stored packages:', e);

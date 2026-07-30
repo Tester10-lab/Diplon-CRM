@@ -21,21 +21,24 @@ export interface FinanceRecord {
   notes?: string;
 }
 
-const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v4';
+const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v5';
 
 const INITIAL_FINANCE_RECORDS: FinanceRecord[] = [
   { id: 'FIN-101', type: 'COLLECTION', title: 'Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31' },
-  { id: 'FIN-102', type: 'COLLECTION', title: 'Muktinath Tour Advance - Abhijit Ghosh (Lalitpur Holidays)', category: 'Customer Booking', amount: 9600, date: '2026-07-31' }
+  { id: 'FIN-102', type: 'COLLECTION', title: 'Jiri Tour Advance Booking - Tarak Panja', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '34,000 Rs collect on Scorpio' },
+  { id: 'FIN-103', type: 'COLLECTION', title: 'Upper Mustang Advance Booking - Bishnu Prasad Kafle', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '1,21,000 Rs collect on Scorpio' },
+  { id: 'FIN-104', type: 'COLLECTION', title: 'Muktinath Tour Advance - Abhijit Ghosh (Lalitpur Holidays)', category: 'Customer Booking', amount: 9600, date: '2026-07-31', notes: '34,400 Rs collect on Scorpio' }
 ];
 
 function getStoredFinanceRecords(): FinanceRecord[] {
   try {
     localStorage.removeItem('diplon_finance_ledger');
     localStorage.removeItem('diplon_finance_ledger_v3');
+    localStorage.removeItem('diplon_finance_ledger_v4');
     const saved = localStorage.getItem(FINANCE_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      const cleaned = parsed.filter((f: any) => f.title?.includes('Halesi') || f.title?.includes('Muktinath'));
+      const cleaned = parsed.filter((f: any) => f.title?.includes('Halesi') || f.title?.includes('Jiri') || f.title?.includes('Mustang') || f.title?.includes('Muktinath'));
       if (cleaned.length > 0) {
         localStorage.setItem(FINANCE_STORAGE_KEY, JSON.stringify(cleaned));
         return cleaned;

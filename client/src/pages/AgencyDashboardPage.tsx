@@ -39,8 +39,8 @@ export const AgencyDashboardPage: React.FC<{ onNavigate?: (path: string) => void
 
   // Agency Specific Financial Calculations
   const agencyBookings = bookings.filter(b => b.companyId === user.companyId || true); // All or isolated
-  const totalCollections = 185000;
-  const totalExpenses = 45000;
+  const totalCollections = agencyBookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0);
+  const totalExpenses = Math.round(totalCollections * 0.15);
   const netProfit = totalCollections - totalExpenses;
 
   return (

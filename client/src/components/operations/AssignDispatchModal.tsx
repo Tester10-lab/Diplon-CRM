@@ -295,6 +295,8 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
                 isDispatched ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
               }`}
             >
+              <option value="28-Seater Sofa Bus">28-Seater Sofa Bus</option>
+              <option value="4WD Scorpio Jeep">4WD Scorpio Jeep</option>
               <option value="Bus">Bus (Tourist Deluxe)</option>
               <option value="EV">EV (Electric Vehicle)</option>
               <option value="Van">Van (Passenger / HiAce)</option>
