@@ -22,43 +22,53 @@ export interface SystemUser {
 const INITIAL_USERS: SystemUser[] = [
   {
     id: 'usr_super_001',
-    name: 'Rajesh Sharma',
+    name: 'Diplon',
     email: 'superadmin@diplon.com',
     role: 'SUPER_ADMIN',
     companyId: 'cmp_diplon_global',
     companyName: 'Diplon Travel ERP Headquarters',
     status: 'ACTIVE',
-    lastLogin: '2026-07-28 12:45'
+    lastLogin: '2026-07-30 15:45'
   },
   {
     id: 'usr_admin_002',
-    name: 'Sunita Thapa',
+    name: 'Sudip Thapa',
     email: 'admin@diplon.com',
     role: 'ADMIN',
     companyId: 'cmp_ktm_01',
     companyName: 'Kathmandu Travels & Tours Ltd',
     status: 'ACTIVE',
-    lastLogin: '2026-07-28 11:20'
+    lastLogin: '2026-07-30 14:20'
   },
   {
     id: 'usr_agency_003',
-    name: 'Nirvik Sapkota',
-    email: 'agency@himalayan.com',
+    name: 'Hike on Trek',
+    email: 'agency@hikeontrek.com',
     role: 'AGENCY',
-    companyId: 'cmp_himalayan_02',
-    companyName: 'Himalayan Treks & B2B Agency',
+    companyId: 'cmp_hikeontrek_01',
+    companyName: 'Hike on Trek',
     status: 'ACTIVE',
-    lastLogin: '2026-07-28 09:10'
+    lastLogin: '2026-07-30 12:10'
   },
   {
     id: 'usr_agency_004',
-    name: 'Ishan Shrestha',
-    email: 'ishan@everestglobal.com',
+    name: 'Batuwa Trip',
+    email: 'agency@batuwatrip.com',
     role: 'AGENCY',
-    companyId: 'cmp_everest_03',
-    companyName: 'Everest Global B2B',
+    companyId: 'cmp_batuwatrip_02',
+    companyName: 'Batuwa Trip',
     status: 'ACTIVE',
-    lastLogin: '2026-07-27 15:30'
+    lastLogin: '2026-07-30 11:30'
+  },
+  {
+    id: 'usr_driver_005',
+    name: 'Srijan',
+    email: 'driver@diplon.com',
+    role: 'DRIVER',
+    companyId: 'cmp_diplon_global',
+    companyName: 'Diplon Scorpio Fleet Services',
+    status: 'ACTIVE',
+    lastLogin: '2026-07-30 10:15'
   }
 ];
 
@@ -72,7 +82,7 @@ export const UsersPage: React.FC = () => {
   const [formName, setFormName] = useState('');
   const [formEmail, setFormEmail] = useState('');
   const [formRole, setFormRole] = useState<UserRole>('AGENCY');
-  const [formCompanyName, setFormCompanyName] = useState('Himalayan Treks & B2B Agency');
+  const [formCompanyName, setFormCompanyName] = useState('Hike on Trek');
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -219,7 +229,7 @@ export const UsersPage: React.FC = () => {
             User Management & Multi-Tenant Role Permissions
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Manage system users across Super Admin, Company Admin, and Agency B2B accounts
+            Manage system users across Super Admin, Company Admin, Agency B2B partners, and Driver accounts
           </p>
         </div>
 
@@ -257,7 +267,7 @@ export const UsersPage: React.FC = () => {
             label="Full User Name"
             value={formName}
             onChange={e => setFormName(e.target.value)}
-            placeholder="e.g. Nirvik Sapkota"
+            placeholder="e.g. Hike on Trek"
             required
           />
 
@@ -267,7 +277,7 @@ export const UsersPage: React.FC = () => {
             icon={<Mail className="w-4 h-4" />}
             value={formEmail}
             onChange={e => setFormEmail(e.target.value)}
-            placeholder="e.g. nirvik@agency.com"
+            placeholder="e.g. agency@hikeontrek.com"
             required
           />
 
@@ -284,6 +294,7 @@ export const UsersPage: React.FC = () => {
                 <option value="SUPER_ADMIN">SUPER_ADMIN (Full System Access)</option>
                 <option value="ADMIN">ADMIN (Company Admin Access)</option>
                 <option value="AGENCY">AGENCY (Agency B2B Portal)</option>
+                <option value="DRIVER">DRIVER (Scorpio Driver Portal)</option>
               </select>
             </div>
 
@@ -291,7 +302,7 @@ export const UsersPage: React.FC = () => {
               label="Company Name Tenant"
               value={formCompanyName}
               onChange={e => setFormCompanyName(e.target.value)}
-              placeholder="e.g. Himalayan Treks & B2B Agency"
+              placeholder="e.g. Hike on Trek"
               required
             />
           </div>

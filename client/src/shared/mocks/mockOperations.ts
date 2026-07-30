@@ -15,9 +15,9 @@ export const mockVehicles: Vehicle[] = [
 ];
 
 export const mockDrivers: Driver[] = [
-  { _id: 'drv_201', name: 'Babu Driver (Scorpio #1)', licenseNumber: 'LIC-998877', phone: '9851090895', vehicleType: 'Scorpio 4WD Jeep (Ba 2 Kha 1234)', tripsCompleted: 24, remainingBalance: 20500, performanceRating: 4.8, leaveBalance: 12, status: 'Active', availability: true, licenseExpiry: '2028-12-31' },
+  { _id: 'drv_201', name: 'Srijan (Scorpio Driver #1)', licenseNumber: 'LIC-998877', phone: '9851090895', vehicleType: 'Scorpio 4WD Jeep (Ba 2 Kha 1234)', tripsCompleted: 24, remainingBalance: 20500, performanceRating: 4.8, leaveBalance: 12, status: 'Active', availability: true, licenseExpiry: '2028-12-31' },
   { _id: 'drv_202', name: 'Kaji Driver (Scorpio #2)', licenseNumber: 'LIC-554433', phone: '9841234567', vehicleType: 'Toyota Coaster Tourist Bus (Ba 1 Jha 9876)', tripsCompleted: 18, remainingBalance: 0, performanceRating: 4.6, leaveBalance: 8, status: 'Active', availability: false, licenseExpiry: '2027-06-30' },
-  { _id: 'drv_203', name: 'Suman Dai (Scorpio #4)', licenseNumber: 'LIC-112233', phone: '9860099335', vehicleType: 'Scorpio 4WD Jeep (Ba 21 Ch 4501)', tripsCompleted: 32, remainingBalance: 14500, performanceRating: 4.9, leaveBalance: 15, status: 'Active', availability: true, licenseExpiry: '2029-01-15' },
+  { _id: 'drv_203', name: 'Srijan Dai (Scorpio #4)', licenseNumber: 'LIC-112233', phone: '9860099335', vehicleType: 'Scorpio 4WD Jeep (Ba 21 Ch 4501)', tripsCompleted: 32, remainingBalance: 14500, performanceRating: 4.9, leaveBalance: 15, status: 'Active', availability: true, licenseExpiry: '2029-01-15' },
   { _id: 'drv_204', name: 'Bir Bahadur Driver (Coaster #3)', licenseNumber: 'LIC-776655', phone: '9801122334', vehicleType: 'HiAce 14-Seater Tourist Van (Ba 3 Kha 5544)', tripsCompleted: 15, remainingBalance: 5000, performanceRating: 4.7, leaveBalance: 10, status: 'Active', availability: true, licenseExpiry: '2028-05-10' },
 ];
 
