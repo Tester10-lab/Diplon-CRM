@@ -9,7 +9,7 @@ import { Input } from '../components/ui/Input';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from '../features/fleet/scorpioStore';
-import { Car, Plus, Download, Copy, Check, Search, CheckCircle2, ShieldCheck, UserCheck, Phone, Bed, Users, Sparkles, Layers, LayoutGrid, Table, Send, UserPlus, AlertCircle, Lock, ShieldAlert, X, Calendar, Filter } from 'lucide-react';
+import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles } from 'lucide-react';
 
 export const FleetPage: React.FC = () => {
   const { data: vehicles, isLoading, error } = useFleet();
@@ -20,7 +20,7 @@ export const FleetPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'SCORPIO_ROSTER' | 'FLEET_CATALOG'>('SCORPIO_ROSTER');
   const [viewStyle, setViewStyle] = useState<'CARDS' | 'TABLE'>('CARDS');
 
-  // Scorpio Assignments State
+  // Vehicle Assignments State
   const [scorpioData, setScorpioData] = useState<ScorpioAssignment[]>(getScorpioAssignments());
   const [selectedTourFilter, setSelectedTourFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -28,11 +28,23 @@ export const FleetPage: React.FC = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Form State for + Assign Scorpio
-  const [formTour, setFormTour] = useState('Sailung–Kalinchowk Tour Package');
-  const [formDate, setFormDate] = useState('2026-08-02');
-  const [formSN, setFormSN] = useState<number>(14);
+  // Vehicle Presets
+  const vehiclePresets = [
+    { type: 'Scorpio 4WD Jeep', capacity: 7 },
+    { type: '28-Seater Sofa Bus', capacity: 28 },
+    { type: 'Toyota Coaster Bus', capacity: 22 },
+    { type: 'Toyota HiAce Super GL', capacity: 14 },
+    { type: 'Prado 4WD Jeep', capacity: 5 },
+    { type: 'Sedan / Car', capacity: 4 }
+  ];
+
+  // Form State for + Assign Vehicle
+  const [formTour, setFormTour] = useState('Halesi Tour Package (1N/2D)');
+  const [formDate, setFormDate] = useState('2026-08-01');
+  const [formSN, setFormSN] = useState<number>(1);
   const [formDriver, setFormDriver] = useState('');
+  const [formVehicleType, setFormVehicleType] = useState('Scorpio 4WD Jeep');
+  const [formVehicleCapacity, setFormVehicleCapacity] = useState<number>(7);
   const [formPax, setFormPax] = useState<number>(7);
   const [formRooms, setFormRooms] = useState('2');
   const [formCustomerName, setFormCustomerName] = useState('');
@@ -44,11 +56,10 @@ export const FleetPage: React.FC = () => {
   const [isGuestDropdownOpen, setIsGuestDropdownOpen] = useState(false);
   const [filterOnlySelectedTourGuests, setFilterOnlySelectedTourGuests] = useState<boolean>(true);
 
-  // ALL HOOKS MUST BE DECLARED TOP-LEVEL BEFORE CONDITIONAL RETURNS
+  // Filter Booked Guests for Selection
   const filteredBookedGuests = useMemo(() => {
     if (!bookings || !Array.isArray(bookings)) return [];
     
-    // 1. Filter by selected tour package if toggle is ON
     let list = bookings;
     if (filterOnlySelectedTourGuests && formTour) {
       const tourLower = formTour.toLowerCase();
@@ -56,18 +67,17 @@ export const FleetPage: React.FC = () => {
         b.packageName && (
           b.packageName.toLowerCase().includes(tourLower) ||
           tourLower.includes(b.packageName.toLowerCase()) ||
-          (tourLower.includes('sailung') && b.packageName.toLowerCase().includes('sailung')) ||
+          (tourLower.includes('halesi') && b.packageName.toLowerCase().includes('halesi')) ||
+          (tourLower.includes('jiri') && b.packageName.toLowerCase().includes('jiri')) ||
           (tourLower.includes('mustang') && b.packageName.toLowerCase().includes('mustang'))
         )
       );
 
-      // If matches exist for this tour, show them; otherwise fallback to full list
       if (tourSpecific.length > 0) {
         list = tourSpecific;
       }
     }
 
-    // 2. Filter by search query text
     if (!guestSearchQuery.trim()) return list;
     const q = guestSearchQuery.toLowerCase();
     return list.filter(b => 
@@ -89,16 +99,18 @@ export const FleetPage: React.FC = () => {
   // Dynamic Lists for Dropdowns
   const tourOptions = Array.from(
     new Set([
-      'Sailung–Kalinchowk Tour Package',
-      'Upper Mustang',
-      'Langtang Valley Trek',
-      'Pokhara Sunrise & Peace Pagoda Tour',
-      'Muktinath Darshan',
+      'Halesi Tour Package (1N/2D)',
+      'Jiri Tour (1N/2D)',
+      'Upper Mustang Package (4N/5D)',
+      'Muktinath Tour (2N/3D)',
+      'Pokhara & Ghandruk Tour',
       ...(departures || []).map(d => d.packageName)
     ])
   );
 
   const defaultDrivers = [
+    'Chandra Driver',
+    'Sofa Bus Driver',
     'Pradip Bhai',
     'Surendra Bhai',
     'Aakash Bhujel',
@@ -106,16 +118,13 @@ export const FleetPage: React.FC = () => {
     'Shankar Bhai',
     'Manish Bhai',
     'Ramesh Dai (Dekohali)',
-    'Rojit Dai',
-    'muktinath tour',
-    'Rajan Saju /',
     'Sabin Dai'
   ];
   const driverOptions = Array.from(new Set([...defaultDrivers, ...(driverList || []).map(d => d.name)]));
 
-  // Filtered Scorpio List
+  // Filtered Vehicle List
   const tourList = Array.from(new Set(scorpioData.map(s => s.tour)));
-  const filteredScorpio = scorpioData.filter(s => {
+  const filteredVehicles = scorpioData.filter(s => {
     const matchesTour = selectedTourFilter === 'ALL' || s.tour.toLowerCase() === selectedTourFilter.toLowerCase();
     const query = searchQuery.toLowerCase();
     const matchesSearch =
@@ -123,27 +132,37 @@ export const FleetPage: React.FC = () => {
       s.driver.toLowerCase().includes(query) ||
       s.name.toLowerCase().includes(query) ||
       s.number.toLowerCase().includes(query) ||
-      s.tour.toLowerCase().includes(query);
+      s.tour.toLowerCase().includes(query) ||
+      (s.vehicleType && s.vehicleType.toLowerCase().includes(query));
     return matchesTour && matchesSearch;
   });
 
-  // Group Scorpio rows by SN (Vehicle #)
+  // Group Vehicle rows by SN (Vehicle Unit #)
   const jeepsMap = new Map<number, ScorpioAssignment[]>();
-  filteredScorpio.forEach(item => {
+  filteredVehicles.forEach(item => {
     if (!jeepsMap.has(item.sn)) jeepsMap.set(item.sn, []);
     jeepsMap.get(item.sn)!.push(item);
   });
 
   const jeepsList = Array.from(jeepsMap.entries()).sort((a, b) => a[0] - b[0]);
 
-  const totalScorpioJeeps = jeepsMap.size;
-  const totalPaxCount = filteredScorpio.reduce((sum, s) => sum + (s.pax || 0), 0);
+  const totalAssignedVehicles = jeepsMap.size;
+  const totalPaxCount = filteredVehicles.reduce((sum, s) => sum + (s.pax || 0), 0);
 
-  // Check if current formSN is already a Private Tour Jeep with an existing group
+  // Check if current formSN is already a Private Tour Vehicle with an existing group
   const existingJeepGroups = scorpioData.filter(s => s.sn === formSN);
   const isJeepPrivateBlocked = existingJeepGroups.some(g => g.isPrivate) && existingJeepGroups.length >= 1;
 
-  // Handle Driver Change & Auto-Calculate Scorpio S.N. Number
+  // Handle Preset Vehicle Type Selection
+  const handleSelectVehicleType = (type: string) => {
+    setFormVehicleType(type);
+    const preset = vehiclePresets.find(v => v.type === type);
+    if (preset) {
+      setFormVehicleCapacity(preset.capacity);
+    }
+  };
+
+  // Handle Driver Selection / Typing & Auto-Link S.N.
   const handleSelectDriver = (driverName: string) => {
     setFormDriver(driverName);
     
@@ -155,7 +174,9 @@ export const FleetPage: React.FC = () => {
       setFormSN(existingDriverAssignment.sn);
       if (existingDriverAssignment.tour) setFormTour(existingDriverAssignment.tour);
       if (existingDriverAssignment.date) setFormDate(existingDriverAssignment.date);
-      showToast(`⚡ Driver ${driverName} automatically linked to Scorpio Jeep #${existingDriverAssignment.sn}!`);
+      if (existingDriverAssignment.vehicleType) setFormVehicleType(existingDriverAssignment.vehicleType);
+      if (existingDriverAssignment.vehicleCapacity) setFormVehicleCapacity(existingDriverAssignment.vehicleCapacity);
+      showToast(`⚡ Driver "${driverName}" linked to Vehicle Unit #${existingDriverAssignment.sn}!`);
     } else {
       const maxSN = scorpioData.length > 0 ? Math.max(...scorpioData.map(s => s.sn)) : 0;
       setFormSN(maxSN + 1);
@@ -176,13 +197,13 @@ export const FleetPage: React.FC = () => {
     showToast(`✨ Selected guest ${booking.customerName}`);
   };
 
-  const handleCreateScorpio = (e: React.FormEvent) => {
+  const handleCreateVehicleAssignment = (e: React.FormEvent) => {
     e.preventDefault();
     if (isJeepPrivateBlocked) return;
     if (!formDriver.trim() && !formCustomerName.trim()) return;
 
     const newAssignment: ScorpioAssignment = {
-      id: `scp_${Date.now()}`,
+      id: `veh_${Date.now()}`,
       tour: formTour,
       date: formDate,
       sn: formSN,
@@ -191,14 +212,16 @@ export const FleetPage: React.FC = () => {
       rooms: formRooms,
       name: formCustomerName || 'Guest Group',
       number: formContactNumber || '-',
-      isPrivate: formIsPrivate
+      isPrivate: formIsPrivate,
+      vehicleType: formVehicleType,
+      vehicleCapacity: formVehicleCapacity
     };
 
     const updated = [...scorpioData, newAssignment];
     setScorpioData(updated);
     saveScorpioAssignments(updated);
     setIsAddModalOpen(false);
-    showToast(`✅ Scorpio Jeep #${formSN} (${formDriver}) assigned for ${formTour}!`);
+    showToast(`✅ Vehicle Unit #${formSN} (${formVehicleType} - Driver ${formDriver || 'Assigned'}) saved!`);
   };
 
   const handleDriverChange = (id: string, newDriver: string) => {
@@ -212,15 +235,17 @@ export const FleetPage: React.FC = () => {
     const updated = scorpioData.map(item => item.sn === sn ? { ...item, isPrivate: !item.isPrivate } : item);
     setScorpioData(updated);
     saveScorpioAssignments(updated);
-    showToast(`🔒 Scorpio Jeep #${sn} Private Tour status updated!`);
+    showToast(`🔒 Vehicle #${sn} Private Tour status updated!`);
   };
 
   const handleExportCSV = () => {
-    const headers = ['Tour', 'Date', 'S.N.', 'Driver', 'Pax', 'Rooms', 'Customer Name', 'Contact Number', 'Is Private'];
-    const rows = filteredScorpio.map(s => [
+    const headers = ['Tour', 'Date', 'S.N.', 'Vehicle Type', 'Capacity', 'Driver', 'Pax', 'Rooms', 'Customer Name', 'Contact Number', 'Is Private'];
+    const rows = filteredVehicles.map(s => [
       `"${s.tour}"`,
-      `"${s.date || '2026-08-02'}"`,
+      `"${s.date || '2026-08-01'}"`,
       s.sn,
+      `"${s.vehicleType || 'Scorpio 4WD'}"`,
+      s.vehicleCapacity || 7,
       `"${s.driver}"`,
       s.pax,
       `"${s.rooms}"`,
@@ -233,33 +258,34 @@ export const FleetPage: React.FC = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `Scorpio_Jeep_Assignment_Roster_2025.csv`);
+    link.setAttribute('download', `Vehicle_Fleet_Assignment_Roster_2026.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    showToast(`📥 Exported Scorpio Assignment Roster to CSV!`);
+    showToast(`📥 Exported Vehicle Assignment Roster to CSV!`);
   };
 
   const handleCopyWhatsAppRoster = () => {
-    const text = `🚌 SCORPIO JEEP DISPATCH ROSTER (${selectedTourFilter})
+    const text = `🚌 VEHICLE DISPATCH ROSTER (${selectedTourFilter})
 ------------------------------------------------
-` + filteredScorpio.map(s => 
-      `Jeep #${s.sn}${s.isPrivate ? ' [PRIVATE]' : ''} | Date: ${s.date || '2026-08-02'} | Driver: ${s.driver} | Pax: ${s.pax} | Rooms: ${s.rooms} | Guest: ${s.name} (${s.number})`
+` + filteredVehicles.map(s => 
+      `Vehicle #${s.sn} (${s.vehicleType || 'Vehicle'}) ${s.isPrivate ? '[PRIVATE]' : ''} | Date: ${s.date || '2026-08-01'} | Driver: ${s.driver} | Pax: ${s.pax} | Rooms: ${s.rooms} | Guest: ${s.name} (${s.number})`
     ).join('\n');
 
     navigator.clipboard.writeText(text);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2500);
-    showToast('📋 WhatsApp Scorpio Roster copied to clipboard!');
+    showToast('📋 WhatsApp Vehicle Roster copied to clipboard!');
   };
 
   const handleSendDriverDispatchSMS = (sn: number, items: ScorpioAssignment[]) => {
     const mainDriver = items[0]?.driver || 'Driver';
     const tourName = items[0]?.tour || 'Tour';
-    const travelDate = items[0]?.date || '2026-08-02';
+    const travelDate = items[0]?.date || '2026-08-01';
+    const vehType = items[0]?.vehicleType || 'Vehicle';
     const isPrivate = items.some(it => it.isPrivate);
-    const text = `🚕 DISPATCH ORDER FOR SCORPIO #${sn} (${mainDriver}) ${isPrivate ? '[PRIVATE TOUR]' : ''}
+    const text = `🚕 DISPATCH ORDER FOR VEHICLE #${sn} [${vehType}] (${mainDriver}) ${isPrivate ? '[PRIVATE TOUR]' : ''}
 Tour: ${tourName}
 Travel Date: ${travelDate}
 ------------------------------------
@@ -268,7 +294,7 @@ Travel Date: ${travelDate}
 Please report to Kathmandu Departure Spot by 06:00 AM!`;
 
     navigator.clipboard.writeText(text);
-    showToast(`📱 Driver Dispatch Order for Jeep #${sn} (${mainDriver}) copied for WhatsApp!`);
+    showToast(`📱 Driver Dispatch Order for Vehicle #${sn} (${mainDriver}) copied for WhatsApp!`);
   };
 
   // Fleet Catalog Columns
@@ -330,11 +356,11 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl bg-gradient-to-r from-slate-900 via-amber-950/40 to-slate-900 border border-slate-800 shadow-2xl backdrop-blur-md">
         <div>
           <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <Car className="w-6 h-6 text-amber-400" />
-            Scorpio Fleet & Driver Assignment Command Center
+            <Bus className="w-6 h-6 text-amber-400" />
+            Vehicle Fleet & Driver Assignment Command Center
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Tour package guest filter, departure date scheduling & driver jeep S.N. auto-link
+            Tour package guest filter, departure date scheduling, vehicle type/capacity & driver auto-link
           </p>
         </div>
 
@@ -348,8 +374,8 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Car className="w-3.5 h-3.5" />
-            🚙 Scorpio Assignment Command
+            <Bus className="w-3.5 h-3.5" />
+            🚍 Vehicle Assignment Command
           </button>
           <button
             onClick={() => setActiveTab('FLEET_CATALOG')}
@@ -430,7 +456,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search driver, guest..."
+                  placeholder="Search vehicle, driver..."
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
                 />
               </div>
@@ -460,7 +486,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 icon={<Plus className="w-4 h-4" />}
                 onClick={() => setIsAddModalOpen(true)}
               >
-                + Assign Scorpio
+                + Assign Vehicle
               </Button>
             </div>
           </div>
@@ -469,10 +495,10 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
               <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Scorpio Jeeps Assigned</span>
-                <div className="text-xl font-black text-amber-400 mt-1 font-mono">{totalScorpioJeeps} Scorpios</div>
+                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Vehicles Assigned</span>
+                <div className="text-xl font-black text-amber-400 mt-1 font-mono">{totalAssignedVehicles} Vehicles</div>
               </div>
-              <Car className="w-5 h-5 text-amber-400" />
+              <Bus className="w-5 h-5 text-amber-400" />
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
@@ -487,23 +513,24 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
               <div>
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Room Allocations</span>
                 <div className="text-xl font-black text-emerald-400 mt-1 font-mono">
-                  {filteredScorpio.length} Groups Assigned
+                  {filteredVehicles.length} Groups Assigned
                 </div>
               </div>
               <Bed className="w-5 h-5 text-emerald-400" />
             </div>
           </div>
 
-          {/* VIEW STYLE 1: Visual Scorpio Vehicle Cards Deck */}
+          {/* VIEW STYLE 1: Visual Vehicle Cards Deck */}
           {viewStyle === 'CARDS' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {jeepsList.map(([sn, items]) => {
                 const totalJeepPax = items.reduce((sum, it) => sum + (it.pax || 0), 0);
-                const capacity = 7;
+                const capacity = items[0]?.vehicleCapacity || 7;
+                const vehType = items[0]?.vehicleType || 'Scorpio 4WD Jeep';
                 const occupancyPercent = Math.min(100, Math.round((totalJeepPax / capacity) * 100));
                 const mainDriver = items[0]?.driver || 'Unassigned';
-                const tourName = items[0]?.tour || 'Upper Mustang';
-                const travelDate = items[0]?.date || '2026-08-02';
+                const tourName = items[0]?.tour || 'Halesi Tour Package';
+                const travelDate = items[0]?.date || '2026-08-01';
                 const isPrivateJeep = items.some(it => it.isPrivate);
 
                 return (
@@ -513,7 +540,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                       isPrivateJeep ? 'border-amber-500/70 shadow-amber-500/10' : 'border-slate-800 hover:border-indigo-500/40'
                     } transition-all duration-200 shadow-xl space-y-4 relative overflow-hidden group`}
                   >
-                    {/* Top Jeep Header */}
+                    {/* Top Vehicle Header */}
                     <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
                       <div className="flex items-center gap-2.5">
                         <div className="w-9 h-9 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 font-mono text-sm">
@@ -521,7 +548,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         </div>
                         <div>
                           <div className="font-extrabold text-white text-sm flex items-center gap-2">
-                            <span>Scorpio Jeep #{sn}</span>
+                            <span>{vehType} #{sn}</span>
                             {isPrivateJeep && (
                               <span className="bg-amber-500/20 text-amber-300 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-500/40 flex items-center gap-1">
                                 <Lock className="w-3 h-3" /> PRIVATE
@@ -589,7 +616,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     {/* Passenger Occupancy Gauge Bar */}
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-400 font-medium">Occupancy ({totalJeepPax} Pax)</span>
+                        <span className="text-slate-400 font-medium">{vehType} Capacity</span>
                         <span className={`font-mono font-bold ${totalJeepPax > capacity ? 'text-rose-400' : totalJeepPax === capacity ? 'text-amber-400' : 'text-emerald-400'}`}>
                           {totalJeepPax} / {capacity} Seats ({occupancyPercent}%)
                         </span>
@@ -602,87 +629,91 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           style={{ width: `${occupancyPercent}%` }}
                         />
                       </div>
-                      {isPrivateJeep && (
-                        <div className="text-[10px] text-amber-300 font-semibold flex items-center gap-1 pt-0.5">
-                          <Lock className="w-3 h-3 text-amber-400" /> Private Group Reserved — No additional groups allowed
-                        </div>
-                      )}
                     </div>
 
-                    {/* Assigned Guests & Rooms List */}
-                    <div className="space-y-2 pt-1">
-                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Assigned Guests & Rooms</span>
-                      <div className="space-y-2">
-                        {items.map(it => (
-                          <div key={it.id} className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 flex items-center justify-between text-xs">
-                            <div>
-                              <div className="font-bold text-white flex items-center gap-1.5">
-                                <span>{it.name}</span>
-                                {it.pax > 0 && <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded font-mono">{it.pax} Pax</span>}
-                              </div>
-                              <div className="text-[11px] text-slate-400 font-mono mt-0.5 flex items-center gap-1">
-                                <Phone className="w-3 h-3 text-slate-500" />
-                                {it.number}
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono">
-                                🛏 {it.rooms} Rooms
-                              </span>
-                            </div>
+                    {/* Guest Breakdown List inside this Vehicle Unit */}
+                    <div className="space-y-2 pt-1 border-t border-slate-800/60">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                        Guest Bookings Assigned ({items.length} Group)
+                      </span>
+                      {items.map(guest => (
+                        <div key={guest.id} className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-1.5 hover:border-slate-700 transition-all">
+                          <div className="flex items-center justify-between">
+                            <span className="font-extrabold text-white text-xs flex items-center gap-1.5">
+                              {guest.name}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
+                              {guest.pax} Pax
+                            </span>
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
+                          <div className="flex items-center justify-between text-[11px] text-slate-400">
+                            <span className="flex items-center gap-1">
+                              <Phone className="w-3 h-3 text-slate-500" /> {guest.number}
+                            </span>
+                            <span className="flex items-center gap-1 text-slate-300 font-medium">
+                              <Bed className="w-3 h-3 text-emerald-400" /> {guest.rooms}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 );
               })}
             </div>
           ) : (
-            /* VIEW STYLE 2: Detailed Excel Roster Table */
-            <div className="rounded-2xl bg-slate-900/90 border border-slate-800 overflow-hidden shadow-2xl">
+            /* VIEW STYLE 2: Excel Roster Table View */
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-slate-950 border-b border-slate-800 text-slate-300 font-extrabold uppercase tracking-wider">
-                      <th className="p-3 border-r border-slate-800/80 text-center w-36">tour</th>
-                      <th className="p-3 border-r border-slate-800/80 text-center w-28">date</th>
-                      <th className="p-3 border-r border-slate-800/80 text-center w-16">S.N.</th>
-                      <th className="p-3 border-r border-slate-800/80">driver</th>
-                      <th className="p-3 border-r border-slate-800/80 text-center w-20">Pax</th>
-                      <th className="p-3 border-r border-slate-800/80 text-center w-24">Rooms</th>
-                      <th className="p-3 border-r border-slate-800/80">name</th>
-                      <th className="p-3">number</th>
+                    <tr className="border-b border-slate-800 bg-slate-950/80 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
+                      <th className="p-3.5 pl-5">Unit S.N.</th>
+                      <th className="p-3.5">Vehicle Type</th>
+                      <th className="p-3.5">Tour Package</th>
+                      <th className="p-3.5">Travel Date</th>
+                      <th className="p-3.5">Assigned Driver</th>
+                      <th className="p-3.5">Pax</th>
+                      <th className="p-3.5">Capacity</th>
+                      <th className="p-3.5">Rooms</th>
+                      <th className="p-3.5">Customer Name</th>
+                      <th className="p-3.5">Contact Number</th>
+                      <th className="p-3.5">Private Status</th>
+                      <th className="p-3.5 pr-5 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 font-medium">
-                    {filteredScorpio.map((row, idx) => (
-                      <tr key={row.id || idx} className="hover:bg-slate-800/40 transition-colors border-b border-slate-800/40">
-                        <td className="p-3 font-extrabold text-amber-400 border-r border-slate-800/60 text-center uppercase tracking-tight">
-                          <div className="flex items-center justify-center gap-1">
-                            {row.isPrivate && <Lock className="w-3 h-3 text-amber-400" />}
-                            <span>{row.tour}</span>
-                          </div>
+                  <tbody className="divide-y divide-slate-800/60 text-xs">
+                    {filteredVehicles.map(item => (
+                      <tr key={item.id} className="hover:bg-slate-800/30 transition-all font-medium">
+                        <td className="p-3.5 pl-5 font-black text-amber-400 font-mono">#{item.sn}</td>
+                        <td className="p-3.5 font-bold text-slate-200">{item.vehicleType || 'Scorpio 4WD'}</td>
+                        <td className="p-3.5 font-bold text-white">{item.tour}</td>
+                        <td className="p-3.5 font-mono text-indigo-300">{item.date || '2026-08-01'}</td>
+                        <td className="p-3.5 font-bold text-indigo-400">{item.driver}</td>
+                        <td className="p-3.5 font-mono font-bold text-amber-300">{item.pax} Pax</td>
+                        <td className="p-3.5 font-mono text-slate-400">{item.vehicleCapacity || 7} Seats</td>
+                        <td className="p-3.5 font-mono text-emerald-400">{item.rooms}</td>
+                        <td className="p-3.5 font-bold text-slate-100">{item.name}</td>
+                        <td className="p-3.5 font-mono text-slate-400">{item.number}</td>
+                        <td className="p-3.5">
+                          {item.isPrivate ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                              🔒 PRIVATE
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400">
+                              👥 SHARING
+                            </span>
+                          )}
                         </td>
-                        <td className="p-3 text-center border-r border-slate-800/60 font-mono text-slate-300 font-semibold">{row.date || '2026-08-02'}</td>
-                        <td className="p-3 font-mono font-black text-white text-center border-r border-slate-800/60 text-sm">{row.sn}</td>
-                        <td className="p-3 font-bold text-slate-100 border-r border-slate-800/60">
-                          <div className="flex items-center gap-1.5">
-                            <UserCheck className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                            <span>{row.driver}</span>
-                          </div>
-                        </td>
-                        <td className="p-3 font-mono font-extrabold text-emerald-400 text-center border-r border-slate-800/60 text-sm">{row.pax > 0 ? row.pax : '-'}</td>
-                        <td className="p-3 text-center border-r border-slate-800/60 font-semibold text-slate-300">
-                          {row.rooms !== '-' ? <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-mono">{row.rooms}</span> : '-'}
-                        </td>
-                        <td className="p-3 font-bold text-white border-r border-slate-800/60">{row.name}</td>
-                        <td className="p-3 font-mono text-slate-300 font-semibold">
-                          <div className="flex items-center gap-1.5">
-                            <Phone className="w-3 h-3 text-slate-400 shrink-0" />
-                            <span>{row.number}</span>
-                          </div>
+                        <td className="p-3.5 pr-5 text-right">
+                          <button
+                            onClick={() => handleSendDriverDispatchSMS(item.sn, [item])}
+                            className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px]"
+                          >
+                            Dispatch
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -692,27 +723,26 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
             </div>
           )}
 
-          {/* Add Scorpio Assignment Modal with Departure Date at Top & Tour Specific Guest Filter */}
+          {/* Modal Dialog: + Assign Vehicle & Driver */}
           <Modal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
-            title="Assign Scorpio Jeep & Driver"
-            description="Select tour package, set travel date, filter guest pipeline for that tour, and assign driver & rooms."
-            maxWidth="md"
+            title="Assign Vehicle & Driver"
+            description="Select tour package, vehicle type, seating capacity, filter guest pipeline, and assign typable driver."
+            maxWidth="lg"
           >
-            <form onSubmit={handleCreateScorpio} className="space-y-4">
+            <form onSubmit={handleCreateVehicleAssignment} className="space-y-4">
               
-              {/* TOP ROW: Scheduled Tour Name & Departure Date */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
-                    Scheduled Tour Name
+              {/* Tour Package Selection & Date */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1.5">
+                    Select Tour Package
                   </label>
                   <select
                     value={formTour}
-                    onChange={e => setFormTour(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-                    required
+                    onChange={(e) => setFormTour(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
                   >
                     {tourOptions.map(t => (
                       <option key={t} value={t}>{t}</option>
@@ -721,36 +751,69 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 </div>
 
                 <Input
-                  label="Departure / Travel Date"
-                  icon={<Calendar className="w-4 h-4" />}
+                  label="Departure Travel Date"
+                  type="date"
                   value={formDate}
                   onChange={e => setFormDate(e.target.value)}
-                  placeholder="e.g. 2026-08-02 / 2nd Aug"
                   required
                 />
               </div>
 
-              {/* Driver Select (Auto Updates Scorpio S.N. #) & Scorpio S.N. # */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Vehicle Type & Seating Capacity Selection */}
+              <div className="grid grid-cols-2 gap-4 bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1">
-                    Assigned Driver
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1.5">
+                    Vehicle Type
                   </label>
                   <select
-                    value={formDriver}
-                    onChange={e => handleSelectDriver(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/40"
-                    required
+                    value={formVehicleType}
+                    onChange={(e) => handleSelectVehicleType(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
                   >
-                    <option value="">-- Select Driver --</option>
-                    {driverOptions.map(d => (
-                      <option key={d} value={d}>{d}</option>
+                    {vehiclePresets.map(v => (
+                      <option key={v.type} value={v.type}>{v.type} ({v.capacity} Seats)</option>
                     ))}
+                    <option value="Custom Vehicle">Custom / Other Vehicle</option>
                   </select>
                 </div>
 
                 <Input
-                  label="Scorpio S.N. #"
+                  label="Vehicle Capacity (Seats)"
+                  type="number"
+                  value={formVehicleCapacity}
+                  onChange={e => setFormVehicleCapacity(Number(e.target.value))}
+                  placeholder="e.g. 28"
+                  required
+                />
+              </div>
+
+              {/* Typable Driver Name Input with Datalist Suggestions */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                    <span>Assigned Driver Name</span>
+                    <span className="text-[10px] text-amber-400 font-normal">Type new or select</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      list="drivers-datalist-modal"
+                      value={formDriver}
+                      onChange={e => handleSelectDriver(e.target.value)}
+                      placeholder="Type custom driver name..."
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
+                      required
+                    />
+                    <datalist id="drivers-datalist-modal">
+                      {driverOptions.map(drv => (
+                        <option key={drv} value={drv} />
+                      ))}
+                    </datalist>
+                  </div>
+                </div>
+
+                <Input
+                  label="Vehicle S.N. #"
                   type="number"
                   value={formSN}
                   onChange={e => setFormSN(Number(e.target.value))}
@@ -850,7 +913,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     <Lock className="w-4 h-4 text-amber-400" />
                     Private Tour Group Only
                   </div>
-                  <div className="text-[11px] text-slate-400">If enabled, no other customer groups can be added to Jeep #{formSN}</div>
+                  <div className="text-[11px] text-slate-400">If enabled, no other customer groups can be added to Vehicle #{formSN}</div>
                 </div>
                 <button
                   type="button"
@@ -865,11 +928,11 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 </button>
               </div>
 
-              {/* Warning Banner if current Jeep S.N. is already Private */}
+              {/* Warning Banner if current Vehicle S.N. is already Private */}
               {isJeepPrivateBlocked && (
                 <div className="bg-rose-500/10 border border-rose-500/30 p-3 rounded-xl flex items-center gap-2.5 text-rose-300 text-xs font-semibold animate-fade-in">
                   <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0 animate-bounce" />
-                  <span>🔒 Scorpio Jeep #{formSN} is reserved for a Private Tour group. Additional guest groups cannot be added to this vehicle!</span>
+                  <span>🔒 Vehicle #{formSN} is reserved for a Private Tour group. Additional guest groups cannot be added to this vehicle!</span>
                 </div>
               )}
 
@@ -879,14 +942,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   label="Guest / Group Lead Name"
                   value={formCustomerName}
                   onChange={e => setFormCustomerName(e.target.value)}
-                  placeholder="e.g. Narayan Shrestha"
+                  placeholder="e.g. Chandra man Maharjan"
                   required
                 />
                 <Input
                   label="Contact Number"
                   value={formContactNumber}
                   onChange={e => setFormContactNumber(e.target.value)}
-                  placeholder="e.g. 9841273144"
+                  placeholder="e.g. 9802100125"
                   required
                 />
               </div>
@@ -917,7 +980,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   disabled={isJeepPrivateBlocked}
                   className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Save Assignment
+                  Save Vehicle Assignment
                 </Button>
               </div>
             </form>

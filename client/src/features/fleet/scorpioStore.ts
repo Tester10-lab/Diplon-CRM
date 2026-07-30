@@ -9,6 +9,8 @@ export interface ScorpioAssignment {
   name: string;
   number: string;
   isPrivate?: boolean;
+  vehicleType?: string;
+  vehicleCapacity?: number;
 }
 
 const SCORPIO_STORAGE_KEY = 'diplon_scorpio_assignments_v3';
