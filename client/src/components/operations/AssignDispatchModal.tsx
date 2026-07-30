@@ -251,9 +251,8 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
               className={`w-full bg-slate-900 border rounded-xl p-3 text-xs font-semibold text-white focus:outline-none transition-all ${
                 isDriverLocked ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
               }`}
-              required
             >
-              <option value="">-- Select Driver from Master Roster --</option>
+              <option value="">-- None / Unassigned (No Driver Required) --</option>
               {drivers.map(d => (
                 <option key={d._id} value={d.name}>
                   {d.name} ({d.vehicleType || 'Scorpio 4WD'} • {d.availability ? 'Available' : 'Assigned'})
@@ -286,7 +285,7 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
           <div>
             <label className="text-xs font-bold text-slate-200 uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
               <Car className="w-4 h-4 text-amber-400" />
-              <span>Assign Fleet Vehicle</span>
+              <span>Vehicle & Tour Type</span>
             </label>
             <select
               value={selectedVehicleReg}
@@ -295,17 +294,18 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
               className={`w-full bg-slate-900 border rounded-xl p-3 text-xs font-semibold text-white focus:outline-none transition-all ${
                 isDispatched ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
               }`}
-              required
             >
-              <option value="">-- Select Fleet Vehicle --</option>
+              <option value="Bus">🚌 Bus</option>
+              <option value="EV">⚡ EV</option>
+              <option value="Van">🚐 Van</option>
+              <option value="Jeep">🚘 Jeep</option>
+              <option value="Trek">🥾 Trek</option>
+              <option value="Hike">🏔️ Hike</option>
               {vehicles.map(v => (
-                <option key={v._id} value={`${v.registrationNumber} (${v.model})`}>
-                  {v.registrationNumber} - {v.model} ({v.type} • {v.capacity} Seats)
+                <option key={v._id} value={`${v.registrationNumber}`}>
+                  {v.name} ({v.registrationNumber}) - {v.type}
                 </option>
               ))}
-              {!vehicles.some(v => `${v.registrationNumber} (${v.model})` === selectedVehicleReg) && selectedVehicleReg && (
-                <option value={selectedVehicleReg}>{selectedVehicleReg}</option>
-              )}
             </select>
           </div>
 
@@ -323,7 +323,7 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
                 isDispatched ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
               }`}
             >
-              <option value="Unassigned">-- None / Unassigned --</option>
+              <option value="">-- None / Unassigned (No Guide Required) --</option>
               {guides.map(g => (
                 <option key={g._id} value={g.name}>
                   {g.name} ({g.languages?.join(', ') || 'English, Nepali'})

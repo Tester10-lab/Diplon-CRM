@@ -14,6 +14,15 @@ export interface AddTourModalProps {
   onSaveTour: (departure: Partial<Departure>) => Promise<void> | void;
 }
 
+export const VEHICLE_TYPES = [
+  { value: 'Bus', label: '🚌 Bus' },
+  { value: 'EV', label: '⚡ EV' },
+  { value: 'Van', label: '🚐 Van' },
+  { value: 'Jeep', label: '🚘 Jeep' },
+  { value: 'Trek', label: '🥾 Trek' },
+  { value: 'Hike', label: '🏔️ Hike' }
+];
+
 export const AddTourModal: React.FC<AddTourModalProps> = ({
   isOpen,
   onClose,
@@ -29,9 +38,9 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
   const [endDate, setEndDate] = useState(new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0]);
   const [seatsTotal, setSeatsTotal] = useState<number>(10);
   const [seatsReserved, setSeatsReserved] = useState<number>(0);
-  const [driverName, setDriverName] = useState('Babu Driver');
-  const [vehicleReg, setVehicleReg] = useState('BA-1-PA-5678');
-  const [guideName, setGuideName] = useState('Pasang Sherpa');
+  const [vehicleType, setVehicleType] = useState<string>('Jeep');
+  const [driverName, setDriverName] = useState<string>('');
+  const [guideName, setGuideName] = useState<string>('');
   const [status, setStatus] = useState<'Active' | 'Delayed' | 'Completed'>('Active');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -62,9 +71,9 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
         seatsReserved,
         seatsAvailable: available,
         travelerCount: seatsReserved,
-        driverName,
-        vehicleReg,
-        guideName,
+        driverName: driverName || 'Unassigned',
+        vehicleReg: vehicleType,
+        guideName: guideName || 'Unassigned',
         status
       });
       onClose();
@@ -80,7 +89,7 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Schedule New Tour Departure"
-      description="Select or type a new tour package, assign dates, seating capacity, driver, vehicle & guide."
+      description="Select or type a new tour package, assign dates, seating capacity, vehicle type, driver & guide."
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -142,43 +151,36 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
-              Assigned Vehicle / Registration
+              Vehicle & Tour Type
             </label>
             <select
-              value={vehicleReg}
-              onChange={(e) => setVehicleReg(e.target.value)}
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
             >
-              {fleet.length > 0 ? (
-                fleet.map(v => (
-                  <option key={v._id} value={v.registrationNumber}>
-                    {v.name} ({v.registrationNumber}) - {v.seatingCapacity} Seats
-                  </option>
-                ))
-              ) : (
-                <option value="BA-1-PA-5678">4WD Scorpio Jeep B2 (BA-1-PA-5678)</option>
-              )}
+              {VEHICLE_TYPES.map(vt => (
+                <option key={vt.value} value={vt.value}>
+                  {vt.label}
+                </option>
+              ))}
             </select>
           </div>
 
           <div>
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
-              Assigned Driver
+              Assigned Driver (Optional)
             </label>
             <select
               value={driverName}
               onChange={(e) => setDriverName(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
             >
-              {drivers.length > 0 ? (
-                drivers.map(d => (
-                  <option key={d._id} value={d.name}>
-                    {d.name} (★ {d.performanceRating})
-                  </option>
-                ))
-              ) : (
-                <option value="Babu Driver">Babu Driver</option>
-              )}
+              <option value="">-- None / Unassigned (No Driver Required) --</option>
+              {drivers.map(d => (
+                <option key={d._id} value={d.name}>
+                  {d.name} (★ {d.performanceRating})
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -187,22 +189,19 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider block mb-1.5">
-              Assigned Tour Guide
+              Assigned Tour Guide (Optional)
             </label>
             <select
               value={guideName}
               onChange={(e) => setGuideName(e.target.value)}
               className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
             >
-              {guides.length > 0 ? (
-                guides.map(g => (
-                  <option key={g._id} value={g.name}>
-                    {g.name} (★ {g.rating})
-                  </option>
-                ))
-              ) : (
-                <option value="Pasang Sherpa">Pasang Sherpa</option>
-              )}
+              <option value="">-- None / Unassigned (No Guide Required) --</option>
+              {guides.map(g => (
+                <option key={g._id} value={g.name}>
+                  {g.name} (★ {g.rating})
+                </option>
+              ))}
             </select>
           </div>
 
