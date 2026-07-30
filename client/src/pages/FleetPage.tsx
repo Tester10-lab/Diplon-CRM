@@ -9,7 +9,7 @@ import { Input } from '../components/ui/Input';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from '../features/fleet/scorpioStore';
-import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles } from 'lucide-react';
+import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone } from 'lucide-react';
 
 export const FleetPage: React.FC = () => {
   const { data: vehicles, isLoading, error } = useFleet();
@@ -83,7 +83,7 @@ export const FleetPage: React.FC = () => {
     return list.filter(b => 
       (b.customerName && b.customerName.toLowerCase().includes(q)) ||
       (b.contactPhone && b.contactPhone.includes(q)) ||
-      (b.customerPhone && b.customerPhone.includes(q)) ||
+      ((b as any).customerPhone && (b as any).customerPhone.includes(q)) ||
       (b.packageName && b.packageName.toLowerCase().includes(q))
     );
   }, [bookings, formTour, filterOnlySelectedTourGuests, guestSearchQuery]);
@@ -877,7 +877,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     {filteredBookedGuests.length > 0 ? (
                       filteredBookedGuests.map(b => (
                         <div
-                          key={b._id || b.id}
+                          key={b._id || (b as any).id}
                           onClick={() => handleSelectGuest(b)}
                           className="p-2.5 hover:bg-indigo-600/30 cursor-pointer text-xs transition-all flex items-center justify-between"
                         >
@@ -889,11 +889,11 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                               </span>
                             </div>
                             <div className="text-[11px] text-slate-400 font-mono">
-                              📞 {b.contactPhone || b.customerPhone || 'No Phone'}
+                              📞 {b.contactPhone || (b as any).customerPhone || 'No Phone'}
                             </div>
                           </div>
                           <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">
-                            {b.seatsReserved || b.pax || 1} Pax
+                            {b.seatsReserved || (b as any).pax || 1} Pax
                           </span>
                         </div>
                       ))
