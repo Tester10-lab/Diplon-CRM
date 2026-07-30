@@ -3,6 +3,9 @@ import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { useAuthStore } from '../../store/authStore';
+import { useGlobalModals } from '../../store/modalStore';
+import { BookingModal } from '../bookings/BookingModal';
+import { bookingService } from '../../shared/services/bookingService';
 
 export interface AppLayoutProps {
   children: React.ReactNode;
@@ -14,10 +17,31 @@ export interface AppLayoutProps {
 export const AppLayout: React.FC<AppLayoutProps> = ({ children, currentPath, onNavigate, onLogout }) => {
   const { logout } = useAuthStore();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const modals = useGlobalModals();
 
   const handleLogout = () => {
     logout();
     if (onLogout) onLogout();
+  };
+
+  const handleSaveGlobalBooking = async (bookingData: any) => {
+    try {
+      await bookingService.createBooking({
+        customerName: bookingData.customerName || 'New Guest',
+        contactPhone: bookingData.contactPhone || '',
+        packageName: bookingData.packageName || 'Halesi Tour Package (1N/2D)',
+        departureDate: bookingData.departureDate || '2026-08-01',
+        pickupPoint: bookingData.pickupPoint || '',
+        seatsReserved: bookingData.seatsReserved || 1,
+        totalAmount: bookingData.totalAmount || 0,
+        paidAmount: bookingData.advanceAmount || 0,
+        status: 'CONFIRMED'
+      });
+      modals.closeBookingModal();
+      window.dispatchEvent(new Event('storage'));
+    } catch (e) {
+      console.error('Failed to create booking:', e);
+    }
   };
 
   return (
@@ -51,6 +75,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, currentPath, onN
 
       {/* Notification Center */}
       <NotificationCenter />
+
+      {/* Global Booking Modal */}
+      <BookingModal
+        isOpen={modals.isBookingModalOpen}
+        onClose={modals.closeBookingModal}
+        onSaveBooking={handleSaveGlobalBooking}
+      />
     </div>
   );
 };

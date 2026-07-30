@@ -117,6 +117,8 @@ export function App() {
         return <InquiryPage />;
       case '/bookings':
         return <BookingsPage />;
+      case '/customers':
+        return <CustomersPage />;
       case '/operations':
         return <OperationsPage />;
       case '/fleet':

@@ -81,10 +81,10 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return [
-      { id: 'r1', text: 'Dispatch Mustang Scorpio at 06:00 AM', due: '06:00 AM Today', completed: true },
-      { id: 'r2', text: 'Settle Muktinath guide Pasang Sherpa allowance', due: '02:00 PM Today', completed: false },
-      { id: 'r3', text: 'Verify tomorrow Chitwan Safari bus seat capacity', due: '05:00 PM Today', completed: false },
-      { id: 'r4', text: 'Confirm VIP airport transfer pickup for Annapurna Group', due: 'Tomorrow 08:00 AM', completed: false }
+      { id: 'r1', text: 'Dispatch Halesi 28-seater Sofa Bus (25 Pax) at Shangri-la Hotel', due: '06:00 AM Aug 1', completed: false },
+      { id: 'r2', text: 'Dispatch Jiri 6 Pax private vehicle at New Road Angan Sweets', due: '06:30 AM Aug 1', completed: false },
+      { id: 'r3', text: 'Collect 34,400 Rs for Muktinath Tour (Lalitpur Holidays referral)', due: 'Oct 25', completed: false },
+      { id: 'r4', text: 'Confirm Upper Mustang 7 Pax Jeep booking for Bishnu Prasad Kafle', due: 'Oct 28', completed: false }
     ];
   });
 
@@ -434,10 +434,10 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           {/* Today's Selected Tour Departure Note */}
           <div className="p-3 rounded-2xl bg-[#0B0E14] border border-white/10 space-y-1">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-extrabold text-[#C8FF2D]">Departing Today (July 28)</span>
-              <span className="text-[10px] text-emerald-400 font-bold font-mono">3 Tours Ready</span>
+              <span className="font-extrabold text-[#C8FF2D]">Next Departure (Aug 1)</span>
+              <span className="text-[10px] text-emerald-400 font-bold font-mono">2 Tours Ready</span>
             </div>
-            <div className="text-xs font-bold text-white truncate">Pokhara VIP Scorpio #14 • Sailung 7 Pax</div>
+            <div className="text-xs font-bold text-white truncate">Halesi 25 Pax Sofa Bus • Jiri 6 Pax Private</div>
           </div>
 
           <Button
@@ -463,9 +463,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           className="p-4 rounded-3xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 transition-all cursor-pointer shadow-lg flex items-center justify-between backdrop-blur-xl"
         >
           <div>
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Today's Tour</div>
-            <div className="text-xl font-black text-white mt-1">3 Active Tours</div>
-            <div className="text-[10px] text-[#C8FF2D] font-extrabold mt-0.5">Scorpio #14 • Bus #9 • Jeep #3</div>
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Upcoming Departures</div>
+            <div className="text-xl font-black text-white mt-1">2 Active Tours</div>
+            <div className="text-[10px] text-[#C8FF2D] font-extrabold mt-0.5">Halesi (25 Pax) • Jiri (6 Pax)</div>
           </div>
           <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/30 flex items-center justify-center font-bold">
             <Compass className="w-5 h-5" />
@@ -480,9 +480,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           className="p-4 rounded-3xl bg-[#111621] border border-white/10 hover:border-amber-400/40 transition-all cursor-pointer shadow-lg flex items-center justify-between backdrop-blur-xl"
         >
           <div>
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tomorrow's Tour</div>
-            <div className="text-xl font-black text-white mt-1">4 Scheduled</div>
-            <div className="text-[10px] text-amber-300 font-extrabold mt-0.5">Chitwan • Pokhara • Muktinath</div>
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Next Cycle (October)</div>
+            <div className="text-xl font-black text-white mt-1">2 Scheduled</div>
+            <div className="text-[10px] text-amber-300 font-extrabold mt-0.5">Muktinath (Oct 25) • Upper Mustang (Oct 28)</div>
           </div>
           <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center justify-center font-bold">
             <CalendarIcon className="w-5 h-5" />
@@ -497,9 +497,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           className="p-4 rounded-3xl bg-[#111621] border border-white/10 hover:border-[#6366F1]/40 transition-all cursor-pointer shadow-lg flex items-center justify-between backdrop-blur-xl"
         >
           <div>
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">This Week Customer Count</div>
-            <div className="text-xl font-black text-white mt-1">128 Passengers</div>
-            <div className="text-[10px] text-[#818CF8] font-extrabold mt-0.5">+24 New Bookings added</div>
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Guest Pax</div>
+            <div className="text-xl font-black text-white mt-1">40 Passengers</div>
+            <div className="text-[10px] text-[#818CF8] font-extrabold mt-0.5">4 Confirmed Active Bookings</div>
           </div>
           <div className="w-10 h-10 rounded-2xl bg-[#6366F1]/15 text-[#818CF8] border border-[#6366F1]/30 flex items-center justify-center font-bold">
             <Users className="w-5 h-5" />
@@ -510,13 +510,13 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         <motion.div
           variants={itemVariants}
           whileHover={{ y: -3 }}
-          onClick={() => triggerToast('Viewing 3 pending action reminders')}
+          onClick={() => triggerToast('Viewing pending active tour action reminders')}
           className="p-4 rounded-3xl bg-[#111621] border border-white/10 hover:border-emerald-400/40 transition-all cursor-pointer shadow-lg flex items-center justify-between backdrop-blur-xl"
         >
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Action Reminders</div>
-            <div className="text-xl font-black text-white mt-1">3 Reminders</div>
-            <div className="text-[10px] text-emerald-300 font-extrabold mt-0.5">Driver advance & fuel receipts</div>
+            <div className="text-xl font-black text-white mt-1">4 Reminders</div>
+            <div className="text-[10px] text-emerald-300 font-extrabold mt-0.5">Halesi & Muktinath Collections</div>
           </div>
           <div className="w-10 h-10 rounded-2xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center justify-center font-bold">
             <Bell className="w-5 h-5" />
@@ -547,18 +547,18 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                 <th className="p-3">Tour Package</th>
                 <th className="p-3">Travel Date</th>
                 <th className="p-3">Assigned Driver</th>
-                <th className="p-3">Vehicle</th>
-                <th className="p-3">Pax Seats</th>
+                <th className="p-3">Vehicle Spec</th>
+                <th className="p-3">Pax Capacity</th>
                 <th className="p-3">Dispatch Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 font-semibold text-slate-200">
               <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-3 font-extrabold text-white">Sailung–Kalinchowk 2D/1N</td>
-                <td className="p-3 font-mono text-slate-300">2026-08-02</td>
-                <td className="p-3 text-[#C8FF2D]">Babu Driver (Scorpio)</td>
-                <td className="p-3">Scorpio #14 (BA 21 CH 4501)</td>
-                <td className="p-3 font-bold text-emerald-400">7 / 7 Pax (100%)</td>
+                <td className="p-3 font-extrabold text-white">Halesi Tour Package (1N/2D)</td>
+                <td className="p-3 font-mono text-slate-300">2026-08-01</td>
+                <td className="p-3 text-[#C8FF2D]">Srijan (Bus Driver)</td>
+                <td className="p-3">28-Seater Sofa Bus</td>
+                <td className="p-3 font-bold text-emerald-400">25 / 25 Pax (100%)</td>
                 <td className="p-3">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
                     READY FOR DISPATCH
@@ -566,11 +566,23 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                 </td>
               </tr>
               <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-3 font-extrabold text-white">Muktinath Helicopter & Jeep Tour</td>
-                <td className="p-3 font-mono text-slate-300">2026-08-04</td>
-                <td className="p-3 text-[#C8FF2D]">Suman Dai (Jeep)</td>
-                <td className="p-3">Scorpio #7 (BA 2 PA 9812)</td>
-                <td className="p-3 font-bold text-amber-300">6 / 7 Pax (85%)</td>
+                <td className="p-3 font-extrabold text-white">Jiri Tour (1N/2D)</td>
+                <td className="p-3 font-mono text-slate-300">2026-08-01</td>
+                <td className="p-3 text-[#C8FF2D]">Tarak Driver</td>
+                <td className="p-3">Scorpio 4WD Jeep</td>
+                <td className="p-3 font-bold text-emerald-400">6 / 6 Pax (100%)</td>
+                <td className="p-3">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
+                    READY FOR DISPATCH
+                  </span>
+                </td>
+              </tr>
+              <tr className="hover:bg-white/5 transition-colors">
+                <td className="p-3 font-extrabold text-white">Muktinath Tour (2N/3D)</td>
+                <td className="p-3 font-mono text-slate-300">2026-10-25</td>
+                <td className="p-3 text-amber-300">Lalitpur Holidays</td>
+                <td className="p-3">Scorpio 4WD Jeep</td>
+                <td className="p-3 font-bold text-amber-300">2 / 2 Pax (100%)</td>
                 <td className="p-3">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/15 text-amber-300 border border-amber-500/30">
                     ASSIGNED & LOCKED
@@ -578,11 +590,11 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                 </td>
               </tr>
               <tr className="hover:bg-white/5 transition-colors">
-                <td className="p-3 font-extrabold text-white">Pokhara Sightseeing & Paragliding</td>
-                <td className="p-3 font-mono text-slate-300">2026-08-06</td>
-                <td className="p-3 text-slate-400">Pending Assignment</td>
-                <td className="p-3 text-slate-400">Coaster Bus #2</td>
-                <td className="p-3 font-bold text-[#818CF8]">18 / 25 Pax (72%)</td>
+                <td className="p-3 font-extrabold text-white">Upper Mustang Package (4N/5D)</td>
+                <td className="p-3 font-mono text-slate-300">2026-10-28</td>
+                <td className="p-3 text-[#818CF8]">Bishnu Driver</td>
+                <td className="p-3">Scorpio 4WD Jeep</td>
+                <td className="p-3 font-bold text-[#818CF8]">7 / 7 Pax (100%)</td>
                 <td className="p-3">
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#6366F1]/15 text-[#818CF8] border border-[#6366F1]/30">
                     SCHEDULED
@@ -600,7 +612,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => openBookingModal()}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <Plus className="w-5 h-5 text-[#C8FF2D] mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">New Booking</div>
@@ -610,8 +622,8 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         <motion.button
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
-          onClick={() => openAddTourModal()}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          onClick={() => onNavigate('/operations')}
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <Compass className="w-5 h-5 text-[#C8FF2D] mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">Add Departure</div>
@@ -622,7 +634,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => onNavigate('/drivers')}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <UserSquare2 className="w-5 h-5 text-sky-400 mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">Add Driver</div>
@@ -633,7 +645,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => onNavigate('/fleet')}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <Car className="w-5 h-5 text-emerald-400 mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">Fleet Master</div>
@@ -644,7 +656,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => onNavigate('/finance')}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <DollarSign className="w-5 h-5 text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">Record Expense</div>
@@ -655,7 +667,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           whileHover={{ scale: 1.03, y: -2 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => onNavigate('/reports')}
-          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/40 text-left transition-all shadow-md group backdrop-blur-xl"
+          className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
           <FileText className="w-5 h-5 text-purple-400 mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">ERP Analytics</div>

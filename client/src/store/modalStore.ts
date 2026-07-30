@@ -20,7 +20,7 @@ export interface ModalStoreState {
 }
 
 // React useState-based hook implementation if zustand is not installed, or standard object hook
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Single source of truth pub-sub listener pattern for React component re-renders
 type Listener = () => void;
@@ -92,13 +92,13 @@ export function useGlobalModals() {
   const [, setTick] = useState(0);
 
   // Subscribe to changes
-  useState(() => {
+  useEffect(() => {
     const listener = () => setTick(t => t + 1);
     listeners.add(listener);
     return () => {
       listeners.delete(listener);
     };
-  });
+  }, []);
 
   return {
     ...globalModalState,
