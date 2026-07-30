@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
-  Users,
   Calendar,
   Compass,
   CreditCard,
@@ -55,7 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   if (isDriver) {
     navItems = [
       { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4.5 h-4.5" />, path: '/' },
-      { id: 'customers', label: 'Assigned Passengers', icon: <Users className="w-4.5 h-4.5" />, path: '/customers' },
       { id: 'operations', label: 'Assigned Tours', icon: <Compass className="w-4.5 h-4.5" />, path: '/operations' },
       { id: 'finance', label: 'Trip Finance', icon: <CreditCard className="w-4.5 h-4.5" />, path: '/finance' },
     ];
@@ -64,7 +62,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4.5 h-4.5" />, path: '/' },
       { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-4.5 h-4.5" />, path: '/calendar' },
       { id: 'bookings', label: 'Bookings', icon: <FileText className="w-4.5 h-4.5" />, path: '/bookings' },
-      { id: 'customers', label: 'Customers', icon: <Users className="w-4.5 h-4.5" />, path: '/customers' },
       { id: 'packages', label: 'Packages', icon: <Package className="w-4.5 h-4.5" />, path: '/packages' },
       { id: 'fleet', label: 'Vehicles', icon: <Car className="w-4.5 h-4.5" />, path: '/fleet' },
       { id: 'drivers', label: 'Drivers', icon: <UserSquare2 className="w-4.5 h-4.5" />, path: '/drivers' },
@@ -76,7 +73,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4.5 h-4.5" />, path: '/' },
       { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-4.5 h-4.5" />, path: '/calendar' },
       { id: 'bookings', label: 'Bookings', icon: <FileText className="w-4.5 h-4.5" />, path: '/bookings' },
-      { id: 'customers', label: 'Customers', icon: <Users className="w-4.5 h-4.5" />, path: '/customers' },
       { id: 'packages', label: 'Packages', icon: <Package className="w-4.5 h-4.5" />, path: '/packages' },
       { id: 'fleet', label: 'Vehicles', icon: <Car className="w-4.5 h-4.5" />, path: '/fleet' },
       { id: 'drivers', label: 'Drivers', icon: <UserSquare2 className="w-4.5 h-4.5" />, path: '/drivers' },
@@ -289,11 +285,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
 
         <button
-          onClick={() => onNavigate('/customers')}
-          className={`flex flex-col items-center gap-1 text-[10px] font-bold ${currentPath === '/customers' ? 'text-[#C8FF2D]' : 'text-slate-400'}`}
+          onClick={() => onNavigate('/packages')}
+          className={`flex flex-col items-center gap-1 text-[10px] font-bold ${currentPath === '/packages' ? 'text-[#C8FF2D]' : 'text-slate-400'}`}
         >
-          <Users className="w-5 h-5" />
-          <span>CRM</span>
+          <Package className="w-5 h-5" />
+          <span>Packages</span>
         </button>
 
         <button

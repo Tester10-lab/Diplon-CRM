@@ -115,8 +115,6 @@ export function App() {
         return renderDashboard();
       case '/inquiries':
         return <InquiryPage />;
-      case '/customers':
-        return <CustomersPage />;
       case '/bookings':
         return <BookingsPage />;
       case '/operations':
