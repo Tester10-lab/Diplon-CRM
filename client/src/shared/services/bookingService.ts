@@ -13,8 +13,8 @@ function getStoredBookings(): Booking[] {
   } catch (e) {
     console.error('Failed to parse stored bookings:', e);
   }
-  localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(mockBookings));
-  return mockBookings;
+  localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify([]));
+  return [];
 }
 
 function saveStoredBookings(bookings: Booking[]) {

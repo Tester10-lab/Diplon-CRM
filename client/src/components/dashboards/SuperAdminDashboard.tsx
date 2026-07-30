@@ -39,10 +39,21 @@ import {
 } from 'lucide-react';
 
 import { useAuthStore } from '../../store/authStore';
+import { useBookings } from '../../shared/hooks/bookings/useBookings';
+import { useCustomers } from '../../shared/hooks/customers/useCustomers';
+import { useDepartures } from '../../shared/hooks/operations/useOperations';
 
 export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { user } = useAuthStore();
   const { metrics, isLoading, error, refetch } = useDashboardMetrics();
+  const { data: bookingsData } = useBookings();
+  const { data: customersData } = useCustomers();
+  const { data: departuresData } = useDepartures();
+
+  const totalBookingsCount = bookingsData ? bookingsData.length : 0;
+  const activeToursCount = departuresData ? departuresData.filter(d => d.status === 'Active').length : 0;
+  const totalRevenueAmount = bookingsData ? bookingsData.reduce((acc, b) => acc + (b.paidAmount || b.totalAmount || 0), 0) : 0;
+  const totalCustomersCount = customersData ? customersData.length : 0;
 
   // Desktop Calendar State
   const [selectedDate, setSelectedDate] = useState<number>(28);
@@ -190,10 +201,10 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-3xl font-black text-white tracking-tight">1,248</div>
+            <div className="text-3xl font-black text-white tracking-tight">{totalBookingsCount.toLocaleString()}</div>
             <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
               <ArrowUpRight className="w-4 h-4" />
-              <span>12.5%</span>
+              <span>{totalBookingsCount > 0 ? '12.5%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
             </div>
           </div>
@@ -213,10 +224,10 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-3xl font-black text-white tracking-tight">32</div>
+            <div className="text-3xl font-black text-white tracking-tight">{activeToursCount}</div>
             <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
               <ArrowUpRight className="w-4 h-4" />
-              <span>8.2%</span>
+              <span>{activeToursCount > 0 ? '8.2%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
             </div>
           </div>
@@ -236,10 +247,16 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-3xl font-black text-white tracking-tight">NPR 8.45M</div>
+            <div className="text-3xl font-black text-white tracking-tight font-mono font-tabular-nums">
+              {totalRevenueAmount > 0
+                ? totalRevenueAmount >= 1000000
+                  ? `NPR ${(totalRevenueAmount / 1000000).toFixed(2)}M`
+                  : `NPR ${totalRevenueAmount.toLocaleString()}`
+                : 'NPR 0'}
+            </div>
             <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
               <ArrowUpRight className="w-4 h-4" />
-              <span>15.3%</span>
+              <span>{totalRevenueAmount > 0 ? '15.3%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
             </div>
           </div>
@@ -259,10 +276,10 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-3xl font-black text-white tracking-tight">3,842</div>
+            <div className="text-3xl font-black text-white tracking-tight">{totalCustomersCount.toLocaleString()}</div>
             <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
               <ArrowUpRight className="w-4 h-4" />
-              <span>10.1%</span>
+              <span>{totalCustomersCount > 0 ? '10.1%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
             </div>
           </div>
