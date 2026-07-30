@@ -14,24 +14,4 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            if (id.includes('recharts')) {
-              return 'recharts-vendor';
-            }
-            if (id.includes('lucide-react')) {
-              return 'icons-vendor';
-            }
-            return 'vendor';
-          }
-        },
-      },
-    },
-  },
 });
