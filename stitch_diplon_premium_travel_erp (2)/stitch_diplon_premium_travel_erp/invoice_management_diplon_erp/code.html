@@ -1,0 +1,669 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Invoice Management - Diplon Travel ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#1d2026",
+                        "on-primary-fixed": "#0f0069",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#351000",
+                        "secondary": "#adc6ff",
+                        "surface-variant": "#32353c",
+                        "secondary-fixed": "#d8e2ff",
+                        "surface-tint": "#c3c0ff",
+                        "on-surface": "#e1e2eb",
+                        "tertiary": "#ffb695",
+                        "secondary-container": "#0566d9",
+                        "inverse-on-surface": "#2e3037",
+                        "on-secondary-container": "#e6ecff",
+                        "inverse-primary": "#4d44e3",
+                        "surface-dim": "#10131a",
+                        "primary-fixed": "#e2dfff",
+                        "outline": "#918fa1",
+                        "surface-container-high": "#272a31",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "danger": "#F43F5E",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e1e2eb",
+                        "on-secondary": "#002e6a",
+                        "error-container": "#93000a",
+                        "success": "#10B981",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-highest": "#32353c",
+                        "outline-variant": "#464555",
+                        "on-tertiary": "#571f00",
+                        "surface-bright": "#363940",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container-lowest": "#0b0e14",
+                        "primary": "#c3c0ff",
+                        "on-background": "#e1e2eb",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "warning": "#F59E0B",
+                        "primary-container": "#4f46e5",
+                        "tertiary-container": "#a44100",
+                        "on-secondary-fixed-variant": "#004395",
+                        "surface-container-low": "#191c22",
+                        "on-primary": "#1d00a5",
+                        "surface": "#10131a",
+                        "on-tertiary-container": "#ffd2be",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "background": "#10131a",
+                        "on-surface-variant": "#c7c4d8",
+                        "text-muted": "#94A3B8",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "container-margin": "24px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-base": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "lead": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0B0E14; color: #e1e2eb; font-family: 'Inter', sans-serif; }
+        .glass-panel { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(24px); }
+        .drawer-overlay { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+        .drawer { box-shadow: -8px 0 32px rgba(0, 0, 0, 0.8); }
+        
+        /* Custom Scrollbar for Drawer */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased">
+<!-- SideNavBar -->
+<nav class="hidden md:flex bg-surface-container-lowest border-r border-border-subtle docked left-0 h-screen w-64 flex flex-col h-full py-md shrink-0">
+<div class="px-md mb-lg flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-sm">travel_explore</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Finance Module</p>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary-container/90 transition-colors py-sm px-md rounded-DEFAULT font-label-md text-label-md flex items-center justify-center gap-sm active:scale-95 duration-150">
+<span class="material-symbols-outlined text-sm">add</span>
+                Create Invoice
+            </button>
+</div>
+<ul class="flex-1 px-sm space-y-xs overflow-y-auto custom-scrollbar">
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base">dashboard</span>
+<span class="font-body-sm text-body-sm">Dashboard</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base">groups</span>
+<span class="font-body-sm text-body-sm">CRM</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base">file_export</span>
+<span class="font-body-sm text-body-sm">Operations</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-primary bg-primary-container/10 border-r-2 border-primary active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-body-sm text-body-sm font-medium">Finance</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-sm pt-md border-t border-border-subtle">
+<ul class="space-y-xs">
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base">settings</span>
+<span class="font-body-sm text-body-sm">Settings</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm px-sm py-sm rounded-DEFAULT text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/50 transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-base">help</span>
+<span class="font-body-sm text-body-sm">Support</span>
+</a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+<!-- TopNavBar -->
+<header class="bg-surface-glass/80 backdrop-blur-xl border-b border-border-subtle shadow-sm sticky top-0 z-40 flex justify-between items-center px-lg py-sm w-full shrink-0">
+<div class="flex items-center gap-lg">
+<button class="md:hidden text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex gap-md">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-base text-body-base" href="#">Invoices</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-body-base text-body-base" href="#">Ledger</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-body-base text-body-base" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-high border border-border-subtle rounded-lg pl-8 pr-sm py-xs text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all w-48 group-hover:bg-surface-variant/50" placeholder="Search" type="text">
+</div>
+<span class="text-on-surface-variant font-label-sm text-label-sm hidden sm:block">Role: Admin</span>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-danger"></span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-border-subtle cursor-pointer hover:border-primary transition-colors">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A small circular avatar portrait of a professional corporate administrator with short dark hair wearing a minimalist dark blazer, set against a sleek grey backdrop. The lighting is soft and studio-quality, emphasizing a modern business aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8LXu8OvrG7Atb22SaO-n3DahLmGpLTeLs5jxK5YwRt91-OhS_iDt4HTVBWaKdC31OEBeJIgd2nbpn9tRspk8Bk4f8UYSi25q2rBR-rxDDTvv1mndFpbOgcnNOlS-PldURQKktuPSAf9gTTX4PhmQBz0PdQWu1CeSHod-DO3TBbEh97gXr_ZEMds7ClmSyrD5y8ZFVyJ6dKaFHe63U3mOWaVEWiHdDiSkq4JFakv6tpPVcJ86GokQE">
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-lg flex flex-col gap-md relative">
+<!-- Header & Stat Row -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Invoice Management</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Manage and track all customer invoices.</p>
+</div>
+<div class="flex gap-sm">
+<button class="glass-panel text-on-surface hover:bg-surface-variant/50 transition-colors py-xs px-sm rounded-DEFAULT font-label-md text-label-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">download</span> Export
+                    </button>
+<button class="bg-primary-container text-on-primary-container hover:bg-primary-container/90 transition-colors py-xs px-sm rounded-DEFAULT font-label-md text-label-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">add</span> New Invoice
+                    </button>
+</div>
+</div>
+<!-- Bento Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-sm">
+<div class="glass-panel p-sm rounded-lg flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Outstanding</span>
+<span class="font-headline-md text-headline-md text-on-surface mt-xs font-mono-data">$124,500.00</span>
+<div class="mt-xs flex items-center gap-xs text-success font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +5.2% vs last month
+                    </div>
+</div>
+<div class="glass-panel p-sm rounded-lg flex flex-col border-l-2 border-warning">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Overdue</span>
+<span class="font-headline-md text-headline-md text-warning mt-xs font-mono-data">$18,200.00</span>
+<div class="mt-xs font-label-sm text-label-sm text-on-surface-variant">
+                        12 Invoices
+                    </div>
+</div>
+<div class="glass-panel p-sm rounded-lg flex flex-col border-l-2 border-primary">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Drafts</span>
+<span class="font-headline-md text-headline-md text-primary mt-xs font-mono-data">5</span>
+<div class="mt-xs font-label-sm text-label-sm text-on-surface-variant">
+                        Awaiting approval
+                    </div>
+</div>
+<div class="glass-panel p-sm rounded-lg flex flex-col border-l-2 border-success">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Collected (MTD)</span>
+<span class="font-headline-md text-headline-md text-success mt-xs font-mono-data">$85,300.00</span>
+<div class="mt-xs flex items-center gap-xs text-success font-label-sm text-label-sm">
+                         64 Invoices Paid
+                    </div>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="glass-panel p-sm rounded-lg flex flex-wrap items-center justify-between gap-sm">
+<div class="flex flex-wrap items-center gap-sm w-full md:w-auto">
+<div class="relative w-full md:w-64 group">
+<span class="material-symbols-outlined absolute left-xs top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container border border-border-subtle rounded-DEFAULT pl-7 pr-xs py-1 text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all group-hover:bg-surface-variant/30" placeholder="Search Invoice ID or Customer..." type="text">
+</div>
+<div class="flex items-center border border-border-subtle rounded-DEFAULT overflow-hidden bg-surface-container">
+<select class="bg-transparent border-none text-body-sm font-body-sm text-on-surface py-1 pl-xs pr-lg focus:ring-0 focus:outline-none appearance-none cursor-pointer">
+<option value="">All Statuses</option>
+<option value="draft">Draft</option>
+<option value="sent">Sent</option>
+<option value="partially_paid">Partially Paid</option>
+<option value="paid">Paid</option>
+<option value="void">Void</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant pointer-events-none -ml-6 text-sm mr-xs">arrow_drop_down</span>
+</div>
+<div class="flex items-center border border-border-subtle rounded-DEFAULT overflow-hidden bg-surface-container">
+<select class="bg-transparent border-none text-body-sm font-body-sm text-on-surface py-1 pl-xs pr-lg focus:ring-0 focus:outline-none appearance-none cursor-pointer">
+<option value="">All Branches</option>
+<option value="ny">New York HQ</option>
+<option value="ldn">London</option>
+<option value="dxb">Dubai</option>
+</select>
+<span class="material-symbols-outlined text-on-surface-variant pointer-events-none -ml-6 text-sm mr-xs">arrow_drop_down</span>
+</div>
+<button class="bg-surface-container border border-border-subtle hover:bg-surface-variant/50 text-on-surface py-1 px-sm rounded-DEFAULT text-body-sm font-body-sm flex items-center gap-xs transition-colors">
+<span class="material-symbols-outlined text-sm">calendar_month</span> Date Range
+                    </button>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-xs" title="Filter Settings">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+</div>
+</div>
+<!-- Bulk Actions (Hidden by default, shown when items selected) -->
+<div class="hidden glass-panel py-xs px-sm rounded-lg flex items-center justify-between border-l-4 border-primary bg-primary-container/5" id="bulk-actions">
+<div class="flex items-center gap-sm text-body-sm font-body-sm text-primary">
+<span class="material-symbols-outlined text-sm">check_box</span>
+<span id="selected-count">0</span> invoices selected
+                </div>
+<div class="flex gap-xs">
+<button class="bg-surface-container border border-border-subtle hover:bg-surface-variant/80 text-on-surface py-1 px-sm rounded-DEFAULT text-label-md font-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">print</span> Print PDF
+                    </button>
+<button class="bg-surface-container border border-border-subtle hover:bg-surface-variant/80 text-on-surface py-1 px-sm rounded-DEFAULT text-label-md font-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">mail</span> Send Reminder
+                    </button>
+<button class="bg-primary-container/20 border border-primary/30 text-primary hover:bg-primary-container/30 py-1 px-sm rounded-DEFAULT text-label-md font-label-md transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">payments</span> Record Payment
+                    </button>
+</div>
+</div>
+<!-- DataTable -->
+<div class="glass-panel rounded-lg overflow-hidden flex-1 flex flex-col">
+<div class="overflow-x-auto flex-1 custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high/50 sticky top-0 z-10">
+<tr>
+<th class="py-sm px-sm border-b border-border-subtle w-8">
+<input class="rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" id="select-all" type="checkbox">
+</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium cursor-pointer hover:text-on-surface group">
+                                    Invoice ID <span class="material-symbols-outlined text-[12px] align-middle opacity-0 group-hover:opacity-100 transition-opacity">arrow_downward</span>
+</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium">Customer</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium text-right cursor-pointer hover:text-on-surface group">
+                                    Amount <span class="material-symbols-outlined text-[12px] align-middle opacity-0 group-hover:opacity-100 transition-opacity">arrow_downward</span>
+</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium">Issue Date</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium">Due Date</th>
+<th class="py-sm px-sm font-label-md text-label-md text-on-surface-variant uppercase tracking-wider border-b border-border-subtle font-medium">Status</th>
+<th class="py-sm px-sm border-b border-border-subtle w-10"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-pointer" onclick="openDrawer()">
+<td class="py-sm px-sm" onclick="event.stopPropagation()">
+<input class="row-checkbox rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" type="checkbox">
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface">INV-2023-0841</td>
+<td class="py-sm px-sm">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-secondary-container/20 flex items-center justify-center text-[10px] text-secondary font-bold">AC</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Acme Corp Travel</span>
+</div>
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface text-right">$12,450.00</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Oct 12, 2023</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-danger">Oct 26, 2023</td>
+<td class="py-sm px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-warning/20 text-warning border border-warning/20">Sent</span>
+</td>
+<td class="py-sm px-sm text-right" onclick="event.stopPropagation()">
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-base">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-pointer" onclick="openDrawer()">
+<td class="py-sm px-sm" onclick="event.stopPropagation()">
+<input class="row-checkbox rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" type="checkbox">
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface">INV-2023-0842</td>
+<td class="py-sm px-sm">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-tertiary-container/20 flex items-center justify-center text-[10px] text-tertiary font-bold">GT</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Global Tech Ind.</span>
+</div>
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface text-right">$4,200.00</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Oct 14, 2023</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Nov 14, 2023</td>
+<td class="py-sm px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-success/20 text-success border border-success/20">Paid</span>
+</td>
+<td class="py-sm px-sm text-right" onclick="event.stopPropagation()">
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-base">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-pointer" onclick="openDrawer()">
+<td class="py-sm px-sm" onclick="event.stopPropagation()">
+<input class="row-checkbox rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" type="checkbox">
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface">INV-2023-0843</td>
+<td class="py-sm px-sm">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-primary-container/20 flex items-center justify-center text-[10px] text-primary font-bold">SL</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Starlight Logistics</span>
+</div>
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface text-right">$18,750.50</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Oct 15, 2023</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Oct 30, 2023</td>
+<td class="py-sm px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-secondary/20 text-secondary border border-secondary/20">Partially Paid</span>
+</td>
+<td class="py-sm px-sm text-right" onclick="event.stopPropagation()">
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-base">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-pointer" onclick="openDrawer()">
+<td class="py-sm px-sm" onclick="event.stopPropagation()">
+<input class="row-checkbox rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" type="checkbox">
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface text-on-surface-variant">INV-2023-0844</td>
+<td class="py-sm px-sm">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-[10px] text-on-surface-variant font-bold">OP</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Oceanic Partners</span>
+</div>
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface-variant text-right">$2,100.00</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">-</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">-</td>
+<td class="py-sm px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-surface-container-high text-on-surface-variant border border-border-subtle">Draft</span>
+</td>
+<td class="py-sm px-sm text-right" onclick="event.stopPropagation()">
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-base">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-pointer opacity-60" onclick="openDrawer()">
+<td class="py-sm px-sm" onclick="event.stopPropagation()">
+<input class="row-checkbox rounded bg-surface-container border-outline-variant text-primary focus:ring-primary focus:ring-offset-surface-container h-4 w-4" type="checkbox">
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface line-through">INV-2023-0839</td>
+<td class="py-sm px-sm">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-error-container/20 flex items-center justify-center text-[10px] text-error font-bold">VX</div>
+<span class="font-body-sm text-body-sm text-on-surface font-medium line-through">Vortex Energy</span>
+</div>
+</td>
+<td class="py-sm px-sm font-mono-data text-mono-data text-on-surface text-right line-through">$8,900.00</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">Oct 01, 2023</td>
+<td class="py-sm px-sm font-body-sm text-body-sm text-on-surface-variant">-</td>
+<td class="py-sm px-sm">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-error/10 text-error border border-error/20">Void</span>
+</td>
+<td class="py-sm px-sm text-right" onclick="event.stopPropagation()">
+<button class="text-on-surface-variant hover:text-on-surface opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-base">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="border-t border-border-subtle p-xs flex items-center justify-between bg-surface-container-highest/20">
+<span class="font-body-sm text-body-sm text-on-surface-variant pl-sm">Showing 1-5 of 124 invoices</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-surface-variant text-on-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-6 h-6 rounded bg-primary text-on-primary font-body-sm text-body-sm flex items-center justify-center">1</button>
+<button class="w-6 h-6 rounded hover:bg-surface-variant text-on-surface font-body-sm text-body-sm flex items-center justify-center transition-colors">2</button>
+<button class="w-6 h-6 rounded hover:bg-surface-variant text-on-surface font-body-sm text-body-sm flex items-center justify-center transition-colors">3</button>
+<span class="text-on-surface-variant mx-1">...</span>
+<button class="p-1 rounded hover:bg-surface-variant text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Atmospheric glow behind content -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+</main>
+</div>
+<!-- Right Drawer: Invoice Details -->
+<div class="fixed inset-0 drawer-overlay z-50 hidden opacity-0 transition-opacity duration-300" id="invoice-drawer-overlay" onclick="closeDrawer()"></div>
+<div class="fixed inset-y-0 right-0 w-full md:w-[600px] glass-header drawer border-l border-border-subtle z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col" id="invoice-drawer">
+<!-- Drawer Header -->
+<div class="px-lg py-md border-b border-border-subtle flex justify-between items-start shrink-0">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-mono-data tracking-tight">INV-2023-0841</h3>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-warning/20 text-warning border border-warning/20">Sent</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Acme Corp Travel • Issued Oct 12, 2023</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Print">
+<span class="material-symbols-outlined text-base">print</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" title="Download PDF">
+<span class="material-symbols-outlined text-base">download</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors p-1" onclick="closeDrawer()">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</div>
+<!-- Drawer Content -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-lg space-y-lg">
+<!-- Quick Actions -->
+<div class="flex gap-sm">
+<button class="flex-1 bg-primary-container text-on-primary-container hover:bg-primary-container/90 transition-colors py-sm px-sm rounded-DEFAULT font-label-md text-label-md flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined text-sm">payments</span> Record Payment
+                </button>
+<button class="flex-1 bg-surface-container border border-border-subtle hover:bg-surface-variant/80 text-on-surface py-sm px-sm rounded-DEFAULT font-label-md text-label-md transition-colors flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined text-sm">mail</span> Send Reminder
+                </button>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="glass-panel p-sm rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Total Amount</span>
+<span class="font-headline-md text-headline-md text-on-surface font-mono-data block">$12,450.00</span>
+</div>
+<div class="glass-panel p-sm rounded-lg">
+<span class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Balance Due</span>
+<span class="font-headline-md text-headline-md text-warning font-mono-data block">$12,450.00</span>
+<span class="font-label-sm text-label-sm text-danger mt-1 block">Due in 5 days (Oct 26)</span>
+</div>
+</div>
+<!-- Line Items -->
+<div>
+<h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider mb-sm">Line Items</h4>
+<div class="glass-panel rounded-lg border border-border-subtle overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-surface-container-high/50 border-b border-border-subtle">
+<tr>
+<th class="py-xs px-sm font-label-sm text-label-sm text-on-surface-variant font-medium">Description</th>
+<th class="py-xs px-sm font-label-sm text-label-sm text-on-surface-variant font-medium text-right">Qty</th>
+<th class="py-xs px-sm font-label-sm text-label-sm text-on-surface-variant font-medium text-right">Rate</th>
+<th class="py-xs px-sm font-label-sm text-label-sm text-on-surface-variant font-medium text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle font-body-sm text-body-sm text-on-surface">
+<tr>
+<td class="py-xs px-sm">
+<div class="font-medium">Corporate Retreat Package</div>
+<div class="text-[11px] text-on-surface-variant">Flights &amp; Accommodation for 15 pax</div>
+</td>
+<td class="py-xs px-sm text-right font-mono-data">15</td>
+<td class="py-xs px-sm text-right font-mono-data">$800.00</td>
+<td class="py-xs px-sm text-right font-mono-data">$12,000.00</td>
+</tr>
+<tr>
+<td class="py-xs px-sm">
+<div class="font-medium">Visa Processing Fees</div>
+<div class="text-[11px] text-on-surface-variant">Expedited handling</div>
+</td>
+<td class="py-xs px-sm text-right font-mono-data">15</td>
+<td class="py-xs px-sm text-right font-mono-data">$30.00</td>
+<td class="py-xs px-sm text-right font-mono-data">$450.00</td>
+</tr>
+</tbody>
+<tfoot class="border-t border-border-subtle bg-surface-container-lowest/50">
+<tr>
+<td class="py-xs px-sm text-right font-label-md text-label-md text-on-surface-variant" colspan="3">Subtotal</td>
+<td class="py-xs px-sm text-right font-mono-data text-body-sm text-on-surface">$12,450.00</td>
+</tr>
+<tr>
+<td class="py-xs px-sm text-right font-label-md text-label-md text-on-surface-variant" colspan="3">Tax (0%)</td>
+<td class="py-xs px-sm text-right font-mono-data text-body-sm text-on-surface">$0.00</td>
+</tr>
+<tr class="border-t border-border-subtle">
+<td class="py-sm px-sm text-right font-label-md text-label-md text-on-surface" colspan="3">Total</td>
+<td class="py-sm px-sm text-right font-mono-data text-body-base font-bold text-on-surface">$12,450.00</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- History & Audit -->
+<div>
+<h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider mb-sm">Activity &amp; Audit Log</h4>
+<div class="relative pl-4 border-l border-border-subtle space-y-md before:absolute before:top-0 before:bottom-0 before:left-[-1px] before:w-[2px] before:bg-gradient-to-b before:from-primary/50 before:to-transparent">
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-warning border-2 border-surface-container-lowest"></div>
+<p class="font-body-sm text-body-sm text-on-surface">Invoice Sent to <span class="font-mono-data">billing@acmecorp.com</span></p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Oct 12, 2023 at 14:32 • System</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-surface-variant border-2 border-surface-container-lowest"></div>
+<p class="font-body-sm text-body-sm text-on-surface">Invoice Finalized</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Oct 12, 2023 at 10:15 • Admin User</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 w-2 h-2 rounded-full bg-surface-variant border-2 border-surface-container-lowest"></div>
+<p class="font-body-sm text-body-sm text-on-surface">Draft Created</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Oct 10, 2023 at 09:45 • Admin User</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Scripts for Interactions -->
+<script>
+        // Drawer Logic
+        const overlay = document.getElementById('invoice-drawer-overlay');
+        const drawer = document.getElementById('invoice-drawer');
+
+        function openDrawer() {
+            overlay.classList.remove('hidden');
+            // Small delay to allow display block to apply before animating opacity
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                drawer.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            overlay.classList.add('opacity-0');
+            drawer.classList.add('translate-x-full');
+            // Wait for transition to finish before hiding
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
+        }
+
+        // Bulk Selection Logic
+        const selectAllCheckbox = document.getElementById('select-all');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const bulkActionsPanel = document.getElementById('bulk-actions');
+        const selectedCountSpan = document.getElementById('selected-count');
+
+        function updateBulkActions() {
+            const selectedCount = document.querySelectorAll('.row-checkbox:checked').length;
+            selectedCountSpan.textContent = selectedCount;
+            
+            if (selectedCount > 0) {
+                bulkActionsPanel.classList.remove('hidden');
+                // Optional: add a subtle flash or animation here
+            } else {
+                bulkActionsPanel.classList.add('hidden');
+            }
+        }
+
+        selectAllCheckbox.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            rowCheckboxes.forEach(cb => {
+                cb.checked = isChecked;
+                // Update visual state of row if needed
+            });
+            updateBulkActions();
+        });
+
+        rowCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const allChecked = Array.from(rowCheckboxes).every(c => c.checked);
+                const someChecked = Array.from(rowCheckboxes).some(c => c.checked);
+                
+                selectAllCheckbox.checked = allChecked;
+                selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                
+                updateBulkActions();
+            });
+        });
+    </script>
+</body></html>

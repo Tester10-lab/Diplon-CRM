@@ -1,0 +1,372 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings &amp; Integrations - Diplon Travel ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#464555",
+                        "on-secondary-container": "#e6ecff",
+                        "tertiary-container": "#a44100",
+                        "surface-container-high": "#272a31",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e1e2eb",
+                        "surface-container-lowest": "#0b0e14",
+                        "error-container": "#93000a",
+                        "danger": "#F43F5E",
+                        "on-surface-variant": "#c7c4d8",
+                        "success": "#10B981",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#1d00a5",
+                        "surface-tint": "#c3c0ff",
+                        "surface": "#10131a",
+                        "secondary": "#adc6ff",
+                        "text-muted": "#94A3B8",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "background": "#10131a",
+                        "on-tertiary": "#571f00",
+                        "tertiary": "#ffb695",
+                        "primary": "#c3c0ff",
+                        "surface-container-low": "#191c22",
+                        "on-tertiary-fixed": "#351000",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container": "#1d2026",
+                        "error": "#ffb4ab",
+                        "warning": "#F59E0B",
+                        "primary-fixed": "#e2dfff",
+                        "secondary-fixed": "#d8e2ff",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "on-surface": "#e1e2eb",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-dim": "#10131a",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "surface-variant": "#32353c",
+                        "surface-container-highest": "#32353c",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-bright": "#363940",
+                        "secondary-container": "#0566d9",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "inverse-primary": "#4d44e3",
+                        "outline": "#918fa1",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-secondary": "#002e6a",
+                        "on-background": "#e1e2eb",
+                        "inverse-on-surface": "#2e3037",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-margin": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "lead": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b0e14; /* Obsidian base */
+            color: #e1e2eb;
+        }
+        .glass-panel {
+            background: rgba(39, 42, 49, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(39, 42, 49, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+        .glass-card:hover {
+            background: rgba(39, 42, 49, 0.8);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+    </style>
+</head>
+<body class="font-body-base text-body-base bg-surface-container-lowest antialiased min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container-lowest dark:bg-surface-container-lowest font-body-base text-body-base h-screen w-64 fixed left-0 top-0 border-r border-border-subtle flex flex-col h-full py-lg z-40">
+<!-- Brand / Header -->
+<div class="px-lg mb-xl flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container text-sm">travel_explore</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary font-black">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Support</p>
+</div>
+</div>
+<!-- Main Navigation Tabs -->
+<div class="flex-1 px-sm space-y-1">
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+<span>Tickets</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Customers</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-primary font-bold border-r-2 border-primary bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">api</span>
+<span>Integrations</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span>SLA Settings</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="px-lg mt-auto mb-md">
+<button class="w-full bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-md text-label-md py-sm rounded-md transition-colors active:scale-95 duration-150 flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Ticket
+            </button>
+</div>
+<!-- Footer Navigation -->
+<div class="px-sm space-y-1 border-t border-border-subtle pt-md">
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-md text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Account</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface-glass backdrop-blur-xl border-b border-border-subtle flex justify-between items-center h-16 px-lg sticky top-0 z-30 w-full">
+<div class="flex items-center gap-lg">
+<span class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">Support Suite</span>
+<div class="hidden md:flex gap-lg h-16 items-end">
+<a class="text-on-surface-variant pb-4 font-label-md text-label-md hover:text-primary transition-all" href="#">Queue</a>
+<a class="text-on-surface-variant pb-4 font-label-md text-label-md hover:text-primary transition-all" href="#">Assigned</a>
+<a class="text-on-surface-variant pb-4 font-label-md text-label-md hover:text-primary transition-all" href="#">Resolved</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<!-- Search (on left of actions) -->
+<div class="relative focus-within:ring-1 focus-within:ring-primary rounded-md hidden md:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-surface-container-high border border-border-subtle text-on-surface font-body-sm rounded-md pl-[32px] pr-sm py-xs focus:outline-none w-48 transition-all focus:w-64" placeholder="Search (Ctrl+K)" type="text">
+</div>
+<div class="flex items-center gap-sm border-l border-border-subtle pl-md">
+<button class="w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="w-8 h-8 rounded-full hover:bg-surface-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">history</span>
+</button>
+<button class="bg-primary-container hover:bg-inverse-primary text-on-primary-container font-label-md text-label-md px-md py-xs rounded-md transition-colors ml-sm shadow-sm">
+                        Create Ticket
+                    </button>
+<img alt="Agent Avatar" class="w-8 h-8 rounded-full object-cover ml-xs border border-border-subtle cursor-pointer hover:ring-2 hover:ring-primary transition-all" data-alt="A small, professional portrait photograph of a confident young professional woman looking directly at the camera, set against a dark gray neutral background. Sharp focus, high contrast, studio lighting. The image serves as a user profile avatar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrGSU-h7y1-nazYk-1FlYWoJUSvT2pCAYa2mQGbQ5g1p5j-iLNSI3g8bdPlGa6K4_yKwYoJP8nxGAvx1OPlcPAyazO2Dcyg41Ii2LwMUX4cpyRnQWeCAqUjJw_Z4ANXIiCEauILlSkLSjrIEB4XNupRxHGSxcDjn1JaGXXifsFXaVrLjKahIzG6WF6KhcD4jhzijIfc9KOr08TijanFoVbEMc1iRtDEmvQZqhyYIZBpSrmktA24_BM">
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 p-lg overflow-y-auto">
+<!-- Page Header -->
+<div class="mb-xl flex items-end justify-between">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">System Settings</h2>
+<p class="font-body-base text-body-base text-on-surface-variant max-w-2xl">Manage global configurations, user access, and external service connections for the Diplon Travel ERP environment.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-xs border border-outline-variant rounded text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Documentation</button>
+<button class="px-md py-xs bg-surface-container-high border border-border-subtle rounded text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">sync</span> Sync Services
+                    </button>
+</div>
+</div>
+<!-- Settings Layout: Sidebar + Content -->
+<div class="flex gap-xl h-full">
+<!-- Settings Internal Sidebar -->
+<aside class="w-48 shrink-0 flex flex-col gap-xs">
+<button class="flex items-center gap-sm px-md py-sm rounded-md text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-colors w-full text-left">
+<span class="material-symbols-outlined text-[18px]">settings</span> General
+                    </button>
+<button class="flex items-center gap-sm px-md py-sm rounded-md text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-colors w-full text-left">
+<span class="material-symbols-outlined text-[18px]">group</span> Users
+                    </button>
+<button class="flex items-center gap-sm px-md py-sm rounded-md text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-colors w-full text-left">
+<span class="material-symbols-outlined text-[18px]">notifications</span> Notifications
+                    </button>
+<button class="flex items-center gap-sm px-md py-sm rounded-md bg-surface-container-high text-primary border border-border-subtle font-label-md text-label-md w-full text-left shadow-sm">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">api</span> Integrations
+                    </button>
+<button class="flex items-center gap-sm px-md py-sm rounded-md text-on-surface-variant font-label-md text-label-md hover:bg-surface-variant transition-colors w-full text-left">
+<span class="material-symbols-outlined text-[18px]">key</span> API Keys
+                    </button>
+</aside>
+<!-- Settings Main Content: Integrations -->
+<section class="flex-1 glass-panel rounded-xl p-lg flex flex-col min-h-[600px]">
+<div class="flex justify-between items-center mb-lg pb-md border-b border-border-subtle">
+<div>
+<h3 class="font-lead text-lead text-on-surface">Connected Services</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Manage external APIs and third-party integrations.</p>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-md py-xs rounded flex items-center gap-xs hover:bg-inverse-primary transition-colors">
+<span class="material-symbols-outlined text-[16px]">add</span> Add Integration
+                        </button>
+</div>
+<!-- Bento Grid for Integrations -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-md auto-rows-fr">
+<!-- Integration Card: WhatsApp -->
+<div class="glass-card rounded-lg p-md flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-[#25D366]/10 border border-[#25D366]/20 rounded-lg flex items-center justify-center shrink-0">
+<!-- Simulating WhatsApp icon with a generic chat icon for now, ideally an SVG -->
+<span class="material-symbols-outlined text-[#25D366] text-xl">forum</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-[16px]">WhatsApp Business</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate w-48">Messaging &amp; Notifications</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-success/10 text-success border border-success/20 font-label-sm text-label-sm flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Connected
+                                </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-border-subtle">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Last sync</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">2 mins ago</span>
+</div>
+<button class="px-sm py-xs border border-outline-variant rounded text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Configure</button>
+</div>
+</div>
+<!-- Integration Card: Gmail -->
+<div class="glass-card rounded-lg p-md flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-[#EA4335]/10 border border-[#EA4335]/20 rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[#EA4335] text-xl">mail</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-[16px]">Google Workspace</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate w-48">Email Support Routing</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-success/10 text-success border border-success/20 font-label-sm text-label-sm flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Connected
+                                </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-border-subtle">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Last sync</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">10 mins ago</span>
+</div>
+<button class="px-sm py-xs border border-outline-variant rounded text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Configure</button>
+</div>
+</div>
+<!-- Integration Card: Twilio -->
+<div class="glass-card rounded-lg p-md flex flex-col justify-between border-dashed border-outline-variant opacity-80">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container-high border border-border-subtle rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant text-xl">sms</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-[16px]">Twilio SMS</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate w-48">Critical Alerts</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-warning/10 text-warning border border-warning/20 font-label-sm text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[12px]">schedule</span> Pending
+                                </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-border-subtle">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Status</span>
+<span class="font-body-sm text-body-sm text-warning">Awaiting API Key</span>
+</div>
+<button class="px-sm py-xs bg-primary-container text-on-primary-container rounded font-label-md text-label-md hover:bg-inverse-primary transition-colors">Complete Setup</button>
+</div>
+</div>
+<!-- Integration Card: Nepal Payment -->
+<div class="glass-card rounded-lg p-md flex flex-col justify-between">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary-container/20 border border-secondary-container/30 rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-xl">account_balance_wallet</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface text-[16px]">Nepal Payment Gateway</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate w-48">Regional Transactions</p>
+</div>
+</div>
+<span class="px-2 py-1 rounded-full bg-success/10 text-success border border-success/20 font-label-sm text-label-sm flex items-center gap-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Connected
+                                </span>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-border-subtle">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-text-muted">Volume Today</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Rs. 450,200</span>
+</div>
+<button class="px-sm py-xs border border-outline-variant rounded text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors">Configure</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

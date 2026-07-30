@@ -1,0 +1,520 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Financial Reports - Diplon ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-variant": "#32353c",
+                        "on-background": "#e1e2eb",
+                        "surface-container-high": "#272a31",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "surface-container-highest": "#32353c",
+                        "inverse-on-surface": "#2e3037",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-error-container": "#ffdad6",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "tertiary-container": "#a44100",
+                        "surface-bright": "#363940",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "text-muted": "#94A3B8",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary": "#002e6a",
+                        "background": "#10131a",
+                        "surface-dim": "#10131a",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "inverse-primary": "#4d44e3",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#c3c0ff",
+                        "on-tertiary": "#571f00",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary": "#adc6ff",
+                        "on-tertiary-fixed": "#351000",
+                        "outline-variant": "#464555",
+                        "on-secondary-container": "#e6ecff",
+                        "success": "#10B981",
+                        "primary-container": "#4f46e5",
+                        "surface-container": "#1d2026",
+                        "warning": "#F59E0B",
+                        "tertiary": "#ffb695",
+                        "surface-container-lowest": "#0b0e14",
+                        "surface": "#10131a",
+                        "on-primary-container": "#dad7ff",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary": "#1d00a5",
+                        "danger": "#F43F5E",
+                        "secondary-container": "#0566d9",
+                        "primary": "#c3c0ff",
+                        "secondary-fixed": "#d8e2ff",
+                        "inverse-surface": "#e1e2eb",
+                        "surface-container-low": "#191c22",
+                        "on-surface": "#e1e2eb",
+                        "outline": "#918fa1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "16px",
+                        "container-margin": "24px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "lead": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Scrollbar for dense areas */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base overflow-hidden flex h-screen">
+<!-- SideNavBar -->
+<nav class="bg-background h-screen w-64 fixed left-0 top-0 border-r border-subtle flex flex-col h-full p-md z-40 hidden md:flex">
+<div class="mb-xl flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md">D</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Suite</p>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-2 px-4 rounded-lg mb-6 hover:bg-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> New Booking
+        </button>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">group</span>
+                CRM
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">explore</span>
+                Operations
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container rounded-lg active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+                Finance
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+</div>
+<div class="mt-auto space-y-1 pt-4 border-t border-subtle">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 transition-transform font-body-base text-body-base" href="#">
+<span class="material-symbols-outlined">help</span>
+                Support
+            </a>
+</div>
+</nav>
+<!-- Main Layout -->
+<div class="flex-1 flex flex-col ml-0 md:ml-64 relative min-w-0">
+<!-- TopNavBar -->
+<header class="bg-surface-glass backdrop-blur-xl fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] z-50 border-b border-subtle shadow-sm flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-6">
+<!-- Search on left -->
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="bg-surface-container-high border-none rounded-lg pl-9 pr-4 py-1.5 text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary focus:bg-surface-container-highest transition-all w-64" placeholder="Search finance..." type="text">
+<div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+<kbd class="font-mono-data text-[10px] bg-surface-variant px-1.5 rounded text-on-surface-variant border border-subtle">⌘</kbd>
+<kbd class="font-mono-data text-[10px] bg-surface-variant px-1.5 rounded text-on-surface-variant border border-subtle">K</kbd>
+</div>
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-6 font-label-md text-label-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Directives</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Inventory</a>
+<a class="text-primary border-b-2 border-primary pb-1 cursor-pointer" href="#">Reports</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 mr-2 hidden md:flex">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">notifications</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">history</span></button>
+</div>
+<div class="h-6 w-px bg-subtle hidden md:block"></div>
+<button class="flex items-center gap-2 font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors">
+<span class="hidden sm:inline">Role Switcher</span>
+<span class="material-symbols-outlined text-[24px]">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 mt-16 p-lg overflow-y-auto overflow-x-hidden flex flex-col gap-lg bg-surface-container-lowest">
+<!-- Page Header & Actions -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shrink-0">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Financial Reports</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Period: Q3 2023 • Consolidation: All Branches</p>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="px-4 py-2 border border-subtle border-white/8 rounded-lg text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors flex-1 sm:flex-none text-center flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span> Export All
+                    </button>
+<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:bg-primary hover:text-on-primary transition-colors flex-1 sm:flex-none text-center shadow-[0_0_15px_rgba(79,70,229,0.2)] flex items-center justify-center gap-2" onclick="document.getElementById('report-config-panel').classList.toggle('translate-x-full');">
+<span class="material-symbols-outlined text-[18px]">add_chart</span> Generate Report
+                    </button>
+</div>
+</div>
+<!-- Main Content Layout: Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6 flex-1 min-h-0">
+<!-- Left Column: Report List (Bento-style Cards) -->
+<div class="xl:col-span-1 flex flex-col gap-4 overflow-y-auto pr-2 pb-4">
+<h3 class="font-label-md text-label-md text-text-muted uppercase tracking-wider mb-2">Available Reports</h3>
+<!-- Report Card: Active -->
+<div class="bg-surface-container-high border border-primary/30 rounded-xl p-4 cursor-pointer hover:border-primary transition-colors relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+</div>
+<h4 class="font-lead text-lead text-on-surface">Profit &amp; Loss</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 line-clamp-2">Detailed breakdown of revenues, costs, and expenses during a specific period.</p>
+<div class="flex justify-between items-center text-xs">
+<span class="font-mono-data text-mono-data text-text-muted">Last run: 2h ago</span>
+<span class="px-2 py-0.5 bg-surface-variant rounded text-on-surface font-label-sm">Standard</span>
+</div>
+</div>
+<!-- Report Card: Inactive -->
+<div class="bg-surface-glass border border-subtle rounded-xl p-4 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</div>
+<h4 class="font-lead text-lead text-on-surface">Tax Summary</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 line-clamp-2">Aggregated tax liabilities and credits across all operational jurisdictions.</p>
+<div class="flex justify-between items-center text-xs">
+<span class="font-mono-data text-mono-data text-text-muted">Last run: Yesterday</span>
+<span class="px-2 py-0.5 bg-surface-variant rounded text-on-surface font-label-sm">Compliance</span>
+</div>
+</div>
+<!-- Report Card: Inactive -->
+<div class="bg-surface-glass border border-subtle rounded-xl p-4 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">compare_arrows</span>
+</div>
+<h4 class="font-lead text-lead text-on-surface">Balance Sheet</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 line-clamp-2">Snapshot of company assets, liabilities, and equity at a specific point in time.</p>
+<div class="flex justify-between items-center text-xs">
+<span class="font-mono-data text-mono-data text-text-muted">Last run: 1w ago</span>
+<span class="px-2 py-0.5 bg-surface-variant rounded text-on-surface font-label-sm">Standard</span>
+</div>
+</div>
+<!-- Report Card: Inactive -->
+<div class="bg-surface-glass border border-subtle rounded-xl p-4 cursor-pointer hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">event_busy</span>
+</div>
+<h4 class="font-lead text-lead text-on-surface">Aged Payables</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 line-clamp-2">Categorization of accounts payable based on the length of time outstanding.</p>
+<div class="flex justify-between items-center text-xs">
+<span class="font-mono-data text-mono-data text-text-muted">Last run: 2w ago</span>
+<span class="px-2 py-0.5 bg-surface-variant rounded text-on-surface font-label-sm">Operational</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Data Preview (High-Density Table) -->
+<div class="xl:col-span-3 flex flex-col bg-surface-container border border-subtle rounded-xl overflow-hidden relative">
+<!-- Preview Header -->
+<div class="bg-surface-container-high px-6 py-4 border-b border-subtle flex justify-between items-center shrink-0">
+<div>
+<h3 class="font-lead text-lead text-on-surface flex items-center gap-2">
+                                Profit &amp; Loss Statement
+                                <span class="px-2 py-0.5 bg-success/10 text-success rounded-full font-label-sm text-[10px] border border-success/20">DRAFT</span>
+</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">01 Jul 2023 - 30 Sep 2023 • All Branches • USD</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded transition-colors" title="Print Preview">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded transition-colors" title="Refresh Data">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-auto bg-surface-dim">
+<table class="w-full text-left border-collapse whitespace-nowrap">
+<thead class="sticky top-0 bg-surface-container-highest/90 backdrop-blur-md z-10 shadow-sm border-b border-subtle">
+<tr>
+<th class="px-6 py-3 font-label-sm text-label-sm text-text-muted uppercase tracking-wider font-semibold w-1/2">Account</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-text-muted uppercase tracking-wider font-semibold text-right">Q3 2023</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-text-muted uppercase tracking-wider font-semibold text-right">Q2 2023</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-text-muted uppercase tracking-wider font-semibold text-right">% Change</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-subtle">
+<!-- Group: Income -->
+<tr class="bg-surface-container-low/50">
+<td class="px-6 py-2 font-label-md text-label-md text-primary font-semibold" colspan="4">Income</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">4000 - Operating Revenue</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">1,245,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">1,150,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-success">+8.26%</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">4100 - Service Fees</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">320,500.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">315,200.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-success">+1.68%</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">4200 - Interest Income</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">12,400.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">14,100.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-danger">-12.05%</td>
+</tr>
+<tr class="bg-surface-container border-t border-subtle border-t-2 font-semibold">
+<td class="px-6 py-3 pl-10 text-on-surface">Total Income</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">1,577,900.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">1,479,300.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-success">+6.66%</td>
+</tr>
+<!-- Group: Cost of Sales -->
+<tr class="bg-surface-container-low/50">
+<td class="px-6 py-2 font-label-md text-label-md text-warning font-semibold" colspan="4">Cost of Sales</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">5000 - Direct Costs</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">450,200.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">420,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-warning">+7.19%</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">5100 - Subcontractors</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">180,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">195,500.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-success">-7.92%</td>
+</tr>
+<tr class="bg-surface-container border-t border-subtle border-t-2 font-semibold">
+<td class="px-6 py-3 pl-10 text-on-surface">Total Cost of Sales</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">630,200.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">615,500.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-warning">+2.38%</td>
+</tr>
+<!-- Gross Profit -->
+<tr class="bg-surface-container-highest border-y border-subtle font-bold">
+<td class="px-6 py-4 text-on-surface text-lead">Gross Profit</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-on-surface text-lead">947,700.00</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-on-surface text-lead">863,800.00</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-success text-lead">+9.71%</td>
+</tr>
+<!-- Group: Operating Expenses -->
+<tr class="bg-surface-container-low/50">
+<td class="px-6 py-2 font-label-md text-label-md text-danger font-semibold" colspan="4">Operating Expenses</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">6000 - Payroll</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">320,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">310,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-danger">+3.22%</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">6100 - Rent</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">85,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">85,000.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">0.00%</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors group cursor-default">
+<td class="px-6 py-2 pl-10 text-on-surface">6200 - Marketing</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface">45,500.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-on-surface-variant">60,200.00</td>
+<td class="px-6 py-2 text-right font-mono-data text-mono-data text-success">-24.41%</td>
+</tr>
+<tr class="bg-surface-container border-t border-subtle border-t-2 font-semibold">
+<td class="px-6 py-3 pl-10 text-on-surface">Total Operating Expenses</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">450,500.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-on-surface">455,200.00</td>
+<td class="px-6 py-3 text-right font-mono-data text-mono-data text-success">-1.03%</td>
+</tr>
+<!-- Net Income -->
+<tr class="bg-primary/10 border-y border-primary/30 font-bold">
+<td class="px-6 py-4 text-primary text-lead">Net Income</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-primary text-lead">497,200.00</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-primary text-lead">408,600.00</td>
+<td class="px-6 py-4 text-right font-mono-data text-mono-data text-success text-lead">+21.68%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Details Drawer: Generate Report Panel -->
+<div class="fixed inset-y-0 right-0 w-full sm:w-96 bg-surface-glass backdrop-blur-3xl border-l border-subtle shadow-[-8px_0_32px_rgba(0,0,0,0.5)] z-[60] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col" id="report-config-panel">
+<div class="px-6 py-5 border-b border-subtle flex justify-between items-center bg-surface-container-highest">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">build</span>
+                Configure Report
+            </h3>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors" onclick="document.getElementById('report-config-panel').classList.add('translate-x-full');">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- Type -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-text-muted">Report Type</label>
+<select class="w-full bg-surface-container border border-subtle rounded-lg px-3 py-2 text-body-base font-body-base text-on-surface focus:ring-1 focus:ring-primary focus:border-primary appearance-none outline-none">
+<option>Profit &amp; Loss</option>
+<option>Balance Sheet</option>
+<option>Cash Flow Statement</option>
+<option>Trial Balance</option>
+</select>
+</div>
+<!-- Date Range (Bento style) -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-text-muted">Period</label>
+<div class="grid grid-cols-2 gap-2 mb-2">
+<button class="bg-surface-variant text-on-surface font-label-sm py-1.5 rounded border border-transparent hover:border-subtle transition-colors">This Month</button>
+<button class="bg-primary/20 text-primary font-label-sm py-1.5 rounded border border-primary/50 transition-colors">This Quarter</button>
+<button class="bg-surface-variant text-on-surface font-label-sm py-1.5 rounded border border-transparent hover:border-subtle transition-colors">YTD</button>
+<button class="bg-surface-variant text-on-surface font-label-sm py-1.5 rounded border border-transparent hover:border-subtle transition-colors">Custom</button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<input class="w-full bg-surface-container border border-subtle rounded-lg px-3 py-2 text-body-sm font-body-sm text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none [color-scheme:dark]" type="date" value="2023-07-01">
+</div>
+<div>
+<input class="w-full bg-surface-container border border-subtle rounded-lg px-3 py-2 text-body-sm font-body-sm text-on-surface focus:ring-1 focus:ring-primary focus:border-primary outline-none [color-scheme:dark]" type="date" value="2023-09-30">
+</div>
+</div>
+</div>
+<!-- Dimensions -->
+<div class="space-y-2">
+<label class="block font-label-md text-label-md text-text-muted">Branch / Entity</label>
+<select class="w-full bg-surface-container border border-subtle rounded-lg px-3 py-2 text-body-base font-body-base text-on-surface focus:ring-1 focus:ring-primary focus:border-primary appearance-none outline-none">
+<option>All Branches (Consolidated)</option>
+<option>North America Region</option>
+<option>EMEA Region</option>
+<option>APAC Region</option>
+</select>
+</div>
+<!-- Comparison -->
+<div class="space-y-3 pt-4 border-t border-subtle">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input checked="" class="peer sr-only" type="checkbox">
+<div class="w-10 h-5 bg-surface-variant rounded-full peer-checked:bg-primary transition-colors"></div>
+<div class="absolute left-1 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+</div>
+<span class="font-body-base text-body-base text-on-surface group-hover:text-primary transition-colors">Include Previous Period Comparison</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer sr-only" type="checkbox">
+<div class="w-10 h-5 bg-surface-variant rounded-full peer-checked:bg-primary transition-colors"></div>
+<div class="absolute left-1 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+</div>
+<span class="font-body-base text-body-base text-on-surface group-hover:text-primary transition-colors">Show Zero Balances</span>
+</label>
+</div>
+<!-- Output Format -->
+<div class="space-y-2 pt-4 border-t border-subtle">
+<label class="block font-label-md text-label-md text-text-muted">Export Format</label>
+<div class="flex gap-3">
+<label class="flex-1 bg-surface-container border border-primary/50 rounded-lg p-3 cursor-pointer text-center relative overflow-hidden group">
+<input checked="" class="sr-only" name="format" type="radio">
+<div class="absolute inset-0 bg-primary/10 opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary mb-1 text-[24px]">description</span>
+<span class="block font-label-sm text-on-surface">PDF</span>
+</label>
+<label class="flex-1 bg-surface-container border border-subtle rounded-lg p-3 cursor-pointer text-center hover:border-primary/50 transition-colors group">
+<input class="sr-only" name="format" type="radio">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-1 text-[24px] transition-colors">table_view</span>
+<span class="block font-label-sm text-on-surface-variant group-hover:text-on-surface transition-colors">CSV</span>
+</label>
+<label class="flex-1 bg-surface-container border border-subtle rounded-lg p-3 cursor-pointer text-center hover:border-primary/50 transition-colors group">
+<input class="sr-only" name="format" type="radio">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-1 text-[24px] transition-colors">dataset</span>
+<span class="block font-label-sm text-on-surface-variant group-hover:text-on-surface transition-colors">XLSX</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-subtle bg-surface-container-highest flex gap-3">
+<button class="flex-1 px-4 py-2 border border-subtle rounded-lg text-on-surface font-label-md text-label-md hover:bg-surface-variant transition-colors" onclick="document.getElementById('report-config-panel').classList.add('translate-x-full');">
+                Cancel
+            </button>
+<button class="flex-1 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:bg-primary hover:text-on-primary transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px] animate-spin hidden">autorenew</span>
+                Generate Now
+            </button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tour Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#002e6a",
+                        "primary": "#c3c0ff",
+                        "on-primary-container": "#dad7ff",
+                        "text-muted": "#94A3B8",
+                        "surface-container-highest": "#32353c",
+                        "inverse-surface": "#e1e2eb",
+                        "error": "#ffb4ab",
+                        "background": "#10131a",
+                        "surface-container": "#1d2026",
+                        "outline": "#918fa1",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-container": "#0566d9",
+                        "warning": "#F59E0B",
+                        "danger": "#F43F5E",
+                        "inverse-primary": "#4d44e3",
+                        "tertiary-container": "#a44100",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-primary": "#1d00a5",
+                        "surface-container-lowest": "#0b0e14",
+                        "surface-container-low": "#191c22",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-surface": "#e1e2eb",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed": "#e2dfff",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "outline-variant": "#464555",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#571f00",
+                        "on-secondary-fixed": "#001a42",
+                        "tertiary": "#ffb695",
+                        "surface-tint": "#c3c0ff",
+                        "surface": "#10131a",
+                        "inverse-on-surface": "#2e3037",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-variant": "#32353c",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary-container": "#e6ecff",
+                        "success": "#10B981",
+                        "error-container": "#93000a",
+                        "on-background": "#e1e2eb",
+                        "surface-container-high": "#272a31",
+                        "surface-dim": "#10131a",
+                        "secondary": "#adc6ff",
+                        "surface-bright": "#363940",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "container-margin": "24px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "lead": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.surface-container-lowest'); color: theme('colors.on-surface'); }
+        .glass-card { background: theme('colors.surface-glass'); border: 1px solid theme('colors.border-subtle'); backdrop-filter: blur(16px); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-surface-container-lowest text-on-surface">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-md px-sm bg-surface-container-lowest border-r border-subtle w-64 shrink-0">
+<div class="flex items-center gap-sm mb-lg px-sm">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A minimalist logo for a high-end enterprise travel management software, featuring clean geometric lines in indigo and dark grey, set against a dark mode background. The design is sleek, modern, and professional, embodying a high-performance command center aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9GUzEAfMdeCRPbBIQx3PUnZZMpoEtdkY_bbJW8Fy_cUdvaD-8W8WgzL2nhNqpZ9lxK0ykQL4tojEqQHoX_MrqiTqBwDPfEtxfr0_AKYrUNeXnFgXseKajzCDfKe3pMw87n-mT2yLyQyOYj_NN7MsDDU_9NAAvxuozVyc-4Mz9_4hk4jRR6690wtKQ0pIrt6hyirJ0_5hNhE_y2YccakjLGP0z_U2sAmnoh1Xtz5P5W0SxbQEfbyRO6CYUA3z3ucWZjRi7i29moFY">
+<div>
+<h1 class="font-headline-sm text-headline-sm text-on-surface font-bold">Global Travels</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Tier</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span>Bookings</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 bg-secondary-container text-on-secondary-container rounded-lg font-label-md text-label-md scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span>Tours</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Customers</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="business_center">business_center</span>
+<span>Vendors</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Reports</span>
+</a>
+</div>
+<button class="mt-auto mb-sm w-full py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+            Quick Action
+        </button>
+<div class="mt-4 pt-4 border-t border-subtle flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+<span>Support</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-2 text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span>Account</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Mobile only for Nav, but acting as Workspace Header here for desktop too) -->
+<header class="flex justify-between items-center w-full px-lg h-16 bg-surface-glass backdrop-blur-xl border-b border-subtle shrink-0 md:hidden">
+<div class="font-headline-md text-headline-md font-bold text-primary">TravelOS Enterprise</div>
+<!-- Mobile nav would go here, omitting for focus on workspace -->
+</header>
+<!-- Workspace Header -->
+<div class="px-lg py-md border-b border-subtle bg-surface-container flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-emerald-900/50 text-emerald-500 font-label-sm text-label-sm border border-emerald-500/20">Departing Today</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">ID: TRK-EBC-8492</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Everest Base Camp Trek</h2>
+<p class="font-body-base text-body-base text-text-muted mt-1">Oct 25, 2023 • 14 Days • 12 Passengers</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-4 py-2 rounded-lg border border-border-subtle bg-transparent hover:bg-surface-container-highest transition-colors font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span> Edit Tour
+                </button>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-white font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span> Dispatch Tour
+                </button>
+</div>
+</div>
+<!-- Scrollable Canvas -->
+<main class="flex-1 overflow-y-auto p-lg">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-md h-full">
+<!-- Left Column: Manifest & Staff (Span 2) -->
+<div class="xl:col-span-2 flex flex-col gap-md">
+<!-- Passenger Manifest -->
+<div class="glass-card rounded-xl p-md flex flex-col flex-1">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">groups</span>
+                                Passenger Manifest
+                            </h3>
+<div class="flex gap-2">
+<div class="bg-surface-container px-3 py-1 rounded-lg border border-border-subtle font-mono-data text-mono-data text-on-surface-variant">
+                                    8/12 Checked In
+                                </div>
+<button class="p-1 hover:bg-surface-container rounded-lg text-text-muted transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto border border-border-subtle rounded-lg bg-surface-container-lowest">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-subtle bg-surface-container-low font-label-sm text-label-sm text-text-muted uppercase tracking-wider">
+<th class="p-sm font-medium">Passenger</th>
+<th class="p-sm font-medium">Booking Ref</th>
+<th class="p-sm font-medium">Status</th>
+<th class="p-sm font-medium">Requirements</th>
+<th class="p-sm font-medium text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-border-subtle hover:bg-surface-container/50 transition-colors group">
+<td class="p-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-indigo-900/50 flex items-center justify-center text-primary font-label-md text-label-md">JD</div>
+<div>
+<div class="font-medium text-on-surface">John Doe</div>
+<div class="text-text-muted text-[11px]">Primary</div>
+</div>
+</td>
+<td class="p-sm font-mono-data text-mono-data">BKG-9921</td>
+<td class="p-sm">
+<span class="px-2 py-0.5 rounded-full bg-emerald-900/30 text-emerald-500 font-label-sm text-label-sm border border-emerald-500/20">Checked In</span>
+</td>
+<td class="p-sm text-text-muted">Vegetarian</td>
+<td class="p-sm text-right">
+<button class="text-text-muted hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<tr class="border-b border-border-subtle hover:bg-surface-container/50 transition-colors group">
+<td class="p-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-indigo-900/50 flex items-center justify-center text-primary font-label-md text-label-md">AS</div>
+<div>
+<div class="font-medium text-on-surface">Alice Smith</div>
+<div class="text-text-muted text-[11px]">Guest</div>
+</div>
+</td>
+<td class="p-sm font-mono-data text-mono-data">BKG-9921</td>
+<td class="p-sm">
+<span class="px-2 py-0.5 rounded-full bg-surface-bright text-text-muted font-label-sm text-label-sm border border-border-subtle">Pending</span>
+</td>
+<td class="p-sm text-text-muted">None</td>
+<td class="p-sm text-right">
+<button class="text-text-muted hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Add more rows as needed for density -->
+<tr class="hover:bg-surface-container/50 transition-colors group">
+<td class="p-sm flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-indigo-900/50 flex items-center justify-center text-primary font-label-md text-label-md">RJ</div>
+<div>
+<div class="font-medium text-on-surface">Robert Johnson</div>
+<div class="text-text-muted text-[11px]">Primary</div>
+</div>
+</td>
+<td class="p-sm font-mono-data text-mono-data">BKG-8834</td>
+<td class="p-sm">
+<span class="px-2 py-0.5 rounded-full bg-emerald-900/30 text-emerald-500 font-label-sm text-label-sm border border-emerald-500/20">Checked In</span>
+</td>
+<td class="p-sm text-warning flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">warning</span> Med Clearance</td>
+<td class="p-sm text-right">
+<button class="text-text-muted hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Staff Details Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md shrink-0">
+<!-- Driver/Vehicle -->
+<div class="glass-card rounded-xl p-md">
+<h4 class="font-label-md text-label-md text-text-muted uppercase mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">directions_bus</span> Transport
+                            </h4>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-border-subtle">
+<span class="material-symbols-outlined text-on-surface-variant">airport_shuttle</span>
+</div>
+<div class="flex-1">
+<div class="font-lead text-lead text-on-surface">Minibus A (15 pax)</div>
+<div class="font-body-sm text-body-sm text-text-muted">Driver: Michael T.</div>
+</div>
+<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-bright border border-border-subtle transition-colors text-primary">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+</div>
+</div>
+<!-- Guide -->
+<div class="glass-card rounded-xl p-md">
+<h4 class="font-label-md text-label-md text-text-muted uppercase mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">badge</span> Lead Guide
+                            </h4>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-lg object-cover border border-border-subtle" data-alt="Professional headshot of a rugged male tour guide with a subtle smile, wearing outdoor gear, set against a dark studio background with rim lighting. Modern, high-contrast aesthetic fitting a premium dark mode dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLpfyxOt0aBYeg57z5YCHolLmnPehMrMR52fK_28av_GfAKrtYE5kbyRNBdgqVoeDHDJhLTqP8j7-2T61atDehFYHLqMnDLw-CqCEKJprX34U2FcbHNu_ZfNPnvlQeLimrL4EwXXYfIdryCMoo04-e0bIKA5s7CNOr1JFJwmzzeFCecpHZ6_XBxZIGg5vC9wDzrFmlYwIAf3GCQxDd3H5Avk3UPbJv7HfU8a8oGMNL42feEb1zrsn9S8r2jY68tyWWPI6L71C5sb8">
+<div class="flex-1">
+<div class="font-lead text-lead text-on-surface">Sarah Jenkins</div>
+<div class="font-body-sm text-body-sm text-text-muted">Senior Alpine Guide</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-container hover:bg-surface-bright border border-border-subtle transition-colors text-primary">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Dispatch & Itinerary (Span 1) -->
+<div class="flex flex-col gap-md">
+<!-- Dispatch Checklist -->
+<div class="glass-card rounded-xl p-md">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-warning">fact_check</span>
+                            Dispatch Checklist
+                        </h3>
+<div class="space-y-3">
+<label class="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-container/50 cursor-pointer transition-colors group">
+<input checked="" class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface-container-lowest" type="checkbox">
+<div>
+<div class="font-body-base text-body-base text-on-surface line-through text-text-muted">Manifest Generated &amp; Printed</div>
+<div class="font-body-sm text-body-sm text-text-muted">System auto-completed</div>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-container/50 cursor-pointer transition-colors group">
+<input checked="" class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface-container-lowest" type="checkbox">
+<div>
+<div class="font-body-base text-body-base text-on-surface line-through text-text-muted">National Park Permits Ready</div>
+<div class="font-body-sm text-body-sm text-text-muted">Verified by Ops Team</div>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-container/50 cursor-pointer transition-colors group">
+<input class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface-container-lowest" type="checkbox">
+<div>
+<div class="font-body-base text-body-base text-on-surface">Vehicle Inspection Complete</div>
+<div class="font-body-sm text-body-sm text-warning">Pending driver confirmation</div>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2 rounded-lg hover:bg-surface-container/50 cursor-pointer transition-colors group">
+<input class="mt-1 w-4 h-4 rounded border-outline-variant bg-surface-container text-primary focus:ring-primary focus:ring-offset-surface-container-lowest" type="checkbox">
+<div>
+<div class="font-body-base text-body-base text-on-surface">Briefing Completed</div>
+<div class="font-body-sm text-body-sm text-text-muted">Required before departure</div>
+</div>
+</label>
+</div>
+</div>
+<!-- Itinerary Summary -->
+<div class="glass-card rounded-xl p-md flex-1 flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">map</span>
+                            Day 1 Itinerary
+                        </h3>
+<div class="relative flex-1 pl-4 border-l border-border-subtle ml-2 space-y-6">
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-[21px] w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<div class="font-label-md text-label-md text-primary mb-1">08:00 AM</div>
+<div class="font-lead text-lead text-on-surface">Group Assembly</div>
+<div class="font-body-sm text-body-sm text-text-muted mt-1">Terminal 2, Gate C. Briefing by Sarah Jenkins.</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-[21px] w-2.5 h-2.5 rounded-full bg-surface-bright border border-border-subtle ring-4 ring-surface-container-lowest"></div>
+<div class="font-label-md text-label-md text-text-muted mb-1">09:30 AM</div>
+<div class="font-lead text-lead text-on-surface">Depart for Lukla</div>
+<div class="font-body-sm text-body-sm text-text-muted mt-1">Chartered flight via Yeti Airlines. Flight time 45 mins.</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-[21px] w-2.5 h-2.5 rounded-full bg-surface-bright border border-border-subtle ring-4 ring-surface-container-lowest"></div>
+<div class="font-label-md text-label-md text-text-muted mb-1">11:00 AM</div>
+<div class="font-lead text-lead text-on-surface">Arrival &amp; Equipment Check</div>
+<div class="font-body-sm text-body-sm text-text-muted mt-1">Lukla Airstrip. Distribute remaining gear.</div>
+</div>
+<!-- Timeline Item -->
+<div class="relative">
+<div class="absolute -left-[21px] w-2.5 h-2.5 rounded-full bg-surface-bright border border-border-subtle ring-4 ring-surface-container-lowest"></div>
+<div class="font-label-md text-label-md text-text-muted mb-1">12:30 PM</div>
+<div class="font-lead text-lead text-on-surface">Begin Trek to Phakding</div>
+<div class="font-body-sm text-body-sm text-text-muted mt-1">Approx 3-4 hours of easy hiking.</div>
+</div>
+</div>
+<button class="mt-4 w-full py-2 bg-surface-container hover:bg-surface-bright border border-border-subtle rounded-lg font-label-md text-label-md text-on-surface transition-colors">
+                            View Full Itinerary
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

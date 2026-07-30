@@ -1,0 +1,480 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Super Admin Dashboard - Diplon Travel ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "primary-fixed": "#e2dfff",
+                        "on-tertiary": "#571f00",
+                        "surface-bright": "#363940",
+                        "text-muted": "#94A3B8",
+                        "surface": "#10131a",
+                        "on-background": "#e1e2eb",
+                        "inverse-primary": "#4d44e3",
+                        "tertiary": "#ffb695",
+                        "surface-container-highest": "#32353c",
+                        "danger": "#F43F5E",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-secondary-fixed": "#001a42",
+                        "on-surface-variant": "#c7c4d8",
+                        "inverse-surface": "#e1e2eb",
+                        "on-primary": "#1d00a5",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary": "#002e6a",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "error": "#ffb4ab",
+                        "warning": "#F59E0B",
+                        "on-tertiary-fixed": "#351000",
+                        "surface-container-low": "#191c22",
+                        "inverse-on-surface": "#2e3037",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-dim": "#10131a",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container": "#1d2026",
+                        "primary-container": "#4f46e5",
+                        "on-secondary-fixed-variant": "#004395",
+                        "secondary-container": "#0566d9",
+                        "outline": "#918fa1",
+                        "secondary-fixed": "#d8e2ff",
+                        "error-container": "#93000a",
+                        "outline-variant": "#464555",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-container-lowest": "#0b0e14",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-container-high": "#272a31",
+                        "on-surface": "#e1e2eb",
+                        "tertiary-container": "#a44100",
+                        "surface-tint": "#c3c0ff",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-primary-container": "#dad7ff",
+                        "on-secondary-container": "#e6ecff",
+                        "background": "#10131a",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-container": "#ffd2be",
+                        "primary": "#c3c0ff",
+                        "surface-variant": "#32353c",
+                        "secondary": "#adc6ff",
+                        "success": "#10B981"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-margin": "24px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Inter"],
+                        "lead": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-border-subtle, rgba(255, 255, 255, 0.08));
+        }
+        
+        /* Custom Scrollbar for dark mode */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 14, 20, 1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-base antialiased overflow-hidden flex h-screen">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-surface-container-lowest border-r border-border-subtle backdrop-blur-xl h-screen w-64 fixed left-0 top-0 overflow-y-auto hidden md:flex flex-col py-md px-sm z-50">
+<div class="mb-xl px-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">travel_explore</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-text-muted">Enterprise Suite</p>
+</div>
+</div>
+<button class="mb-lg mx-4 bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-md text-label-md py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Booking
+        </button>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto space-y-1 pt-4 border-t border-border-subtle">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined">person_outline</span>
+<span class="font-label-md text-label-md">Account</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 relative flex flex-col h-screen">
+<!-- Shared Component: TopNavBar -->
+<header class="bg-surface-glass border-b border-border-subtle backdrop-blur-md shadow-sm fixed top-0 right-0 h-16 w-full md:w-[calc(100%-16rem)] z-40 flex justify-between items-center px-lg">
+<div class="flex items-center gap-6">
+<span class="font-headline-md text-headline-md font-extrabold text-primary">Diplon Travel ERP</span>
+<nav class="hidden lg:flex gap-4">
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-primary transition-all duration-200" href="#">Workspaces</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-primary transition-all duration-200" href="#">Operations</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-primary transition-all duration-200" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-surface-container rounded-full border border-border-subtle">
+<span class="material-symbols-outlined text-[16px] text-text-muted">search</span>
+<input class="bg-transparent border-none text-body-sm text-on-surface focus:ring-0 w-32 md:w-48 placeholder-text-muted outline-none h-6" placeholder="Search (Ctrl+K)" type="text">
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-all duration-200 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-all duration-200 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">find_replace</span>
+</button>
+</div>
+<div class="h-6 w-px bg-border-subtle mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="font-label-sm text-label-sm text-on-surface">Diplon Maharjan</p>
+<p class="text-[10px] text-text-muted">Role: Admin</p>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container overflow-hidden border border-border-subtle shrink-0">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a young male executive in a dark modern office setting, dramatic lighting, high contrast, cyberpunk subtle undertones, 8k resolution, photorealistic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8WuevMqPFSMKeaUjsW26tMerAx76NCajnY3uRnBa03RoCGWnMCYuh9nYCvo-Tfwom-kwB86bKb5EExgpcSGsURI8xf8V1DyX3aK9dN7Kdv_CeVyHPCRKlmVBm0RnPCYSbnHGnPfQnMkuZ_vm2jOY1dokKtmCJS1DXASX8l_cGoNCNCf5zJuwBth5Pr0IvOjLzjY9ZzwtrWLK0vvpzEGYIoZlJgj4AixaT1iILIzD8stIfSS_el8tIOuMdsrBW3H0FuqQNs47sCPg">
+</div>
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto pt-16 pb-12 w-full">
+<div class="p-lg max-w-[1600px] mx-auto space-y-lg">
+<!-- Welcome & Quick Actions Header -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 glass-panel rounded-xl p-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Welcome back, Diplon</h2>
+<p class="font-body-sm text-body-sm text-text-muted flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">admin_panel_settings</span> Super Admin 
+                            <span class="text-border-subtle">•</span>
+<span class="material-symbols-outlined text-[14px]">location_on</span> Kathmandu HQ
+                            <span class="text-border-subtle">•</span>
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 24, 2024
+                        </p>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container/90 transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add_circle</span> Create Booking
+                        </button>
+<button class="bg-surface-container text-on-surface border border-border-subtle px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">record_voice_over</span> Inquiry
+                        </button>
+<button class="bg-surface-container text-on-surface border border-border-subtle px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">tour</span> Tour
+                        </button>
+<button class="bg-surface-container text-on-surface border border-border-subtle px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">payments</span> Payment
+                        </button>
+</div>
+</div>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- KPI 1 -->
+<div class="glass-panel rounded-xl p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Today's Bookings</span>
+<span class="material-symbols-outlined text-[18px] text-primary">receipt_long</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-mono-data text-2xl font-bold text-on-surface">142</span>
+<span class="font-label-sm text-label-sm text-success flex items-center"><span class="material-symbols-outlined text-[12px]">trending_up</span> +12%</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="glass-panel rounded-xl p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Revenue (Today)</span>
+<span class="material-symbols-outlined text-[18px] text-emerald-400">attach_money</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-mono-data text-2xl font-bold text-on-surface">$14,250</span>
+<span class="font-label-sm text-label-sm text-success flex items-center"><span class="material-symbols-outlined text-[12px]">trending_up</span> +4.5%</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="glass-panel rounded-xl p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Active Tours</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">explore</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-mono-data text-2xl font-bold text-on-surface">18</span>
+<span class="font-label-sm text-label-sm text-text-muted">Across 5 regions</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="glass-panel rounded-xl p-4 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Pending Payments</span>
+<span class="material-symbols-outlined text-[18px] text-warning">warning</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-mono-data text-2xl font-bold text-on-surface">$3,420</span>
+<span class="font-label-sm text-label-sm text-danger flex items-center"><span class="material-symbols-outlined text-[12px]">arrow_upward</span> 8 overdue</span>
+</div>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-lg">
+<!-- Left Column (Span 2) -->
+<div class="xl:col-span-2 space-y-lg">
+<!-- Today's Operations Panel -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="p-4 border-b border-border-subtle flex justify-between items-center bg-surface-container-low">
+<h3 class="font-lead text-lead text-on-surface">Today's Operations Dispatch</h3>
+<button class="text-primary font-label-sm text-label-sm hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-text-muted font-label-sm text-label-sm uppercase tracking-wider border-b border-border-subtle">
+<th class="p-3 font-medium">Tour / Ref</th>
+<th class="p-3 font-medium">Time</th>
+<th class="p-3 font-medium">Asset &amp; Crew</th>
+<th class="p-3 font-medium text-right">Occupancy</th>
+<th class="p-3 font-medium text-right">Status</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm text-on-surface-variant">
+<tr class="border-b border-border-subtle hover:bg-surface-container-highest transition group">
+<td class="p-3">
+<div class="font-medium text-on-surface group-hover:text-primary transition">Everest Base Camp Trek</div>
+<div class="text-[11px] text-text-muted font-mono-data">REF-992A</div>
+</td>
+<td class="p-3 font-mono-data">06:00 AM</td>
+<td class="p-3">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[14px]">directions_bus</span> Ba 2 Kha 1234</div>
+<div class="flex items-center gap-2 text-text-muted text-[11px]"><span class="material-symbols-outlined text-[12px]">person</span> R. Thapa / G. Sherpa</div>
+</td>
+<td class="p-3 text-right">
+<div class="font-mono-data">14/14</div>
+<div class="w-16 h-1 bg-surface-container ml-auto rounded-full mt-1 overflow-hidden"><div class="h-full bg-success w-full"></div></div>
+</td>
+<td class="p-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-secondary-container/20 text-secondary-container border border-secondary-container/30">En Route</span>
+</td>
+</tr>
+<tr class="border-b border-border-subtle hover:bg-surface-container-highest transition group">
+<td class="p-3">
+<div class="font-medium text-on-surface group-hover:text-primary transition">Pokhara City Tour</div>
+<div class="text-[11px] text-text-muted font-mono-data">REF-884B</div>
+</td>
+<td class="p-3 font-mono-data">09:30 AM</td>
+<td class="p-3">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[14px]">local_taxi</span> Ba 1 Jha 9876</div>
+<div class="flex items-center gap-2 text-text-muted text-[11px]"><span class="material-symbols-outlined text-[12px]">person</span> S. Gurung</div>
+</td>
+<td class="p-3 text-right">
+<div class="font-mono-data">3/4</div>
+<div class="w-16 h-1 bg-surface-container ml-auto rounded-full mt-1 overflow-hidden"><div class="h-full bg-warning w-[75%]"></div></div>
+</td>
+<td class="p-3 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-warning/20 text-warning border border-warning/30">Dispatching</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Finance Mini-Grid & Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+<!-- Finance Grid -->
+<div class="glass-panel rounded-xl p-4 flex flex-col">
+<h3 class="font-lead text-lead text-on-surface mb-4">Financial Pulse</h3>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container p-3 rounded-lg border border-border-subtle">
+<div class="text-[10px] text-text-muted uppercase mb-1">Collection</div>
+<div class="font-mono-data text-lg text-success">$8.4k</div>
+</div>
+<div class="bg-surface-container p-3 rounded-lg border border-border-subtle">
+<div class="text-[10px] text-text-muted uppercase mb-1">Outstanding</div>
+<div class="font-mono-data text-lg text-danger">$2.1k</div>
+</div>
+<div class="bg-surface-container p-3 rounded-lg border border-border-subtle">
+<div class="text-[10px] text-text-muted uppercase mb-1">Supplier Due</div>
+<div class="font-mono-data text-lg text-warning">$4.5k</div>
+</div>
+<div class="bg-surface-container p-3 rounded-lg border border-border-subtle">
+<div class="text-[10px] text-text-muted uppercase mb-1">Cash / Bank</div>
+<div class="font-mono-data text-lg text-primary">$12.2k</div>
+</div>
+</div>
+</div>
+<!-- Smart Alerts -->
+<div class="glass-panel rounded-xl p-4 flex flex-col bg-gradient-to-br from-surface-container-low to-primary-container/10 border-primary/20">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
+<h3 class="font-lead text-lead text-primary-fixed">AI Insights</h3>
+</div>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 bg-surface-container/50 rounded-lg border border-border-subtle">
+<span class="material-symbols-outlined text-success text-[16px] mt-0.5">trending_up</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Revenue Prediction</p>
+<p class="font-body-sm text-[11px] text-text-muted">Expected +12% increase next week based on historical Dashain trends.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 bg-surface-container/50 rounded-lg border border-border-subtle">
+<span class="material-symbols-outlined text-warning text-[16px] mt-0.5">warning</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Low Occupancy Alert</p>
+<p class="font-body-sm text-[11px] text-text-muted">Pokhara Tour (May 15) is at 20% capacity. Consider dynamic discounting.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column (Span 1) -->
+<div class="space-y-lg flex flex-col h-full">
+<!-- Quick Actions Grid -->
+<div class="grid grid-cols-2 gap-3">
+<button class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition group">
+<span class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition">receipt_long</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface">New Invoice</span>
+</button>
+<button class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition group">
+<span class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition">flight_takeoff</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface">Issue Ticket</span>
+</button>
+<button class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition group">
+<span class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition">directions_car</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface">Dispatch</span>
+</button>
+<button class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-surface-container transition group">
+<span class="material-symbols-outlined text-[24px] text-text-muted group-hover:text-primary transition">account_balance</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface">Settle Ledger</span>
+</button>
+</div>
+<!-- Recent Activity Timeline -->
+<div class="glass-panel rounded-xl p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-lead text-lead text-on-surface">Live Activity</h3>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
+</span>
+</div>
+<div class="relative pl-4 border-l border-border-subtle space-y-6 flex-1 overflow-y-auto pr-2">
+<div class="relative">
+<div class="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-primary ring-4 ring-surface-container-lowest"></div>
+<p class="font-label-sm text-label-sm text-on-surface">Booking Confirmed</p>
+<p class="font-body-sm text-[11px] text-text-muted mt-0.5">John Doe - ABC Trek <span class="text-primary ml-1 font-mono-data">$1,200</span></p>
+<p class="font-mono-data text-[9px] text-border-subtle mt-1 text-text-muted">2 mins ago</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-success ring-4 ring-surface-container-lowest"></div>
+<p class="font-label-sm text-label-sm text-on-surface">Payment Received</p>
+<p class="font-body-sm text-[11px] text-text-muted mt-0.5">Inv #4092 settled via Bank Transfer</p>
+<p class="font-mono-data text-[9px] text-border-subtle mt-1 text-text-muted">15 mins ago</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-warning ring-4 ring-surface-container-lowest"></div>
+<p class="font-label-sm text-label-sm text-on-surface">Driver Assigned</p>
+<p class="font-body-sm text-[11px] text-text-muted mt-0.5">R. Thapa assigned to Pokhara Tour</p>
+<p class="font-mono-data text-[9px] text-border-subtle mt-1 text-text-muted">1 hr ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Shared Component: Footer -->
+<footer class="bg-surface-container-low border-t border-border-subtle fixed bottom-0 right-0 w-full md:w-[calc(100%-16rem)] h-8 z-40 flex justify-between items-center px-lg">
+<span class="font-label-md text-label-md text-primary">Diplon ERP</span>
+<div class="flex items-center gap-4">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Diplon Travel ERP. System Status: Operational</span>
+<div class="hidden sm:flex gap-3">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface" href="#">API Docs</a>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

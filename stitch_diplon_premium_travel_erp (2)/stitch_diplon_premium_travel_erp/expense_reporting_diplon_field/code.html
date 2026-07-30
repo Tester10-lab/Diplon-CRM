@@ -1,0 +1,348 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Expenses - Field Ops</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&amp;family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005236",
+                        "on-primary": "#1000a9",
+                        "surface-container-low": "#131b2e",
+                        "primary-fixed": "#e1e0ff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "tertiary-fixed": "#ffddb8",
+                        "inverse-on-surface": "#283044",
+                        "primary": "#c0c1ff",
+                        "surface-tint": "#c0c1ff",
+                        "tertiary": "#ffb95f",
+                        "inverse-surface": "#dae2fd",
+                        "surface-bright": "#31394d",
+                        "on-tertiary-container": "#3e2400",
+                        "on-primary-container": "#0d0096",
+                        "outline-variant": "#464554",
+                        "on-secondary-container": "#00311f",
+                        "surface": "#0b1326",
+                        "secondary": "#4edea3",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface-container-highest": "#2d3449",
+                        "surface-container": "#171f33",
+                        "outline": "#908fa0",
+                        "tertiary-container": "#ca8100",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#472a00",
+                        "secondary-container": "#00a572",
+                        "surface-container-high": "#222a3d",
+                        "inverse-primary": "#494bd6",
+                        "surface-container-lowest": "#060e20",
+                        "on-error": "#690005",
+                        "on-primary-fixed": "#07006c",
+                        "error": "#ffb4ab",
+                        "primary-container": "#8083ff",
+                        "on-background": "#dae2fd",
+                        "on-secondary": "#003824",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-surface": "#dae2fd",
+                        "surface-variant": "#2d3449",
+                        "secondary-fixed-dim": "#4edea3",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "background": "#0b1326",
+                        "secondary-fixed": "#6ffbbe",
+                        "surface-dim": "#0b1326",
+                        "on-secondary-fixed": "#002113"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "gutter": "12px",
+                        "touch-target-min": "44px",
+                        "stack-sm": "8px",
+                        "stack-lg": "24px",
+                        "edge-margin": "16px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "data-mono": ["JetBrains Mono"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "data-mono-sm": ["JetBrains Mono"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "data-mono-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Modal Animation */
+        #expense-modal {
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #expense-modal.open {
+            transform: translateY(0);
+        }
+        #modal-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex items-center justify-between px-edge-margin h-touch-target-min bg-surface border-b border-outline-variant flat no shadows">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+<div class="font-headline-md text-headline-md font-label-caps text-label-caps tracking-widest text-secondary text-center absolute left-1/2 -translate-x-1/2">
+            FIELD OPS
+        </div>
+<div class="flex items-center">
+<button class="h-touch-target-min w-touch-target-min flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high active:scale-95 transition-transform rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="pt-touch-target-min px-edge-margin mt-stack-md flex flex-col gap-stack-lg max-w-md mx-auto">
+<!-- Summary Dashboard (Bento style) -->
+<section class="grid grid-cols-2 gap-gutter">
+<div class="col-span-2 bg-surface-container rounded-xl p-stack-md border border-outline-variant relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-6xl">payments</span>
+</div>
+<h2 class="font-label-caps text-label-caps text-on-surface-variant mb-1">THIS TRIP - EXPENSES</h2>
+<div class="font-headline-lg text-headline-lg text-primary mb-1">$482.50</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 mt-stack-sm overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+<div class="flex justify-between items-center mt-2 font-data-mono-sm text-data-mono-sm text-on-surface-variant">
+<span>65% Used</span>
+<span>Budget: $750.00</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-stack-md border border-outline-variant flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-secondary mb-1">check_circle</span>
+<span class="font-data-mono text-data-mono text-on-surface">3 Approved</span>
+</div>
+<div class="bg-surface-container rounded-lg p-stack-md border border-outline-variant flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-tertiary mb-1">schedule</span>
+<span class="font-data-mono text-data-mono text-on-surface">2 Pending</span>
+</div>
+</section>
+<!-- Expenses List -->
+<section class="flex flex-col gap-gutter">
+<div class="flex justify-between items-end mb-1">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">RECENT SUBMISSIONS</h3>
+<button class="font-label-caps text-label-caps text-primary hover:text-primary-fixed">VIEW ALL</button>
+</div>
+<!-- Expense Item 1 -->
+<div class="bg-surface-container-low rounded-lg p-stack-md border border-outline-variant flex items-center justify-between relative overflow-hidden group hover:bg-surface-container-highest transition-colors">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-tertiary"></div>
+<div class="flex items-center gap-stack-md pl-2">
+<div class="h-10 w-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">local_gas_station</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface font-semibold">Shell Station 42</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface-variant mt-0.5">Oct 24, 14:30 • Fuel</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="font-data-mono text-data-mono text-on-surface">$85.20</div>
+<div class="font-label-caps text-label-caps text-tertiary mt-1 bg-tertiary/10 px-2 py-0.5 rounded">PENDING</div>
+</div>
+</div>
+<!-- Expense Item 2 -->
+<div class="bg-surface-container-low rounded-lg p-stack-md border border-outline-variant flex items-center justify-between relative overflow-hidden group hover:bg-surface-container-highest transition-colors">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary"></div>
+<div class="flex items-center gap-stack-md pl-2">
+<div class="h-10 w-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface font-semibold">Highway Diner</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface-variant mt-0.5">Oct 24, 12:15 • Meal</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="font-data-mono text-data-mono text-on-surface">$24.50</div>
+<div class="font-label-caps text-label-caps text-secondary mt-1 bg-secondary/10 px-2 py-0.5 rounded">APPROVED</div>
+</div>
+</div>
+<!-- Expense Item 3 -->
+<div class="bg-surface-container-low rounded-lg p-stack-md border border-outline-variant flex items-center justify-between relative overflow-hidden group hover:bg-surface-container-highest transition-colors">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline"></div>
+<div class="flex items-center gap-stack-md pl-2">
+<div class="h-10 w-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">build</span>
+</div>
+<div>
+<div class="font-body-md text-body-md text-on-surface font-semibold">Auto Parts Co.</div>
+<div class="font-data-mono-sm text-data-mono-sm text-on-surface-variant mt-0.5">Oct 23, 09:00 • Maint</div>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="font-data-mono text-data-mono text-on-surface">$112.00</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant mt-1 bg-surface-variant px-2 py-0.5 rounded">REIMBURSED</div>
+</div>
+</div>
+</section>
+<!-- Floating Add Button (Above Bottom Nav) -->
+<button class="fixed bottom-24 right-edge-margin h-14 w-14 bg-primary-container text-on-primary-container rounded-full shadow-[0_4px_14px_0_rgba(0,0,0,0.5)] flex items-center justify-center active:scale-95 transition-transform z-40 border border-primary-fixed/20" id="open-modal-btn">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-stack-sm bg-surface-container border-t border-outline-variant shadow-sm rounded-t-xl pb-6">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-90 transition-all duration-100 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">calendar_today</span>
+<span class="font-label-caps text-label-caps">Today</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-90 transition-all duration-100 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">local_shipping</span>
+<span class="font-label-caps text-label-caps">Fleet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-highest active:scale-90 transition-all duration-100 rounded-lg" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-label-caps text-label-caps">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-100" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-label-caps text-label-caps">Expenses</span>
+</a>
+</nav>
+<!-- Backdrop -->
+<div class="fixed inset-0 bg-background/80 backdrop-blur-sm z-[60]" id="modal-backdrop"></div>
+<!-- Bottom Sheet Modal (Add Expense) -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-high rounded-t-2xl z-[70] border-t border-[#312E81] flex flex-col max-h-[90vh] pb-8 shadow-[0_-8px_30px_rgba(0,0,0,0.5)]" id="expense-modal">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center py-3" id="close-modal-drag">
+<div class="w-12 h-1.5 bg-outline-variant rounded-full"></div>
+</div>
+<div class="px-edge-margin overflow-y-auto hide-scrollbar flex-1 pb-stack-lg">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">New Expense</h2>
+<button class="h-10 w-10 flex items-center justify-center text-on-surface-variant rounded-full hover:bg-surface-variant" id="close-modal-btn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Amount Input (Large) -->
+<div class="mb-stack-lg flex flex-col items-center border-b border-outline-variant pb-stack-md">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-2">AMOUNT</div>
+<div class="flex items-center text-primary">
+<span class="font-headline-lg text-headline-lg mr-1">$</span>
+<input autofocus="" class="bg-transparent border-none outline-none font-headline-lg text-headline-lg text-on-surface text-center w-40 p-0 focus:ring-0 placeholder:text-outline" placeholder="0.00" type="number">
+</div>
+</div>
+<!-- Category Selector -->
+<div class="mb-stack-lg">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-3">CATEGORY</div>
+<div class="grid grid-cols-2 gap-gutter">
+<button class="bg-primary-container/20 border-2 border-primary text-primary rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">local_gas_station</span>
+<span class="font-label-caps text-label-caps">Fuel</span>
+</button>
+<button class="bg-surface border border-outline-variant text-on-surface-variant rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-caps text-label-caps">Meal</span>
+</button>
+<button class="bg-surface border border-outline-variant text-on-surface-variant rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">toll</span>
+<span class="font-label-caps text-label-caps">Tolls</span>
+</button>
+<button class="bg-surface border border-outline-variant text-on-surface-variant rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-label-caps text-label-caps">Misc</span>
+</button>
+</div>
+</div>
+<!-- Receipt Scan Zone -->
+<div class="mb-stack-lg">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-3">RECEIPT</div>
+<button class="w-full h-32 border-2 border-dashed border-outline-variant rounded-xl bg-surface flex flex-col items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-colors group">
+<div class="h-12 w-12 rounded-full bg-surface-variant group-hover:bg-primary-container/20 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined">document_scanner</span>
+</div>
+<span class="font-data-mono-sm text-data-mono-sm">Tap to scan or upload</span>
+</button>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-14 bg-primary text-on-primary font-label-caps text-label-caps rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+                SUBMIT EXPENSE
+            </button>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openBtn = document.getElementById('open-modal-btn');
+            const closeBtn = document.getElementById('close-modal-btn');
+            const closeDrag = document.getElementById('close-modal-drag');
+            const modal = document.getElementById('expense-modal');
+            const backdrop = document.getElementById('modal-backdrop');
+
+            function openModal() {
+                modal.classList.add('open');
+                backdrop.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('open');
+                backdrop.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            closeDrag.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+            
+            // Simple category toggle visual feedback
+            const categoryBtns = document.querySelectorAll('.grid-cols-2 button');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Reset all
+                    categoryBtns.forEach(b => {
+                        b.className = 'bg-surface border border-outline-variant text-on-surface-variant rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform';
+                    });
+                    // Set active
+                    e.currentTarget.className = 'bg-primary-container/20 border-2 border-primary text-primary rounded-lg p-3 flex flex-col items-center justify-center gap-1 active:scale-95 transition-transform';
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Executive Analytics Dashboard - Diplon ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-variant": "#32353c",
+                        "on-background": "#e1e2eb",
+                        "surface-container-high": "#272a31",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "surface-container-highest": "#32353c",
+                        "inverse-on-surface": "#2e3037",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-error-container": "#ffdad6",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "tertiary-container": "#a44100",
+                        "surface-bright": "#363940",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "text-muted": "#94A3B8",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary": "#002e6a",
+                        "background": "#10131a",
+                        "surface-dim": "#10131a",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "inverse-primary": "#4d44e3",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#c3c0ff",
+                        "on-tertiary": "#571f00",
+                        "on-error": "#690005",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary": "#adc6ff",
+                        "on-tertiary-fixed": "#351000",
+                        "outline-variant": "#464555",
+                        "on-secondary-container": "#e6ecff",
+                        "success": "#10B981",
+                        "primary-container": "#4f46e5",
+                        "surface-container": "#1d2026",
+                        "warning": "#F59E0B",
+                        "tertiary": "#ffb695",
+                        "surface-container-lowest": "#0b0e14",
+                        "surface": "#10131a",
+                        "on-primary-container": "#dad7ff",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary": "#1d00a5",
+                        "danger": "#F43F5E",
+                        "secondary-container": "#0566d9",
+                        "primary": "#c3c0ff",
+                        "secondary-fixed": "#d8e2ff",
+                        "inverse-surface": "#e1e2eb",
+                        "surface-container-low": "#191c22",
+                        "on-surface": "#e1e2eb",
+                        "outline": "#918fa1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "16px",
+                        "container-margin": "24px",
+                        "lg": "24px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "lead": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #0B0E14; color: #e1e2eb; }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #c3c0ff, #adc6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body-base antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-background dark:bg-background h-screen w-64 fixed left-0 top-0 border-r border-subtle flex flex-col p-md z-40 transition-transform md:translate-x-0 -translate-x-full" id="sidebar">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-sm font-bold">flight_takeoff</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Nepal Travel ERP</h1>
+<p class="font-label-sm text-label-sm text-text-muted">Enterprise Suite</p>
+</div>
+</div>
+<button class="mb-6 bg-primary-container text-on-primary-container font-label-md text-label-md py-2 px-4 rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-2 w-full">
+<span class="material-symbols-outlined text-sm">add</span> New Booking
+        </button>
+<div class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span> Dashboard
+            </a>
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">group</span> CRM
+            </a>
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">explore</span> Operations
+            </a>
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">payments</span> Finance
+            </a>
+<a class="font-body-base text-body-base bg-secondary-container text-on-secondary-container rounded-lg flex items-center gap-3 px-3 py-2 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined text-lg">analytics</span> Analytics
+            </a>
+</div>
+<div class="mt-auto pt-4 border-t border-subtle flex flex-col gap-1">
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">settings</span> Settings
+            </a>
+<a class="font-body-base text-body-base text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:scale-95 flex items-center gap-3 px-3 py-2 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">help</span> Support
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-64 flex flex-col h-screen relative">
+<!-- TopNavBar -->
+<header class="bg-surface-glass backdrop-blur-xl fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] z-50 border-b border-subtle shadow-sm flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant" onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-sm">search</span>
+<input class="bg-surface-container-high border border-outline-variant text-on-surface font-body-sm text-body-sm rounded-lg pl-9 pr-4 py-1.5 focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64 placeholder-text-muted" placeholder="Search directives..." type="text">
+</div>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Directives</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Inventory</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1 cursor-pointer" href="#">Reports</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-2 border-r border-subtle pr-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer p-1 rounded hover:bg-surface-variant">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer p-1 rounded hover:bg-surface-variant">
+<span class="material-symbols-outlined text-xl">history</span>
+</button>
+</div>
+<button class="font-label-md text-label-md text-on-surface bg-surface-container hover:bg-surface-variant border border-outline-variant px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2">
+                    Role Switcher <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-subtle overflow-hidden cursor-pointer flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic user profile icon set against a deep obsidian background, accented with subtle, glowing indigo reflections to match a high-end, modern dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgIpaWrjXPpoSnJum2t2yQhnXjLsdmzKgr-LRKg1ff9QlOZftEzyzvJNXO0Q0uSlM4h1QlkmggStTp3QpX3eukgJT1c2hNE7BCD31P2rhDb7_LM7u6D2FhkCG9rT0Mfp7rHVKd-UcFwFkF7274ATIQ2qkATwr0RRjRgGx9c4CWjOwE3qJLaVRRHFKyOKBEAekrFSSGm7pM9sCxaF9Feg4kR5-cRRVs_GmuXZj-WkmFUo4XeHyPEerv">
+</div>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto mt-16 p-lg bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-surface-container/40 via-surface-container-lowest to-surface-container-lowest">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-1">Executive Analytics</h2>
+<p class="font-body-base text-body-base text-text-muted">High-level performance overview for Q3 2024</p>
+</div>
+<div class="flex gap-3">
+<button class="glass-panel font-label-md text-label-md text-on-surface px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-sm">calendar_today</span> Last 30 Days
+                    </button>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-sm">download</span> Export
+                    </button>
+</div>
+</div>
+<!-- KPI Row (Bento Grid Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+<!-- Total Revenue -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-md text-label-md text-text-muted uppercase tracking-wider">Total Revenue</span>
+<span class="material-symbols-outlined text-primary text-xl">account_balance_wallet</span>
+</div>
+<div>
+<div class="font-mono-data text-[28px] font-bold text-on-surface mb-1">$2.4M</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">trending_up</span> +14.2%
+                            </span>
+<span class="text-text-muted">vs last quarter</span>
+</div>
+</div>
+<div class="h-10 mt-4 w-full">
+<canvas id="sparklineRev"></canvas>
+</div>
+</div>
+<!-- Net Profit Margin -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-md text-label-md text-text-muted uppercase tracking-wider">Net Profit Margin</span>
+<span class="material-symbols-outlined text-secondary text-xl">query_stats</span>
+</div>
+<div>
+<div class="font-mono-data text-[28px] font-bold text-on-surface mb-1">18.5%</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="text-success bg-success/10 px-1.5 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">trending_up</span> +2.1%
+                            </span>
+<span class="text-text-muted">vs last quarter</span>
+</div>
+</div>
+<div class="h-10 mt-4 w-full flex items-end">
+<div class="w-full bg-surface-variant rounded-full h-2 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[18.5%]"></div>
+</div>
+</div>
+</div>
+<!-- Booking Growth -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-md text-label-md text-text-muted uppercase tracking-wider">Booking Growth</span>
+<span class="material-symbols-outlined text-tertiary text-xl">event_available</span>
+</div>
+<div>
+<div class="font-mono-data text-[28px] font-bold text-on-surface mb-1">3,421</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="text-warning bg-warning/10 px-1.5 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">trending_flat</span> +0.5%
+                            </span>
+<span class="text-text-muted">vs last quarter</span>
+</div>
+</div>
+<div class="h-10 mt-4 w-full">
+<canvas id="sparklineBookings"></canvas>
+</div>
+</div>
+<!-- Vehicle Occupancy -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-md text-label-md text-text-muted uppercase tracking-wider">Fleet Occupancy</span>
+<span class="material-symbols-outlined text-primary-fixed-dim text-xl">directions_bus</span>
+</div>
+<div>
+<div class="font-mono-data text-[28px] font-bold text-on-surface mb-1">82%</div>
+<div class="flex items-center gap-2 font-label-sm text-label-sm">
+<span class="text-danger bg-danger/10 px-1.5 py-0.5 rounded flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]">trending_down</span> -3.2%
+                            </span>
+<span class="text-text-muted">vs last quarter</span>
+</div>
+</div>
+<div class="h-10 mt-4 w-full flex items-center justify-between gap-1">
+<!-- Tiny bar chart simulation -->
+<div class="w-full bg-surface-variant rounded h-full relative overflow-hidden"><div class="absolute bottom-0 left-0 w-full bg-primary-fixed-dim h-[80%]"></div></div>
+<div class="w-full bg-surface-variant rounded h-full relative overflow-hidden"><div class="absolute bottom-0 left-0 w-full bg-primary-fixed-dim h-[85%]"></div></div>
+<div class="w-full bg-surface-variant rounded h-full relative overflow-hidden"><div class="absolute bottom-0 left-0 w-full bg-primary-fixed-dim h-[75%]"></div></div>
+<div class="w-full bg-surface-variant rounded h-full relative overflow-hidden"><div class="absolute bottom-0 left-0 w-full bg-primary-fixed-dim h-[90%]"></div></div>
+<div class="w-full bg-surface-variant rounded h-full relative overflow-hidden"><div class="absolute bottom-0 left-0 w-full bg-primary-fixed-dim h-[82%]"></div></div>
+</div>
+</div>
+</div>
+<!-- Main Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+<!-- Revenue vs Targets (Large Chart) -->
+<div class="glass-panel rounded-xl p-5 lg:col-span-2 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-lead text-lead text-on-surface">Revenue vs. Targets</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-text-muted"><div class="w-2 h-2 rounded-full bg-primary"></div> Actual</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-text-muted"><div class="w-2 h-2 rounded-full bg-surface-variant border border-outline"></div> Target</span>
+</div>
+</div>
+<div class="flex-1 w-full h-[300px]">
+<canvas id="revenueChart" height="224" width="600" style="height: 224px; width: 600.7px;"></canvas>
+</div>
+</div>
+<!-- Revenue by Source (Donut) -->
+<div class="glass-panel rounded-xl p-5 flex flex-col">
+<h3 class="font-lead text-lead text-on-surface mb-6">Revenue by Source</h3>
+<div class="flex-1 w-full relative flex items-center justify-center h-[200px]">
+<canvas id="sourceChart" height="150" width="267" style="height: 150px; width: 267.3px;"></canvas>
+<!-- Center text -->
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<span class="font-mono-data text-body-base text-text-muted">Total</span>
+<span class="font-headline-md text-headline-md text-on-surface">$2.4M</span>
+</div>
+</div>
+<div class="mt-4 flex flex-col gap-2">
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-primary"></div> B2B Partners</div>
+<span class="font-mono-data text-on-surface">45%</span>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-secondary"></div> Direct Booking</div>
+<span class="font-mono-data text-on-surface">35%</span>
+</div>
+<div class="flex justify-between items-center font-label-sm text-label-sm">
+<div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-tertiary"></div> OTA Networks</div>
+<span class="font-mono-data text-on-surface">20%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Top Destinations & DataTable -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8">
+<!-- Top Destinations (Horizontal Bar) -->
+<div class="glass-panel rounded-xl p-5">
+<h3 class="font-lead text-lead text-on-surface mb-6">Top Destinations</h3>
+<div class="w-full h-[250px]">
+<canvas id="destChart"></canvas>
+</div>
+</div>
+<!-- Recent High-Value Bookings (Mini Table) -->
+<div class="glass-panel rounded-xl p-0 lg:col-span-2 overflow-hidden flex flex-col">
+<div class="p-5 border-b border-subtle flex justify-between items-center">
+<h3 class="font-lead text-lead text-on-surface">Recent High-Value Bookings</h3>
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-subtle bg-surface-container/50">
+<th class="py-3 px-5 font-label-sm text-label-sm text-text-muted font-medium uppercase tracking-wider">ID</th>
+<th class="py-3 px-5 font-label-sm text-label-sm text-text-muted font-medium uppercase tracking-wider">Client</th>
+<th class="py-3 px-5 font-label-sm text-label-sm text-text-muted font-medium uppercase tracking-wider">Destination</th>
+<th class="py-3 px-5 font-label-sm text-label-sm text-text-muted font-medium uppercase tracking-wider">Status</th>
+<th class="py-3 px-5 font-label-sm text-label-sm text-text-muted font-medium uppercase tracking-wider text-right">Value</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-subtle hover:bg-surface-variant/30 transition-colors">
+<td class="py-3 px-5 font-mono-data text-text-muted">#BK-9021</td>
+<td class="py-3 px-5">Summit Expeditions Ltd.</td>
+<td class="py-3 px-5">Everest Base Camp</td>
+<td class="py-3 px-5"><span class="inline-block px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-medium border border-success/20">Confirmed</span></td>
+<td class="py-3 px-5 text-right font-mono-data">$12,450</td>
+</tr>
+<tr class="border-b border-subtle hover:bg-surface-variant/30 transition-colors">
+<td class="py-3 px-5 font-mono-data text-text-muted">#BK-9018</td>
+<td class="py-3 px-5">Global Treks Inc.</td>
+<td class="py-3 px-5">Annapurna Circuit</td>
+<td class="py-3 px-5"><span class="inline-block px-2 py-0.5 rounded-full bg-warning/10 text-warning text-[10px] font-medium border border-warning/20">Pending</span></td>
+<td class="py-3 px-5 text-right font-mono-data">$8,200</td>
+</tr>
+<tr class="border-b border-subtle hover:bg-surface-variant/30 transition-colors">
+<td class="py-3 px-5 font-mono-data text-text-muted">#BK-9015</td>
+<td class="py-3 px-5">Sarah Jenkins (Direct)</td>
+<td class="py-3 px-5">Pokhara Retreat</td>
+<td class="py-3 px-5"><span class="inline-block px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-medium border border-success/20">Confirmed</span></td>
+<td class="py-3 px-5 text-right font-mono-data">$4,150</td>
+</tr>
+<tr class="border-b border-subtle hover:bg-surface-variant/30 transition-colors">
+<td class="py-3 px-5 font-mono-data text-text-muted">#BK-9011</td>
+<td class="py-3 px-5">Himalayan Tours B2B</td>
+<td class="py-3 px-5">Kathmandu Heritage</td>
+<td class="py-3 px-5"><span class="inline-block px-2 py-0.5 rounded-full bg-surface-variant text-text-muted text-[10px] font-medium border border-outline">Draft</span></td>
+<td class="py-3 px-5 text-right font-mono-data">$15,600</td>
+</tr>
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-3 px-5 font-mono-data text-text-muted">#BK-9008</td>
+<td class="py-3 px-5">Wanderlust Group</td>
+<td class="py-3 px-5">Langtang Valley</td>
+<td class="py-3 px-5"><span class="inline-block px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-medium border border-success/20">Confirmed</span></td>
+<td class="py-3 px-5 text-right font-mono-data">$9,800</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Chart.js Configuration
+        Chart.defaults.color = '#94A3B8';
+        Chart.defaults.font.family = 'Inter';
+        
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            interaction: { mode: 'index', intersect: false },
+        };
+
+        // 1. Sparkline - Revenue
+        new Chart(document.getElementById('sparklineRev').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    data: [65, 78, 60, 92, 85, 105],
+                    borderColor: '#10B981', // Success
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: { x: { display: false }, y: { display: false, min: 0 } },
+                plugins: { tooltip: { enabled: false } }
+            }
+        });
+
+        // 2. Sparkline - Bookings
+        new Chart(document.getElementById('sparklineBookings').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    data: [120, 135, 125, 140, 138, 142],
+                    borderColor: '#c3c0ff', // Primary
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: { x: { display: false }, y: { display: false, min: 100 } },
+                plugins: { tooltip: { enabled: false } }
+            }
+        });
+
+        // 3. Main Revenue vs Target Chart
+        const ctxRev = document.getElementById('revenueChart').getContext('2d');
+        const gradientPrimary = ctxRev.createLinearGradient(0, 0, 0, 300);
+        gradientPrimary.addColorStop(0, 'rgba(195, 192, 255, 0.2)');
+        gradientPrimary.addColorStop(1, 'rgba(195, 192, 255, 0)');
+
+        new Chart(ctxRev, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Actual Revenue',
+                        data: [120, 135, 125, 145, 160, 155, 175, 190, 210, 205, 230, 250],
+                        borderColor: '#c3c0ff', // Primary
+                        backgroundColor: gradientPrimary,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0B0E14',
+                        pointBorderColor: '#c3c0ff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Target',
+                        data: [130, 140, 140, 150, 150, 160, 170, 180, 190, 200, 210, 220],
+                        borderColor: '#464555', // outline-variant
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: { grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { callback: function(value) { return '$' + value + 'k'; } }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: '#000000',
+                        titleColor: '#e1e2eb',
+                        bodyColor: '#e1e2eb',
+                        borderColor: '#c3c0ff',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: true
+                    }
+                }
+            }
+        });
+
+        // 4. Source Donut Chart
+        new Chart(document.getElementById('sourceChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['B2B Partners', 'Direct Booking', 'OTA Networks'],
+                datasets: [{
+                    data: [45, 35, 20],
+                    backgroundColor: ['#c3c0ff', '#adc6ff', '#ffb695'], // Primary, Secondary, Tertiary
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                cutout: '75%',
+                plugins: {
+                    tooltip: {
+                        backgroundColor: '#000000',
+                        callbacks: {
+                            label: function(context) { return ' ' + context.label + ': ' + context.parsed + '%'; }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 5. Top Destinations Bar Chart
+        new Chart(document.getElementById('destChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Everest Region', 'Annapurna', 'Kathmandu', 'Pokhara', 'Chitwan'],
+                datasets: [{
+                    data: [850, 720, 640, 510, 320],
+                    backgroundColor: 'rgba(195, 192, 255, 0.8)', // Primary w/ opacity
+                    borderRadius: 4,
+                    barThickness: 16
+                }]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, display: false },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body></html>

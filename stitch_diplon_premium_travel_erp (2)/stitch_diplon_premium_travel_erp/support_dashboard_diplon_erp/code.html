@@ -1,0 +1,520 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Support Dashboard - Diplon Travel ERP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#464555",
+                        "on-secondary-container": "#e6ecff",
+                        "tertiary-container": "#a44100",
+                        "surface-container-high": "#272a31",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e1e2eb",
+                        "surface-container-lowest": "#0b0e14",
+                        "error-container": "#93000a",
+                        "danger": "#F43F5E",
+                        "on-surface-variant": "#c7c4d8",
+                        "success": "#10B981",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#1d00a5",
+                        "surface-tint": "#c3c0ff",
+                        "surface": "#10131a",
+                        "secondary": "#adc6ff",
+                        "text-muted": "#94A3B8",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "background": "#10131a",
+                        "on-tertiary": "#571f00",
+                        "tertiary": "#ffb695",
+                        "primary": "#c3c0ff",
+                        "surface-container-low": "#191c22",
+                        "on-tertiary-fixed": "#351000",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-secondary-fixed": "#001a42",
+                        "surface-container": "#1d2026",
+                        "error": "#ffb4ab",
+                        "warning": "#F59E0B",
+                        "primary-fixed": "#e2dfff",
+                        "secondary-fixed": "#d8e2ff",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "on-surface": "#e1e2eb",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "surface-dim": "#10131a",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "surface-variant": "#32353c",
+                        "surface-container-highest": "#32353c",
+                        "on-secondary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#0f0069",
+                        "surface-bright": "#363940",
+                        "secondary-container": "#0566d9",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "inverse-primary": "#4d44e3",
+                        "outline": "#918fa1",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-secondary": "#002e6a",
+                        "on-background": "#e1e2eb",
+                        "inverse-on-surface": "#2e3037",
+                        "on-primary-container": "#dad7ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "container-margin": "24px",
+                        "md": "16px",
+                        "base": "8px",
+                        "xl": "32px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "lead": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: theme('colors.surface-glass');
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid theme('colors.border-subtle');
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-base antialiased overflow-hidden flex">
+<!-- SideNavBar (from JSON) -->
+<nav class="bg-surface-container-lowest h-screen w-64 fixed left-0 top-0 border-r border-border-subtle flex flex-col h-full py-lg z-50">
+<div class="px-md mb-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md font-black">D</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary font-black">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-text-muted">Enterprise Support</p>
+</div>
+</div>
+</div>
+<div class="px-md mb-lg">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary-container/90 transition-colors py-sm px-md rounded-lg font-label-md flex items-center justify-center gap-xs shadow-[0_0_15px_rgba(79,70,229,0.3)]">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                New Ticket
+            </button>
+</div>
+<ul class="flex flex-col gap-xs px-md flex-1 overflow-y-auto scrollbar-hide">
+<!-- Active Tab -->
+<li>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-primary font-bold border-r-2 border-primary bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+</li>
+<!-- Inactive Tabs -->
+<li>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-md">Tickets</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md">Customers</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">api</span>
+<span class="font-label-md">Integrations</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-md">SLA Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-md pt-lg border-t border-border-subtle flex flex-col gap-xs">
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md">Support</span>
+</a>
+<a class="flex items-center gap-sm py-sm px-sm rounded-lg text-on-surface-variant font-medium hover:bg-surface-variant transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Account</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 h-screen flex flex-col relative overflow-hidden bg-surface">
+<!-- Ambient Background Effect -->
+<div class="absolute inset-0 z-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-container via-surface to-background"></div>
+<!-- TopAppBar (from JSON) -->
+<header class="bg-surface-glass backdrop-blur-xl border-b border-border-subtle flex justify-between items-center h-16 px-lg sticky top-0 z-40 w-full relative">
+<div class="flex items-center gap-lg">
+<div class="font-headline-md text-headline-md text-on-surface tracking-tight">Support Suite</div>
+<nav class="hidden md:flex gap-lg h-full items-center">
+<a class="text-on-surface-variant hover:text-primary transition-all font-label-md h-full flex items-center relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:opacity-0 hover:after:opacity-100" href="#">Queue</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-label-md h-full flex items-center relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:opacity-0 hover:after:opacity-100" href="#">Assigned</a>
+<a class="text-on-surface-variant hover:text-primary transition-all font-label-md h-full flex items-center relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:opacity-0 hover:after:opacity-100" href="#">Resolved</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden lg:block focus-within:ring-1 focus-within:ring-primary rounded-lg transition-all">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-text-muted" style="font-size: 18px;">search</span>
+<input class="bg-surface-container-high border border-border-subtle rounded-lg pl-8 pr-3 py-1.5 text-body-sm text-on-surface placeholder-text-muted focus:outline-none focus:border-primary focus:bg-surface-container w-64 transition-all" placeholder="Search tickets..." type="text">
+</div>
+<div class="flex items-center gap-xs">
+<button class="p-1.5 text-text-muted hover:text-primary hover:bg-surface-variant rounded-md transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full border border-surface-glass"></span>
+</button>
+<button class="p-1.5 text-text-muted hover:text-primary hover:bg-surface-variant rounded-md transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+</div>
+<div class="h-6 w-px bg-border-subtle mx-xs"></div>
+<div class="flex items-center gap-sm cursor-pointer hover:bg-surface-variant p-1 rounded-lg transition-colors">
+<img alt="Agent Avatar" class="w-8 h-8 rounded-full object-cover border border-border-subtle" data-alt="A professional headshot of a female customer support agent in her 30s. She is smiling subtly, wearing a dark navy blazer over a light blue blouse. The background is a slightly blurred, modern office setting with glass partitions and soft, cool-toned lighting. The overall mood is approachable, competent, and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWb5vHouEEecqzYokDuQ_hlEcNsyR2JAV7V1DgOjHyjaB9zKeaP_vtMK4lsO8KRXMw_2-I5-3hBFcybRq7lDZEKlKjEOwpbb2x9aXIhdb-MfcEMGTP8ijuH-ZS4VT3SKqPzPekpqUoMBARUIN-QoHm4CAgjUkmmDew1SRszoTO_IbTdu_UL_Y_CW0JIPVx9kFKYxSMxLTl-u-8Vi-WRU-pPGG1fTo4s6eDi0c6Vx4M9JadjOlm2TCG">
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-lg z-10 space-y-lg pb-xl">
+<!-- KPI Cards Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- KPI 1 -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined" style="font-size: 16px;">schedule</span>
+<span class="font-label-sm uppercase tracking-wider">Avg Response</span>
+</div>
+<span class="flex items-center text-success font-label-sm bg-success/10 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined" style="font-size: 12px;">trending_down</span>
+                            12%
+                        </span>
+</div>
+<div class="z-10">
+<span class="font-headline-lg text-headline-lg font-black text-on-surface">1.2<span class="text-headline-md text-text-muted font-normal ml-0.5">h</span></span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-secondary-container/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined" style="font-size: 16px;">inbox</span>
+<span class="font-label-sm uppercase tracking-wider">Open Tickets</span>
+</div>
+<span class="flex items-center text-warning font-label-sm bg-warning/10 px-1.5 py-0.5 rounded">
+<span class="material-symbols-outlined" style="font-size: 12px;">trending_up</span>
+                            5%
+                        </span>
+</div>
+<div class="z-10">
+<span class="font-headline-lg text-headline-lg font-black text-on-surface">142</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-success/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-xs text-text-muted">
+<span class="material-symbols-outlined" style="font-size: 16px;">sentiment_satisfied</span>
+<span class="font-label-sm uppercase tracking-wider">CSAT Score</span>
+</div>
+</div>
+<div class="z-10 flex items-baseline gap-1">
+<span class="font-headline-lg text-headline-lg font-black text-on-surface">4.8</span>
+<span class="font-body-sm text-text-muted">/ 5</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm relative overflow-hidden group border-danger/30 bg-danger/5">
+<div class="absolute inset-0 bg-gradient-to-br from-danger/20 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-xs text-danger">
+<span class="material-symbols-outlined" style="font-size: 16px;">warning</span>
+<span class="font-label-sm uppercase tracking-wider">SLA Breaches</span>
+</div>
+</div>
+<div class="z-10">
+<span class="font-headline-lg text-headline-lg font-black text-danger">3</span>
+</div>
+</div>
+</div>
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Main Chart -->
+<div class="glass-panel rounded-xl p-md lg:col-span-2 flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Ticket Volume Trends</h2>
+<div class="flex gap-2">
+<span class="font-label-sm text-text-muted bg-surface-container-high px-2 py-1 rounded border border-border-subtle">Last 30 Days</span>
+</div>
+</div>
+<div class="flex-1 relative min-h-[250px] w-full">
+<canvas id="volumeChart" height="250" width="613" style="height: 250px; width: 613.3px;"></canvas>
+</div>
+</div>
+<!-- Secondary Chart -->
+<div class="glass-panel rounded-xl p-md flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Resolution Channel</h2>
+</div>
+<div class="flex-1 relative min-h-[250px] w-full flex items-center justify-center">
+<canvas id="channelChart" height="256" width="282" style="height: 256px; width: 282.7px;"></canvas>
+</div>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="glass-panel rounded-xl flex flex-col overflow-hidden">
+<div class="p-md border-b border-border-subtle flex justify-between items-center bg-surface-container-low/50">
+<h2 class="font-headline-md text-headline-md text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-danger">local_fire_department</span>
+                        Recent Critical Tickets
+                    </h2>
+<button class="font-label-md text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-border-subtle bg-surface-container-lowest/50">
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold">ID</th>
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold">Priority</th>
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold">Customer</th>
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold">Subject</th>
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold">Assigned Agent</th>
+<th class="py-sm px-md font-label-sm text-text-muted uppercase tracking-wider font-semibold text-right">Age</th>
+</tr>
+</thead>
+<tbody class="font-body-base divide-y divide-border-subtle">
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="py-sm px-md font-mono-data text-text-muted">#T-8921</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-full bg-danger/10 text-danger font-label-sm border border-danger/20">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span> Critical
+                                    </span>
+</td>
+<td class="py-sm px-md font-medium text-on-surface">Acme Corp Ltd.</td>
+<td class="py-sm px-md text-on-surface-variant truncate max-w-xs group-hover:text-primary transition-colors">API Gateway Timeout during peak hours</td>
+<td class="py-sm px-md">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm font-bold text-[10px]">SJ</div>
+<span class="text-text-muted font-body-sm">Sarah Jenkins</span>
+</div>
+</td>
+<td class="py-sm px-md text-right font-mono-data text-warning">45m</td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="py-sm px-md font-mono-data text-text-muted">#T-8919</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-full bg-warning/10 text-warning font-label-sm border border-warning/20">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span> High
+                                    </span>
+</td>
+<td class="py-sm px-md font-medium text-on-surface">Global Logistics Inc.</td>
+<td class="py-sm px-md text-on-surface-variant truncate max-w-xs group-hover:text-primary transition-colors">Payment gateway reconciliation error</td>
+<td class="py-sm px-md">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-label-sm font-bold text-[10px]">MR</div>
+<span class="text-text-muted font-body-sm">Marcus Reed</span>
+</div>
+</td>
+<td class="py-sm px-md text-right font-mono-data text-text-muted">1h 12m</td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="py-sm px-md font-mono-data text-text-muted">#T-8905</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-full bg-danger/10 text-danger font-label-sm border border-danger/20">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span> Critical
+                                    </span>
+</td>
+<td class="py-sm px-md font-medium text-on-surface">TechSolutions Group</td>
+<td class="py-sm px-md text-on-surface-variant truncate max-w-xs group-hover:text-primary transition-colors">Data sync failure across EU nodes</td>
+<td class="py-sm px-md">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-label-sm font-bold text-[10px]">AK</div>
+<span class="text-text-muted font-body-sm">Alex Kim</span>
+</div>
+</td>
+<td class="py-sm px-md text-right font-mono-data text-danger font-medium">3h 40m</td>
+</tr>
+<tr class="hover:bg-surface-variant/50 transition-colors group cursor-pointer">
+<td class="py-sm px-md font-mono-data text-text-muted">#T-8890</td>
+<td class="py-sm px-md">
+<span class="inline-flex items-center gap-xs px-2 py-0.5 rounded-full bg-warning/10 text-warning font-label-sm border border-warning/20">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span> High
+                                    </span>
+</td>
+<td class="py-sm px-md font-medium text-on-surface">Northern Star Travel</td>
+<td class="py-sm px-md text-on-surface-variant truncate max-w-xs group-hover:text-primary transition-colors">Unable to process bulk itinerary updates</td>
+<td class="py-sm px-md">
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-sm font-bold text-[10px]">SJ</div>
+<span class="text-text-muted font-body-sm">Sarah Jenkins</span>
+</div>
+</td>
+<td class="py-sm px-md text-right font-mono-data text-text-muted">5h 15m</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Chart.js Configuration
+        Chart.defaults.color = '#94A3B8'; // text-muted
+        Chart.defaults.font.family = 'Inter';
+        
+        // 1. Volume Area Chart
+        const volCtx = document.getElementById('volumeChart').getContext('2d');
+        
+        // Gradient for Area Chart
+        const gradientPrimary = volCtx.createLinearGradient(0, 0, 0, 400);
+        gradientPrimary.addColorStop(0, 'rgba(79, 70, 229, 0.4)'); // primary-container with opacity
+        gradientPrimary.addColorStop(1, 'rgba(79, 70, 229, 0)');
+
+        new Chart(volCtx, {
+            type: 'line',
+            data: {
+                labels: ['1', '4', '7', '10', '13', '16', '19', '22', '25', '28', '30'],
+                datasets: [{
+                    label: 'Tickets Created',
+                    data: [45, 52, 38, 65, 80, 55, 70, 95, 85, 110, 90],
+                    borderColor: '#c3c0ff', // primary
+                    backgroundColor: gradientPrimary,
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#10131a', // background
+                    pointBorderColor: '#c3c0ff',
+                    pointBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1d2026', // surface-container
+                        titleColor: '#e1e2eb', // on-surface
+                        bodyColor: '#c7c4d8', // on-surface-variant
+                        borderColor: 'rgba(255, 255, 255, 0.08)',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false,
+                        },
+                        beginAtZero: true,
+                        ticks: { font: { size: 11, family: 'Inter' } } // simulating mono-data slightly
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index',
+                },
+            }
+        });
+
+        // 2. Channel Doughnut Chart
+        const channelCtx = document.getElementById('channelChart').getContext('2d');
+        new Chart(channelCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Email', 'WhatsApp', 'Portal', 'Phone'],
+                datasets: [{
+                    data: [45, 25, 20, 10],
+                    backgroundColor: [
+                        '#4f46e5', // primary-container
+                        '#10B981', // success (whatsapp-ish)
+                        '#adc6ff', // secondary
+                        '#ffb695'  // tertiary
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#10131a', // match background to create gaps
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                         backgroundColor: '#1d2026',
+                         titleColor: '#e1e2eb',
+                         bodyColor: '#e1e2eb',
+                         borderColor: 'rgba(255, 255, 255, 0.08)',
+                         borderWidth: 1
+                    }
+                }
+            }
+        });
+    </script>
+</body></html>

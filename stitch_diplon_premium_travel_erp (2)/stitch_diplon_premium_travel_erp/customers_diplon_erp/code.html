@@ -1,0 +1,571 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Diplon CRM - Customers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#002e6a",
+                        "primary": "#c3c0ff",
+                        "on-primary-container": "#dad7ff",
+                        "text-muted": "#94A3B8",
+                        "surface-container-highest": "#32353c",
+                        "inverse-surface": "#e1e2eb",
+                        "error": "#ffb4ab",
+                        "background": "#10131a",
+                        "surface-container": "#1d2026",
+                        "outline": "#918fa1",
+                        "on-primary-fixed": "#0f0069",
+                        "secondary-container": "#0566d9",
+                        "warning": "#F59E0B",
+                        "danger": "#F43F5E",
+                        "inverse-primary": "#4d44e3",
+                        "tertiary-container": "#a44100",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#ffd2be",
+                        "on-primary": "#1d00a5",
+                        "surface-container-lowest": "#0b0e14",
+                        "surface-container-low": "#191c22",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-surface": "#e1e2eb",
+                        "on-secondary-fixed-variant": "#004395",
+                        "primary-fixed": "#e2dfff",
+                        "border-subtle": "rgba(255, 255, 255, 0.08)",
+                        "outline-variant": "#464555",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-tertiary": "#571f00",
+                        "on-secondary-fixed": "#001a42",
+                        "tertiary": "#ffb695",
+                        "surface-tint": "#c3c0ff",
+                        "surface": "#10131a",
+                        "inverse-on-surface": "#2e3037",
+                        "surface-glass": "rgba(15, 23, 42, 0.8)",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "primary-container": "#4f46e5",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-variant": "#32353c",
+                        "on-tertiary-fixed": "#351000",
+                        "on-secondary-container": "#e6ecff",
+                        "success": "#10B981",
+                        "error-container": "#93000a",
+                        "on-background": "#e1e2eb",
+                        "surface-container-high": "#272a31",
+                        "surface-dim": "#10131a",
+                        "secondary": "#adc6ff",
+                        "surface-bright": "#363940",
+                        "on-error": "#690005",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "container-margin": "24px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "gutter": "16px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "lead": ["Inter"],
+                        "mono-data": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-base": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "lead": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-base": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0B0E14; /* Obsidian */
+            color: #e1e2eb;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(25, 28, 34, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-drawer {
+            background: rgba(11, 14, 20, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #32353c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464555;
+        }
+
+        /* Row hover */
+        .table-row-hover:hover {
+            background: rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+        }
+        
+        /* Drawer transition */
+        .drawer-enter {
+            transform: translateX(100%);
+        }
+        .drawer-enter-active {
+            transform: translateX(0);
+            transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .drawer-exit {
+            transform: translateX(0);
+        }
+        .drawer-exit-active {
+            transform: translateX(100%);
+            transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-surface-container-lowest border-r border-border-subtle backdrop-blur-xl z-50 flex flex-col py-md px-sm">
+<div class="mb-xl px-4 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-[20px]">explore</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-text-muted">Enterprise Suite</p>
+</div>
+</div>
+<button class="mb-lg w-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors duration-200 py-2 px-4 rounded-lg font-label-md text-label-md flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Booking
+        </button>
+<div class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto border-t border-border-subtle pt-4 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">person_outline</span>
+<span class="font-label-md text-label-md">Account</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-16rem)] z-40 bg-surface-glass border-b border-border-subtle backdrop-blur-md flex justify-between items-center px-lg">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px]">search</span>
+<input class="bg-surface-container text-on-surface border border-outline-variant rounded-lg pl-10 pr-4 py-1.5 font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-all placeholder:text-text-muted" placeholder="Search across ERP (Ctrl+K)" type="text">
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-primary transition-all duration-200" href="#">Workspaces</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-sm text-label-sm opacity-80" href="#">Operations</a>
+<a class="text-on-surface-variant font-medium font-label-sm text-label-sm hover:text-primary transition-all duration-200" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-sm text-label-sm text-text-muted border border-border-subtle rounded px-2 py-1 bg-surface-container-low">Role: Admin</span>
+<div class="flex items-center gap-2 text-text-muted">
+<button class="p-1.5 hover:bg-surface-container-highest rounded-full transition-colors hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">notifications</span></button>
+<button class="p-1.5 hover:bg-surface-container-highest rounded-full transition-colors hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">search</span></button>
+<button class="p-1.5 hover:bg-surface-container-highest rounded-full transition-colors hover:text-on-surface"><span class="material-symbols-outlined text-[20px]">find_replace</span></button>
+</div>
+<button class="font-label-sm text-label-sm text-on-surface bg-surface-container-high border border-border-subtle hover:bg-surface-container-highest px-3 py-1.5 rounded transition-colors">Quick Actions</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-border-subtle overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic user avatar icon with subtle indigo glowing edges, set against a completely black background. The lighting is focused and cinematic, creating deep shadows and sharp highlights. High resolution, minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxlzL2-DAhFU2ck2y_eM1mgXoqRMsgsyf1EYEVO0Un4gtkvogJ4K2TSPCbUxGwXJA6rh8agd3XNZ0fo5uipH7BNeQbPLgVSl2pjT0k00efqIzkYhkwvpDsWg19yuAub_nwWdV4jYXeJjsWvEJRrrfdX6bBnetXeGlmMtPYF-yDYDpqhRRgODvtsMYcWF_fpzlPsdujBK_34ii4LPzySuG_L08eKkre66ZxNZRfLK6bFLePxHTExh10WIND2C0f74nEeIksjS-QZfc">
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-64 mt-16 p-lg w-[calc(100%-16rem)] h-[calc(100vh-6rem)] overflow-y-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Customers</h2>
+<p class="font-body-sm text-body-sm text-text-muted">Manage your traveler base and client relationships.</p>
+</div>
+<div class="flex gap-3">
+<button class="font-label-md text-label-md px-4 py-2 rounded-lg border border-border-subtle bg-transparent text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export
+                </button>
+<button class="font-label-md text-label-md px-4 py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+                    New Customer
+                </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="glass-panel rounded-lg p-sm mb-md flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[16px]">filter_list</span>
+<input class="bg-surface-container-lowest text-on-surface border border-outline-variant rounded-md pl-9 pr-3 py-1.5 font-body-sm text-body-sm focus:outline-none focus:border-primary w-64" placeholder="Filter customers..." type="text">
+</div>
+<div class="flex bg-surface-container-lowest rounded-md border border-border-subtle p-0.5">
+<button class="px-3 py-1 font-label-sm text-label-sm bg-surface-container-highest text-on-surface rounded shadow-sm">All</button>
+<button class="px-3 py-1 font-label-sm text-label-sm text-text-muted hover:text-on-surface rounded">Active</button>
+<button class="px-3 py-1 font-label-sm text-label-sm text-text-muted hover:text-on-surface rounded">VIP</button>
+<button class="px-3 py-1 font-label-sm text-label-sm text-text-muted hover:text-on-surface rounded">Inactive</button>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-body-sm text-body-sm text-text-muted">Sort by:</span>
+<select class="bg-surface-container-lowest text-on-surface border border-border-subtle rounded-md px-2 py-1 font-body-sm text-body-sm focus:outline-none focus:border-primary">
+<option>Recent Activity</option>
+<option>Lifetime Value</option>
+<option>Name (A-Z)</option>
+</select>
+</div>
+</div>
+<!-- High-Density DataTable -->
+<div class="glass-panel rounded-xl overflow-hidden border border-border-subtle">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest border-b border-border-subtle">
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider w-8"><input class="rounded bg-surface-container border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent" type="checkbox"></th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Customer Name</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Contact</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider text-right">Total Bookings</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider text-right">Lifetime Value</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider">Status</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-text-muted uppercase tracking-wider w-10"></th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-border-subtle">
+<!-- Row 1 -->
+<tr class="table-row-hover" onclick="toggleDrawer()">
+<td class="py-3 px-4"><input class="rounded bg-surface-container border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent" onclick="event.stopPropagation()" type="checkbox"></td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md">AK</div>
+<div>
+<div class="font-medium text-on-surface">Aarav Karki</div>
+<div class="text-text-muted text-[11px]">Kathmandu, Nepal</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface">aarav.k@example.com</div>
+<div class="text-text-muted font-mono-data text-mono-data">+977 9841-234567</div>
+</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">14</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">$12,450</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-900/30 text-success border border-success/20 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Active
+                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-text-muted hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="table-row-hover">
+<td class="py-3 px-4"><input class="rounded bg-surface-container border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent" type="checkbox"></td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center font-label-md text-label-md">SG</div>
+<div>
+<div class="font-medium text-on-surface">Sarah Gurung</div>
+<div class="text-text-muted text-[11px]">Pokhara, Nepal</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface">s.gurung@trek.net</div>
+<div class="text-text-muted font-mono-data text-mono-data">+977 9813-987654</div>
+</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">5</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">$3,800</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-warning/10 text-warning border border-warning/20 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span> Inactive
+                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-text-muted hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="table-row-hover">
+<td class="py-3 px-4"><input class="rounded bg-surface-container border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent" type="checkbox"></td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-indigo-900/50 text-primary border border-primary/20 flex items-center justify-center font-label-md text-label-md">PS</div>
+<div>
+<div class="font-medium text-on-surface flex items-center gap-1">Prakash Sherpa <span class="material-symbols-outlined text-[14px] text-warning" title="VIP Customer">stars</span></div>
+<div class="text-text-muted text-[11px]">Namche Bazaar, Nepal</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface">prakash.expeditions@mail.com</div>
+<div class="text-text-muted font-mono-data text-mono-data">+977 9801-112233</div>
+</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">28</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">$45,200</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-900/30 text-success border border-success/20 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Active
+                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-text-muted hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="table-row-hover">
+<td class="py-3 px-4"><input class="rounded bg-surface-container border-border-subtle text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent" type="checkbox"></td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-text-muted flex items-center justify-center font-label-md text-label-md">MT</div>
+<div>
+<div class="font-medium text-on-surface">Maya Tamang</div>
+<div class="text-text-muted text-[11px]">Lalitpur, Nepal</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="text-on-surface">maya.t@domain.co</div>
+<div class="text-text-muted font-mono-data text-mono-data">+977 9841-998877</div>
+</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">1</td>
+<td class="py-3 px-4 text-right font-mono-data text-mono-data">$450</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-900/30 text-success border border-success/20 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Active
+                            </span>
+</td>
+<td class="py-3 px-4 text-right">
+<button class="text-text-muted hover:text-on-surface"><span class="material-symbols-outlined text-[18px]">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="bg-surface-container-lowest p-3 border-t border-border-subtle flex justify-between items-center text-text-muted font-body-sm text-body-sm">
+<span>Showing 1 to 4 of 248 entries</span>
+<div class="flex gap-1">
+<button class="px-2 py-1 rounded hover:bg-surface-container-highest transition-colors disabled:opacity-50" disabled="">Prev</button>
+<button class="px-2 py-1 rounded bg-surface-container-highest text-on-surface">1</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-highest transition-colors">2</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-highest transition-colors">3</button>
+<button class="px-2 py-1 rounded hover:bg-surface-container-highest transition-colors">Next</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Details Drawer (Hidden by default, shown via JS) -->
+<div class="fixed top-16 right-0 w-[480px] h-[calc(100vh-6rem)] glass-drawer z-50 flex flex-col drawer-enter hidden" id="detailsDrawer">
+<!-- Drawer Header -->
+<div class="p-lg border-b border-border-subtle flex justify-between items-start">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-lg text-headline-lg">AK</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Aarav Karki</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-900/30 text-success border border-success/20 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span> Active
+                        </span>
+<span class="font-body-sm text-body-sm text-text-muted">Customer since Jan 2022</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-md hover:bg-surface-container-high text-text-muted transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+<button class="p-2 rounded-md hover:bg-surface-container-high text-text-muted transition-colors" onclick="toggleDrawer()"><span class="material-symbols-outlined text-[20px]">close</span></button>
+</div>
+</div>
+<!-- Drawer Content -->
+<div class="flex-1 overflow-y-auto p-lg flex flex-col gap-xl">
+<!-- Contact Info Card -->
+<div class="glass-panel rounded-xl p-md">
+<h4 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider text-text-muted">Contact Information</h4>
+<div class="grid grid-cols-2 gap-y-4 gap-x-6">
+<div>
+<div class="font-label-sm text-label-sm text-text-muted mb-1">Email</div>
+<div class="font-body-sm text-body-sm text-on-surface">aarav.k@example.com</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-text-muted mb-1">Phone</div>
+<div class="font-mono-data text-mono-data text-on-surface">+977 9841-234567</div>
+</div>
+<div class="col-span-2">
+<div class="font-label-sm text-label-sm text-text-muted mb-1">Address</div>
+<div class="font-body-sm text-body-sm text-on-surface">Thamel Marg, Ward No. 26<br>Kathmandu, Bagmati Province<br>Nepal, 44600</div>
+</div>
+</div>
+</div>
+<!-- Stats Bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-panel rounded-xl p-md flex flex-col">
+<span class="material-symbols-outlined text-primary mb-2">flight_takeoff</span>
+<span class="font-label-sm text-label-sm text-text-muted">Total Bookings</span>
+<span class="font-headline-md text-headline-md text-on-surface font-mono-data mt-1">14</span>
+</div>
+<div class="glass-panel rounded-xl p-md flex flex-col">
+<span class="material-symbols-outlined text-success mb-2">payments</span>
+<span class="font-label-sm text-label-sm text-text-muted">Lifetime Value</span>
+<span class="font-headline-md text-headline-md text-on-surface font-mono-data mt-1">$12,450</span>
+</div>
+</div>
+<!-- Booking Timeline -->
+<div>
+<h4 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider text-text-muted">Recent Activity</h4>
+<div class="relative border-l border-border-subtle ml-3 space-y-6">
+<div class="relative pl-6">
+<div class="absolute w-3 h-3 bg-primary rounded-full -left-[6.5px] top-1 ring-4 ring-background"></div>
+<div class="font-label-sm text-label-sm text-text-muted mb-1 font-mono-data">Oct 12, 2023</div>
+<div class="glass-panel p-3 rounded-lg border-l-2 border-l-primary">
+<div class="font-body-sm text-body-sm font-medium text-on-surface mb-1">Everest Base Camp Trek</div>
+<div class="flex justify-between items-center text-[12px] text-text-muted">
+<span>Booking Ref: #EBC-8892</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high border border-border-subtle">Completed</span>
+</div>
+</div>
+</div>
+<div class="relative pl-6">
+<div class="absolute w-3 h-3 bg-surface-container-highest border border-border-subtle rounded-full -left-[6.5px] top-1 ring-4 ring-background"></div>
+<div class="font-label-sm text-label-sm text-text-muted mb-1 font-mono-data">Apr 05, 2023</div>
+<div class="glass-panel p-3 rounded-lg border-l-2 border-l-outline-variant">
+<div class="font-body-sm text-body-sm font-medium text-on-surface mb-1">Chitwan Safari Package</div>
+<div class="flex justify-between items-center text-[12px] text-text-muted">
+<span>Booking Ref: #CWN-4410</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high border border-border-subtle">Completed</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Documents -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<h4 class="font-label-md text-label-md text-on-surface uppercase tracking-wider text-text-muted">Documents</h4>
+<button class="text-primary font-label-sm text-label-sm hover:underline">Upload</button>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 glass-panel rounded-lg hover:bg-surface-container-highest transition-colors cursor-pointer border border-transparent hover:border-border-subtle">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-text-muted">description</span>
+<div>
+<div class="font-body-sm text-body-sm text-on-surface">Passport_Copy.pdf</div>
+<div class="font-label-sm text-label-sm text-text-muted">Added Jan 15, 2022 • 2.4 MB</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-muted text-[18px]">download</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-md border-t border-border-subtle bg-surface-container-lowest flex gap-3">
+<button class="flex-1 py-2 font-label-md text-label-md bg-transparent border border-border-subtle text-on-surface rounded-lg hover:bg-surface-container-highest transition-colors">Send Message</button>
+<button class="flex-1 py-2 font-label-md text-label-md bg-primary-container text-on-primary-container rounded-lg hover:bg-primary hover:text-on-primary transition-colors">Create Booking</button>
+</div>
+</div>
+<!-- Footer -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-16rem)] h-8 z-40 bg-surface-container-low border-t border-border-subtle flex justify-between items-center px-lg">
+<div class="font-label-md text-label-md text-primary"></div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Diplon Travel ERP. System Status: Operational</div>
+<div class="flex gap-4">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors duration-200" href="#">API Docs</a>
+</div>
+</footer>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('detailsDrawer');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                // Force reflow
+                void drawer.offsetWidth;
+                drawer.classList.remove('drawer-enter');
+                drawer.classList.add('drawer-enter-active');
+            } else {
+                drawer.classList.remove('drawer-enter-active');
+                drawer.classList.add('drawer-exit-active');
+                setTimeout(() => {
+                    drawer.classList.add('hidden');
+                    drawer.classList.remove('drawer-exit-active');
+                    drawer.classList.add('drawer-enter');
+                }, 250);
+            }
+        }
+    </script>
+</body></html>

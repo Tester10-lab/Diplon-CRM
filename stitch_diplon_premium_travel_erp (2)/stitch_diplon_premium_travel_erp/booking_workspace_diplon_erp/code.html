@@ -1,0 +1,455 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Diplon ERP - Booking Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#002e6a",
+                      "primary": "#c3c0ff",
+                      "on-primary-container": "#dad7ff",
+                      "text-muted": "#94A3B8",
+                      "surface-container-highest": "#32353c",
+                      "inverse-surface": "#e1e2eb",
+                      "error": "#ffb4ab",
+                      "background": "#10131a",
+                      "surface-container": "#1d2026",
+                      "outline": "#918fa1",
+                      "on-primary-fixed": "#0f0069",
+                      "secondary-container": "#0566d9",
+                      "warning": "#F59E0B",
+                      "danger": "#F43F5E",
+                      "inverse-primary": "#4d44e3",
+                      "tertiary-container": "#a44100",
+                      "secondary-fixed": "#d8e2ff",
+                      "on-surface-variant": "#c7c4d8",
+                      "on-error-container": "#ffdad6",
+                      "on-tertiary-container": "#ffd2be",
+                      "on-primary": "#1d00a5",
+                      "surface-container-lowest": "#0b0e14",
+                      "surface-container-low": "#191c22",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "on-surface": "#e1e2eb",
+                      "on-secondary-fixed-variant": "#004395",
+                      "primary-fixed": "#e2dfff",
+                      "border-subtle": "rgba(255, 255, 255, 0.08)",
+                      "outline-variant": "#464555",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "on-tertiary": "#571f00",
+                      "on-secondary-fixed": "#001a42",
+                      "tertiary": "#ffb695",
+                      "surface-tint": "#c3c0ff",
+                      "surface": "#10131a",
+                      "inverse-on-surface": "#2e3037",
+                      "surface-glass": "rgba(15, 23, 42, 0.8)",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "primary-container": "#4f46e5",
+                      "tertiary-fixed-dim": "#ffb695",
+                      "tertiary-fixed": "#ffdbcc",
+                      "surface-variant": "#32353c",
+                      "on-tertiary-fixed": "#351000",
+                      "on-secondary-container": "#e6ecff",
+                      "success": "#10B981",
+                      "error-container": "#93000a",
+                      "on-background": "#e1e2eb",
+                      "surface-container-high": "#272a31",
+                      "surface-dim": "#10131a",
+                      "secondary": "#adc6ff",
+                      "surface-bright": "#363940",
+                      "on-error": "#690005",
+                      "on-primary-fixed-variant": "#3323cc"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "sm": "8px",
+                      "container-margin": "24px",
+                      "base": "8px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "gutter": "16px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "lead": ["Inter"],
+                      "mono-data": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-base": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "lead": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                      "mono-data": ["13px", {"lineHeight": "18px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-base": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(30, 33, 40, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+        }
+        
+        /* Hide scrollbar for cleaner UI */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #32353c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464555;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-sm text-body-sm antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-border-subtle backdrop-blur-xl flex flex-col h-full py-md px-sm z-50">
+<!-- Header -->
+<div class="px-4 py-6 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">travel_explore</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-text-muted mt-1">Enterprise Suite</p>
+</div>
+</div>
+</div>
+<!-- CTA -->
+<div class="px-2 mb-6">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-inverse-primary transition-colors duration-200">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Booking
+            </button>
+</div>
+<!-- Main Nav -->
+<div class="flex-1 overflow-y-auto px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span class="font-label-md text-label-md">Finance</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- Footer Nav -->
+<div class="mt-auto px-2 pt-4 border-t border-border-subtle space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">person_outline</span>
+<span class="font-label-md text-label-md">Account</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-16 w-[calc(100%-16rem)] z-40 bg-surface-glass dark:bg-surface-glass border-b border-border-subtle backdrop-blur-md shadow-sm flex justify-between items-center px-lg">
+<!-- Left: Nav Links -->
+<div class="flex items-center gap-8 h-full">
+<nav class="flex h-full">
+<a class="flex items-center h-full px-2 text-primary font-bold border-b-2 border-primary pb-1 opacity-80" href="#">
+<span class="font-label-md text-label-md">Workspaces</span>
+</a>
+<a class="flex items-center h-full px-4 text-on-surface-variant font-medium hover:text-primary transition-all duration-200" href="#">
+<span class="font-label-md text-label-md">Operations</span>
+</a>
+<a class="flex items-center h-full px-4 text-on-surface-variant font-medium hover:text-primary transition-all duration-200" href="#">
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+</div>
+<!-- Right: Actions & Profile -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-highest relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full border-2 border-surface-container-lowest"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]">find_replace</span>
+</button>
+</div>
+<div class="h-6 w-px bg-border-subtle"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden md:block">
+<p class="font-label-md text-label-md text-on-surface">Role: Admin</p>
+<p class="font-label-sm text-label-sm text-text-muted">Quick Actions</p>
+</div>
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-border-subtle overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A highly detailed, professional headshot of a corporate administrator in dark mode lighting. Soft cinematic edge lighting highlights their profile against a pure obsidian black background. The mood is serious, capable, and modern. Subtle cool blue ambient light fills the shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZWcSwf-aNTGHpCm-rHRDD5P1baY9tL5eS_veqKu1BTQLgjYFTsHiur7ZeFaKsNrM7hKLjR0gAROdt9rdpfYOlj7J59ggsl6Ng2Gc7lS-FicsG138X-d-5UfkID5omYrHEf7xnOTQWeRMwaHgFxdL2ihfaBOXLyOn58DZ8gjwiG99M52f596s0t6cIQWuBwtIynRb0SBIrddozZE2_J_0vernrXLTXK8_aEcEGMSFXRQAuWQ33mHRyxeXfrYMmnuBUW8OTDevcZG0">
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 pb-8 min-h-screen">
+<div class="p-lg max-w-7xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col gap-4 mb-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-text-muted font-label-sm text-label-sm">
+<a class="hover:text-primary transition-colors" href="#">Bookings</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface">#BK-9021</span>
+</div>
+<!-- Title & Actions Row -->
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Kyoto Sakura VIP Tour</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-success/10 border border-success/20 text-success font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+                                Confirmed
+                            </span>
+</div>
+<p class="font-body-base text-body-base text-text-muted">Booking Reference: <span class="font-mono-data text-mono-data text-on-surface-variant">#BK-9021</span> • Created: Oct 12, 2024</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 rounded-lg border border-border-subtle hover:bg-surface-container-high transition-colors font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">print</span>
+                            Print
+                        </button>
+<button class="px-4 py-2 rounded-lg bg-surface-container-highest hover:bg-surface-bright transition-colors border border-border-subtle font-label-md text-label-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Edit
+                        </button>
+</div>
+</div>
+</div>
+<!-- Workspace Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Tabs & Detailed Content -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Tabs -->
+<div class="border-b border-border-subtle">
+<nav class="flex gap-6">
+<a class="pb-3 border-b-2 border-primary text-primary font-label-md text-label-md flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                                Overview
+                            </a>
+<a class="pb-3 border-b-2 border-transparent text-text-muted hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+                                Payments
+                            </a>
+<a class="pb-3 border-b-2 border-transparent text-text-muted hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]">description</span>
+                                Documents
+                            </a>
+<a class="pb-3 border-b-2 border-transparent text-text-muted hover:text-on-surface transition-colors font-label-md text-label-md flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                                Timeline
+                            </a>
+</nav>
+</div>
+<!-- Bento Grid Overview Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Primary Pax Card -->
+<div class="glass-panel rounded-xl p-5 col-span-1 md:col-span-2">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-lead text-lead text-on-surface">Primary Contact &amp; Passengers</h3>
+<button class="text-primary hover:text-inverse-primary text-label-sm font-label-md">Manage</button>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest border border-border-subtle overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="A striking portrait of an Asian male traveler in his 40s. The lighting is cinematic, highlighting his facial features against a dark, moody background. He wears a dark, modern smart-casual jacket. The image feels premium, high-resolution, and perfectly suited for a dark-mode enterprise application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfK1h2caQkcZuqRNykjyN9zPrTgimiM-TWH6OT-n4_qS8x5KJ8nRCdK449si_sQFu7zzDGwXyKDEMAplxStQuWWjQ2pM64usncVgwbs4bgfZMjpphn6cfHM_k0h4CwjNdp0rGkG3-nOI0x8JGmEAYB-B8MlnfxL2v7QRQuhjG-VHyKLVG0LaJSmQ_MZY0ynkErCozuHOG4LpIkoRiVvLoarpWziDagxqCcaRZgb8cE0v8KyVSgsEyeu6fp8jkvHZD1Ov078txky-8">
+</div>
+<div class="flex-1">
+<h4 class="font-label-md text-label-md text-on-surface">Kenji Watanabe <span class="text-text-muted font-body-sm">(Lead)</span></h4>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1 mt-2">
+<p class="font-body-sm text-body-sm text-text-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">mail</span> kenji.w@example.com
+                                        </p>
+<p class="font-body-sm text-body-sm text-text-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">phone</span> +81 90-1234-5678
+                                        </p>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-4 border-t border-border-subtle">
+<p class="font-label-sm text-label-sm text-text-muted mb-2 uppercase tracking-wider">Additional Passengers (2)</p>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Mei Watanabe (Adult)</span>
+<span class="font-mono-data text-mono-data text-text-muted">PP: L892***</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hana Watanabe (Child, 8)</span>
+<span class="font-mono-data text-mono-data text-text-muted">PP: L893***</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Itinerary Snapshot -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col">
+<div class="h-24 w-full relative">
+<div class="w-full h-full bg-cover bg-center" data-alt="A striking, high-contrast landscape photograph of Kyoto, Japan during cherry blossom season. The scene features a traditional wooden pagoda in the foreground, illuminated by soft, golden-hour light. The background is filled with vibrant pink cherry blossoms against a clear, deep black night sky. The overall aesthetic is cinematic, premium, and fits seamlessly into a sophisticated, dark-mode travel application interface, emphasizing clarity and visual impact." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwc-ehpbzOOO_Rr03GCbuCCmBXx7nRlmf3dKDVDLRsHe4MDUmnoe_jc_bbMg42H3TonbV9VkpZjAHc8GFaKJKJaXmJJ5eZSqiWo6HpcyDaYrpgACT7AAq2HKjEJ1ocKJJlOSone6Dv57HCTdcaRECmYcDb4VDWiOtnrSNExdjj8-FzcHOL0FpPg2wlJ6u9mPO_2VzD4MMzKEAwTmh0Ut7C1vl03xxSouHuOcrVTEoPj5xlt0U_YQ-8NiAEQdHacZIsVNrsxkrpsyw')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent"></div>
+<div class="absolute bottom-2 left-4">
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider bg-surface-glass px-2 py-1 rounded backdrop-blur-md">Destination</span>
+</div>
+</div>
+<div class="p-5 flex-1">
+<h3 class="font-lead text-lead text-on-surface mb-4">Itinerary Snapshot</h3>
+<div class="relative border-l border-border-subtle ml-2 space-y-4">
+<div class="relative pl-4">
+<div class="absolute w-2 h-2 bg-primary rounded-full -left-[4.5px] top-1.5 border border-surface"></div>
+<p class="font-label-sm text-label-sm text-primary">Mar 28, 2025 • 14:00</p>
+<p class="font-label-md text-label-md text-on-surface">Arrival KIX (Flight JL7082)</p>
+</div>
+<div class="relative pl-4">
+<div class="absolute w-2 h-2 bg-surface-variant rounded-full -left-[4.5px] top-1.5 border border-border-subtle"></div>
+<p class="font-label-sm text-label-sm text-text-muted">Mar 28 - Apr 04 (7 Nights)</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ritz-Carlton Kyoto (Suite)</p>
+</div>
+<div class="relative pl-4">
+<div class="absolute w-2 h-2 bg-surface-variant rounded-full -left-[4.5px] top-1.5 border border-border-subtle"></div>
+<p class="font-label-sm text-label-sm text-text-muted">Apr 04, 2025 • 10:00</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Private Transfer to Station</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Special Requirements -->
+<div class="glass-panel rounded-xl p-5 flex flex-col">
+<h3 class="font-lead text-lead text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-warning">warning</span>
+                                Special Requirements
+                            </h3>
+<div class="space-y-3 flex-1">
+<div class="bg-warning/10 border border-warning/20 rounded-lg p-3">
+<p class="font-label-sm text-label-sm text-warning uppercase mb-1">Dietary</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Strict Vegetarian (No dashi/fish stock) for Lead Passenger. Must inform all ryokans and booked restaurants.</p>
+</div>
+<div class="bg-surface-container-high border border-border-subtle rounded-lg p-3">
+<p class="font-label-sm text-label-sm text-text-muted uppercase mb-1">Mobility</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ground floor room requested where possible. Wheelchair access needed for transport.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Financial Summary -->
+<div class="lg:col-span-4">
+<div class="glass-panel rounded-xl p-6 sticky top-24">
+<h3 class="font-lead text-lead text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-primary">account_balance_wallet</span>
+                            Financial Summary
+                        </h3>
+<!-- Big Number -->
+<div class="mb-6">
+<p class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider mb-1">Total Booking Value</p>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md text-on-surface-variant">$</span>
+<span class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-mono-data">14,250.00</span>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="mb-6">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-sm text-label-sm text-text-muted">Payment Status</span>
+<span class="font-label-sm text-label-sm text-success">100% Paid</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-success w-full rounded-full"></div>
+</div>
+</div>
+<!-- Breakdown -->
+<div class="space-y-3 pt-4 border-t border-border-subtle mb-6">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Subtotal</span>
+<span class="font-mono-data text-mono-data text-on-surface">$13,500.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm text-text-muted">Taxes &amp; Fees (5.5%)</span>
+<span class="font-mono-data text-mono-data text-text-muted">$750.00</span>
+</div>
+<div class="flex justify-between items-center pt-2 mt-2 border-t border-border-subtle border-dashed">
+<span class="font-label-md text-label-md text-on-surface">Total Received</span>
+<span class="font-mono-data text-mono-data text-success">$14,250.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-on-surface">Balance Due</span>
+<span class="font-mono-data text-mono-data text-on-surface">$0.00</span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-2">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-inverse-primary transition-colors py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                                View Invoice
+                            </button>
+<button class="w-full bg-transparent border border-border-subtle text-on-surface hover:bg-surface-container-high transition-colors py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">send</span>
+                                Send Receipt
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-16rem)] h-8 z-40 bg-surface-container-low dark:bg-surface-container-low border-t border-border-subtle flex justify-between items-center px-lg">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+            © 2024 Diplon Travel ERP. System Status: <span class="text-success inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-success"></span> Operational</span>
+</div>
+<div class="flex gap-4">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">API Docs</a>
+</div>
+</footer>
+</body></html>

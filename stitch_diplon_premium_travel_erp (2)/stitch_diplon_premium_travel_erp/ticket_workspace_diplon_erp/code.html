@@ -1,0 +1,500 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Diplon Travel ERP - Ticket Workspace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#464555",
+                      "on-secondary-container": "#e6ecff",
+                      "tertiary-container": "#a44100",
+                      "surface-container-high": "#272a31",
+                      "on-error": "#690005",
+                      "inverse-surface": "#e1e2eb",
+                      "surface-container-lowest": "#0b0e14",
+                      "error-container": "#93000a",
+                      "danger": "#F43F5E",
+                      "on-surface-variant": "#c7c4d8",
+                      "success": "#10B981",
+                      "on-error-container": "#ffdad6",
+                      "on-primary": "#1d00a5",
+                      "surface-tint": "#c3c0ff",
+                      "surface": "#10131a",
+                      "secondary": "#adc6ff",
+                      "text-muted": "#94A3B8",
+                      "on-tertiary-fixed-variant": "#7b2f00",
+                      "background": "#10131a",
+                      "on-tertiary": "#571f00",
+                      "tertiary": "#ffb695",
+                      "primary": "#c3c0ff",
+                      "surface-container-low": "#191c22",
+                      "on-tertiary-fixed": "#351000",
+                      "on-tertiary-container": "#ffd2be",
+                      "on-secondary-fixed": "#001a42",
+                      "surface-container": "#1d2026",
+                      "error": "#ffb4ab",
+                      "warning": "#F59E0B",
+                      "primary-fixed": "#e2dfff",
+                      "secondary-fixed": "#d8e2ff",
+                      "secondary-fixed-dim": "#adc6ff",
+                      "border-subtle": "rgba(255, 255, 255, 0.08)",
+                      "on-surface": "#e1e2eb",
+                      "primary-fixed-dim": "#c3c0ff",
+                      "surface-dim": "#10131a",
+                      "primary-container": "#4f46e5",
+                      "tertiary-fixed-dim": "#ffb695",
+                      "surface-variant": "#32353c",
+                      "surface-container-highest": "#32353c",
+                      "on-secondary-fixed-variant": "#004395",
+                      "on-primary-fixed": "#0f0069",
+                      "surface-bright": "#363940",
+                      "secondary-container": "#0566d9",
+                      "surface-glass": "rgba(15, 23, 42, 0.8)",
+                      "inverse-primary": "#4d44e3",
+                      "outline": "#918fa1",
+                      "on-primary-fixed-variant": "#3323cc",
+                      "tertiary-fixed": "#ffdbcc",
+                      "on-secondary": "#002e6a",
+                      "on-background": "#e1e2eb",
+                      "inverse-on-surface": "#2e3037",
+                      "on-primary-container": "#dad7ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "8px",
+                      "xs": "4px",
+                      "lg": "24px",
+                      "container-margin": "24px",
+                      "md": "16px",
+                      "base": "8px",
+                      "xl": "32px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "lead": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "lead": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-base": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "mono-data": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "11px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.03em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { background-color: #0b0e14; color: #e1e2eb; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="font-body-base bg-surface-container-lowest text-on-surface h-screen overflow-hidden flex">
+<!-- SideNavBar -->
+<nav class="h-screen w-64 fixed left-0 top-0 border-r border-border-subtle bg-surface-container-lowest flex flex-col py-lg z-40">
+<div class="px-md mb-xl flex items-center gap-sm">
+<img alt="Diplon Travel Logo" class="w-8 h-8 rounded-full" data-alt="A minimalist, futuristic travel logo featuring a geometric globe in neon indigo and bright white against a deep dark background. Sleek, vector style, ultra-high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjlexw-7G7k1vj3UNG_fE03ozjEzpBO2e84S2wwxrEYKWjp5yNh2JTTx7LTZNP3RQLiFAvz3ufnYhYHXFvMCIRsls8SFB2EFhluZhgAytF97DOEIPTvbj5NRlkyz1-i6FvOew0glrRdTAe0xb-OQJGFoWycwg53J3aRUFX8FjuAk5dQ1qbjejYx8Wt-Gvt4vblM83j169H6vpdqb6kn_Q9wx4hUyUhUsldEwjefCz9Od-Sv2x3MkIf">
+<div>
+<h1 class="font-headline-md text-headline-md text-primary font-black">Diplon ERP</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Enterprise Support</p>
+</div>
+</div>
+<div class="px-md mb-md">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary-container/80 transition-colors rounded flex items-center justify-center gap-sm py-sm font-label-md text-label-md active:scale-95 duration-150">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+                New Ticket
+            </button>
+</div>
+<div class="flex-1 overflow-y-auto scrollbar-hide px-sm flex flex-col gap-xs">
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">dashboard</span>
+                Dashboard
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-sm px-sm py-sm rounded text-primary font-bold border-r-2 border-primary bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+                Tickets
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">group</span>
+                Customers
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">api</span>
+                Integrations
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">verified_user</span>
+                SLA Settings
+            </a>
+</div>
+<div class="mt-auto px-sm flex flex-col gap-xs border-t border-border-subtle pt-md">
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-sm px-sm py-sm rounded text-on-surface-variant font-medium hover:bg-surface-variant transition-colors group" href="#">
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">settings</span>
+                Account
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-64 flex flex-col h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center h-16 px-lg sticky top-0 z-50 w-full border-b border-border-subtle bg-surface-glass backdrop-blur-xl">
+<div class="flex items-center gap-lg">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">Support Suite</span>
+<!-- Search Bar -->
+<div class="relative hidden lg:flex items-center w-64 group focus-within:ring-1 focus-within:ring-primary rounded">
+<span class="material-symbols-outlined absolute left-sm text-outline-variant">search</span>
+<input class="w-full bg-surface-container border border-border-subtle rounded py-xs pl-xl pr-sm text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="Search tickets, #BK-..." type="text">
+<span class="absolute right-sm text-label-sm text-outline-variant px-1 rounded border border-border-subtle">⌘K</span>
+</div>
+</div>
+<nav class="hidden md:flex items-end h-full gap-md pt-md">
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary pb-4" href="#">Queue</a>
+<a class="font-label-md text-label-md text-on-surface-variant pb-4 hover:text-primary transition-all" href="#">Assigned</a>
+<a class="font-label-md text-label-md text-on-surface-variant pb-4 hover:text-primary transition-all" href="#">Resolved</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="text-outline-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-outline-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="bg-primary-container text-on-primary-container px-sm py-xs rounded font-label-md text-label-md hover:bg-primary-container/80 transition-colors hidden sm:block">
+                    Create Ticket
+                </button>
+<img alt="Agent Avatar" class="w-8 h-8 rounded-full ml-sm object-cover border border-border-subtle" data-alt="A professional headshot of a customer service agent wearing a dark headset, lit with cinematic, cool-toned studio lighting against a dark slate background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxwzA9aDInBwk6oqoHRueFr4Dg17mKUf0BiU5BM5H9y6OaYL7Fr0VHNln2IpnmJzL-3Z051IaNJI3yyKmXUvtYVWRcfgFpFelw_tD7ezHKtdbzNdnb2KdaNqkoVnRcQeFIBqssB-eA3_Pfrk-rJkQ8lV5m6f6K_bLj0qZeJQuFqQPMhfyGSq2aN9spGHxOr4FVx_azKnh7fhG7R0Do6v5-FsSzN02NTsfxdVMmir0z6_AybYF4CWGG">
+</div>
+</header>
+<!-- Three-Column Layout -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Column 1: Ticket Queue -->
+<div class="w-80 border-r border-border-subtle flex flex-col bg-surface-container-low shrink-0 z-10">
+<div class="p-md border-b border-border-subtle">
+<div class="flex items-center justify-between mb-sm">
+<h2 class="font-lead text-lead text-on-surface">Queue</h2>
+<button class="text-outline-variant hover:text-on-surface"><span class="material-symbols-outlined">filter_list</span></button>
+</div>
+<div class="flex gap-xs overflow-x-auto scrollbar-hide pb-1">
+<button class="px-sm py-1 rounded bg-surface-variant text-on-surface font-label-sm text-label-sm whitespace-nowrap">My Tickets</button>
+<button class="px-sm py-1 rounded border border-border-subtle text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-variant whitespace-nowrap">Unassigned</button>
+<button class="px-sm py-1 rounded border border-border-subtle text-on-surface-variant font-label-sm text-label-sm hover:bg-surface-variant whitespace-nowrap flex items-center gap-1">Priority <span class="w-2 h-2 rounded-full bg-danger"></span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto scrollbar-hide flex flex-col">
+<!-- Ticket Item 1 (Active) -->
+<div class="p-md border-b border-border-subtle bg-surface cursor-pointer relative">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="flex justify-between items-start mb-xs">
+<span class="font-mono-data text-mono-data text-outline-variant">#TK-4402</span>
+<span class="text-label-sm text-label-sm text-outline-variant">2h ago</span>
+</div>
+<h3 class="font-lead text-lead text-on-surface mb-xs truncate">Booking Refund Request - #BK-9021</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-sm">Customer requesting full refund due to flight cancellation on their end. Awaiting policy review.</p>
+<div class="flex items-center gap-xs">
+<span class="px-2 py-0.5 rounded bg-warning/20 text-warning font-label-sm text-label-sm border border-warning/30">Urgent</span>
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-sm text-label-sm border border-border-subtle">Refund</span>
+</div>
+</div>
+<!-- Ticket Item 2 -->
+<div class="p-md border-b border-border-subtle hover:bg-surface-variant/50 transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-mono-data text-mono-data text-outline-variant">#TK-4399</span>
+<span class="text-label-sm text-label-sm text-outline-variant">4h ago</span>
+</div>
+<h3 class="font-lead text-lead text-on-surface mb-xs truncate">Itinerary Modification - Add Infant</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-sm">Need to add an infant on lap for the return leg from DXB to LHR.</p>
+<div class="flex items-center gap-xs">
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface-variant font-label-sm text-label-sm border border-border-subtle">Modification</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 2: Thread Context -->
+<div class="flex-1 flex flex-col bg-surface-container-lowest min-w-0">
+<!-- Thread Header -->
+<div class="px-lg py-md border-b border-border-subtle flex items-center justify-between bg-surface-glass backdrop-blur-md z-10 sticky top-0">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface">#TK-4402</h2>
+<span class="px-2 py-0.5 rounded-full bg-warning/20 text-warning font-label-sm text-label-sm border border-warning/30 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-warning"></span> Open</span>
+</div>
+<h3 class="font-lead text-lead text-on-surface-variant">Booking Refund Request - #BK-9021</h3>
+</div>
+<div class="flex items-center gap-sm">
+<button class="px-md py-sm rounded border border-border-subtle bg-surface-container hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">person_add</span> Reassign
+                        </button>
+<button class="px-md py-sm rounded border border-border-subtle bg-surface-container hover:bg-surface-variant text-danger font-label-md text-label-md transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">arrow_upward</span> Escalate
+                        </button>
+<button class="px-md py-sm rounded bg-primary-container hover:bg-primary-container/80 text-on-primary-container font-label-md text-label-md transition-colors flex items-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> Resolve
+                        </button>
+</div>
+</div>
+<!-- Thread Content -->
+<div class="flex-1 overflow-y-auto p-lg flex flex-col gap-md">
+<!-- Customer Message -->
+<div class="flex gap-md max-w-3xl">
+<img alt="Rajesh Poudel" class="w-10 h-10 rounded-full object-cover border border-border-subtle shrink-0" data-alt="A portrait of a male customer looking slightly concerned, neutral studio lighting, dark background, corporate photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXDm8OuFPyZ5RPLXkBaOzOvbg9WkPWKF9jQ1C6-Jn7S82VJf1L5MVGCVpzyUAKN4_Al1bk01Vw5kx7yj0psStFjT52uDE8UpZIYuP6y06zkf0nYRladv-wDUNFAWnMGMNMpbniNdB_2r7YClwSk90w5E30XQJRfmFkpuxufIIAtDYbNerIcGYAlXfrEYDbCS6HnrGM0Fa0cTiXE9GI9l2DUmXZUAckAiIUorNfmNhRGqCKkW-E6QCX">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs">
+<span class="font-label-md text-label-md text-on-surface">Rajesh Poudel</span>
+<span class="font-label-sm text-label-sm text-outline-variant">Customer</span>
+<span class="font-label-sm text-label-sm text-outline-variant ml-auto">Oct 24, 09:15 AM</span>
+</div>
+<div class="bg-surface-container-high rounded-r-lg rounded-bl-lg p-md border border-border-subtle shadow-sm relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<p class="font-body-base text-body-base text-on-surface relative z-10">
+                                    Hello, I need to cancel my booking #BK-9021. My connecting flight with a different airline was cancelled so I won't make it to this reservation. Given the circumstances, I am hoping for a full refund. Please advise on the process.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Internal Note -->
+<div class="flex gap-md max-w-3xl ml-auto flex-row-reverse">
+<img alt="Sita Sharma" class="w-10 h-10 rounded-full object-cover border border-border-subtle shrink-0" data-alt="A professional headshot of a female customer service agent wearing a headset, lit with cinematic, warm-toned studio lighting against a dark slate background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVWEE6QwYQEvOxrj7BI7IGOCwBuB5-39RV9HB0PVKNUnvKwqpPngqNFTmUKCBjdXdOODHaTSMXgNNZHObfpc9GPrWSrdXHq6EwfZgX-nqhkmOJi8BgyvWFGwa4mIf_dwpY3zFslyfwT-yMc6jUpKrWPfCu6mLcaKlv0EQY6OAdBRi2V9Q3TyRlqdToqC7b6N5beDNJSDbDFaIPSSeB3AyLjTYT0apJyGdYm4vHWJG-p5yAAvpRqZnE">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs flex-row-reverse">
+<span class="font-label-md text-label-md text-on-surface">Sita Sharma</span>
+<span class="font-label-sm text-label-sm text-warning flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">lock</span> Internal Note</span>
+<span class="font-label-sm text-label-sm text-outline-variant mr-auto">Oct 24, 09:30 AM</span>
+</div>
+<div class="bg-surface-container rounded-l-lg rounded-br-lg p-md border border-warning/30 shadow-sm relative overflow-hidden">
+<div class="absolute inset-0 bg-warning/5 pointer-events-none"></div>
+<p class="font-body-base text-body-base text-on-surface relative z-10">
+                                    Checked policy matrix for non-refundable fares under force majeure (carrier delay). Need approval from Tier 2 since the cancelled leg was not booked through us. Escalating temporarily to review exception logic.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Agent Reply -->
+<div class="flex gap-md max-w-3xl ml-auto flex-row-reverse">
+<img alt="Sita Sharma" class="w-10 h-10 rounded-full object-cover border border-border-subtle shrink-0" data-alt="A professional headshot of a female customer service agent wearing a headset, lit with cinematic, warm-toned studio lighting against a dark slate background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH4pgnUPx_jFYIhUMT7xtDNAajx6nhqI2LyaT7wlZsW3JIhxYdqRDjzVzzRv9dQXB2W7oxxfkbRUz1UzGy4mRpS3tuUFlscCgDOHurLbpJYiZxYABCLPB1BlOp_BQAyLUJ2JpEwnTFZAgCi8kJV4bnGomhAO5XQg9tkylBc6-UDVh20VCHAdFkKhLCiC2L48FfLoSdPz8_Y9NagxdiCYC5SuzkQOSHQuFwECGqEvYXXjFeMvIrhQw9">
+<div class="flex-1">
+<div class="flex items-center gap-sm mb-xs flex-row-reverse">
+<span class="font-label-md text-label-md text-on-surface">Sita Sharma</span>
+<span class="font-label-sm text-label-sm text-primary">Agent</span>
+<span class="font-label-sm text-label-sm text-outline-variant mr-auto">Oct 24, 09:35 AM</span>
+</div>
+<div class="glass-panel rounded-l-lg rounded-br-lg p-md shadow-sm">
+<p class="font-body-base text-body-base text-on-surface">
+                                   Dear Rajesh,<br><br>Thank you for reaching out. I understand the frustration with the cancelled connection. I am currently reviewing our exception policies with our ticketing team to see what options we have for your reservation #BK-9021.<br><br>I will get back to you within 2 hours with an update.
+                               </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Composer -->
+<div class="p-md border-t border-border-subtle bg-surface-container-low mt-auto">
+<div class="glass-panel rounded border border-border-subtle flex flex-col focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<div class="flex items-center gap-sm p-xs border-b border-border-subtle bg-surface/50">
+<button class="p-1 rounded hover:bg-surface-variant text-outline-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1 rounded hover:bg-surface-variant text-outline-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1 rounded hover:bg-surface-variant text-outline-variant transition-colors"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<div class="w-px h-4 bg-border-subtle mx-1"></div>
+<button class="px-sm py-1 rounded hover:bg-surface-variant text-outline-variant font-label-sm text-label-sm flex items-center gap-1 transition-colors"><span class="material-symbols-outlined text-[16px]">add_link</span> Attach</button>
+<button class="px-sm py-1 rounded hover:bg-warning/20 text-warning font-label-sm text-label-sm flex items-center gap-1 transition-colors ml-auto"><span class="material-symbols-outlined text-[16px]">lock</span> Add Internal Note</button>
+</div>
+<textarea class="w-full bg-transparent border-none p-sm font-body-base text-body-base text-on-surface resize-none focus:ring-0 placeholder:text-outline-variant" placeholder="Type a reply..." rows="3"></textarea>
+<div class="flex items-center justify-between p-sm border-t border-border-subtle bg-surface/30">
+<div class="flex items-center gap-sm">
+<span class="font-label-sm text-label-sm text-outline-variant">Press ⌘+Enter to send</span>
+</div>
+<div class="flex items-center gap-sm">
+<select class="bg-surface-container border border-border-subtle rounded py-xs pl-sm pr-lg text-label-sm text-on-surface focus:outline-none focus:border-primary font-label-sm">
+<option>Send as Open</option>
+<option>Send &amp; Pending</option>
+<option>Send &amp; Resolve</option>
+</select>
+<button class="bg-primary-container text-on-primary-container px-md py-xs rounded font-label-md text-label-md hover:bg-primary-container/80 transition-colors flex items-center gap-sm">
+                                    Send <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Customer Context -->
+<div class="w-80 border-l border-border-subtle flex flex-col bg-surface-container-low shrink-0 z-10 overflow-y-auto scrollbar-hide">
+<!-- SLA Timer -->
+<div class="p-md bg-surface-container border-b border-border-subtle">
+<div class="flex items-center justify-between mb-xs">
+<span class="font-label-sm text-label-sm text-outline-variant uppercase tracking-wider">First Response SLA</span>
+<span class="font-mono-data text-mono-data text-warning font-bold">45m 12s</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5">
+<div class="bg-warning h-1.5 rounded-full" style="width: 70%"></div>
+</div>
+</div>
+<!-- Profile Card -->
+<div class="p-md border-b border-border-subtle">
+<div class="flex items-center gap-md mb-md">
+<img alt="Rajesh Poudel" class="w-16 h-16 rounded-lg object-cover border border-border-subtle shrink-0" data-alt="A portrait of a male customer looking slightly concerned, neutral studio lighting, dark background, corporate photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLt79KJ_spQb0UgnwveufENKiYJDgviuDnwuOM94FCfSfVdhllRsh14W0STKemTzJW4nBVqljecffcLvsYN6InTeRHyaT49cFTCqsD_G7KG-Qnzp1xPqEN6H7atfBq3dQJRI0UhttvYDkxLvC6DCTlmG6MDFZoO9nsb-FkGWDBpZKZQP5HVf1ub91-jPAA2en_L6ANzIQAtex74AtE_fx2ov3eKA3KMUOfRWa3R9ujJYqLmdA8sNwL">
+<div>
+<h3 class="font-lead text-lead text-on-surface">Rajesh Poudel</h3>
+<p class="font-label-sm text-label-sm text-outline-variant flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">star</span> VIP Member</p>
+</div>
+</div>
+<div class="space-y-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline-variant">Email</span>
+<span class="font-body-sm text-body-sm text-on-surface">rajesh.p@example.com</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline-variant">Phone</span>
+<span class="font-mono-data text-mono-data text-on-surface">+1 (555) 019-2831</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline-variant">Locale</span>
+<span class="font-body-sm text-body-sm text-on-surface">EN-US / PST</span>
+</div>
+</div>
+</div>
+<!-- Associated Booking -->
+<div class="p-md border-b border-border-subtle">
+<h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">flight</span> Associated Booking</h4>
+<div class="glass-panel p-sm rounded border border-border-subtle hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-mono-data text-mono-data text-primary group-hover:underline">#BK-9021</span>
+<span class="px-2 py-0.5 rounded bg-success/20 text-success font-label-sm text-label-sm border border-success/30">Confirmed</span>
+</div>
+<div class="flex items-center justify-between mb-xs">
+<div class="text-center">
+<div class="font-headline-md text-headline-md text-on-surface">JFK</div>
+<div class="font-label-sm text-label-sm text-outline-variant">New York</div>
+</div>
+<div class="flex-1 px-2 relative flex items-center justify-center">
+<div class="w-full h-px bg-border-subtle"></div>
+<span class="material-symbols-outlined absolute text-outline-variant bg-surface-container-low px-1 text-[16px]">flight_takeoff</span>
+</div>
+<div class="text-center">
+<div class="font-headline-md text-headline-md text-on-surface">LHR</div>
+<div class="font-label-sm text-label-sm text-outline-variant">London</div>
+</div>
+</div>
+<div class="font-label-sm text-label-sm text-outline-variant mt-sm">Oct 28 • Delta Airlines DL44</div>
+</div>
+</div>
+<!-- Recent History -->
+<div class="p-md">
+<h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">history</span> History</h4>
+<div class="space-y-sm relative before:absolute before:inset-y-0 before:left-[11px] before:w-px before:bg-border-subtle">
+<div class="relative pl-xl">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-variant border border-border-subtle flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">check</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface">Seat Upgrade Request</div>
+<div class="font-label-sm text-label-sm text-outline-variant">Resolved • #TK-4102 • Oct 15</div>
+</div>
+<div class="relative pl-xl">
+<div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-surface-variant border border-border-subtle flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">check</span>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface">Baggage Inquiry</div>
+<div class="font-label-sm text-label-sm text-outline-variant">Resolved • #TK-3891 • Sep 02</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
