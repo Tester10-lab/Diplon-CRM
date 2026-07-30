@@ -9,7 +9,17 @@ interface DayViewProps {
   guides: GuideData[];
 }
 
-export const DayView: React.FC<DayViewProps> = ({ departures, vehicles, drivers, guides }) => {
+export const DayView: React.FC<DayViewProps> = ({
+  departures = [],
+  vehicles = [],
+  drivers = [],
+  guides = []
+}) => {
+  const safeDepartures = departures || [];
+  const safeVehicles = vehicles || [];
+  const safeDrivers = drivers || [];
+  const safeGuides = guides || [];
+
   return (
     <div className="space-y-6">
       {/* 3-Column Resource Breakdown */}
@@ -18,11 +28,11 @@ export const DayView: React.FC<DayViewProps> = ({ departures, vehicles, drivers,
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <span className="flex items-center gap-2 font-bold text-sm text-slate-200"><Bus className="w-4 h-4 text-indigo-400" /> Vehicle Fleet Schedule</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-indigo-500/20 text-indigo-400">{vehicles.length} Units</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-indigo-500/20 text-indigo-400">{safeVehicles.length} Units</span>
           </div>
           <div className="space-y-2.5">
-            {vehicles.map(v => {
-              const assignedDep = departures.find(d => d.vehicleReg === v.registrationNumber);
+            {safeVehicles.map(v => {
+              const assignedDep = safeDepartures.find(d => d.vehicleReg === v.registrationNumber);
               return (
                 <div key={v._id} className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
@@ -47,11 +57,11 @@ export const DayView: React.FC<DayViewProps> = ({ departures, vehicles, drivers,
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <span className="flex items-center gap-2 font-bold text-sm text-slate-200"><User className="w-4 h-4 text-emerald-400" /> Driver Assignments</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400">{drivers.length} Drivers</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400">{safeDrivers.length} Drivers</span>
           </div>
           <div className="space-y-2.5">
-            {drivers.map(d => {
-              const assignedDep = departures.find(dep => dep.driverName === d.name);
+            {safeDrivers.map(d => {
+              const assignedDep = safeDepartures.find(dep => dep.driverName === d.name);
               return (
                 <div key={d._id} className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
@@ -76,11 +86,11 @@ export const DayView: React.FC<DayViewProps> = ({ departures, vehicles, drivers,
         <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <span className="flex items-center gap-2 font-bold text-sm text-slate-200"><Compass className="w-4 h-4 text-amber-400" /> Tour Guides</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400">{guides.length} Guides</span>
+            <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400">{safeGuides.length} Guides</span>
           </div>
           <div className="space-y-2.5">
-            {guides.map(g => {
-              const assignedDep = departures.find(dep => dep.guideName === g.name);
+            {safeGuides.map(g => {
+              const assignedDep = safeDepartures.find(dep => dep.guideName === g.name);
               return (
                 <div key={g._id} className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">

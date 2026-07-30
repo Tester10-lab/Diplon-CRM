@@ -20,10 +20,10 @@ export const ResolveConflictModal: React.FC<ResolveConflictModalProps> = ({
   isOpen,
   onClose,
   conflict,
-  departures,
-  drivers,
-  vehicles,
-  guides,
+  departures = [],
+  drivers = [],
+  vehicles = [],
+  guides = [],
   onResolve
 }) => {
   const [selectedDepartureId, setSelectedDepartureId] = useState<string>('');
@@ -34,11 +34,11 @@ export const ResolveConflictModal: React.FC<ResolveConflictModalProps> = ({
 
   useEffect(() => {
     if (conflict) {
-      setSelectedDepartureId(conflict.departureId || (departures[0]?._id || ''));
+      setSelectedDepartureId(conflict.departureId || (departures?.[0]?._id || ''));
     }
   }, [conflict, departures]);
 
-  const targetDeparture = departures.find(d => d._id === selectedDepartureId) || departures[0];
+  const targetDeparture = (departures || []).find(d => d._id === selectedDepartureId) || (departures || [])[0];
 
   useEffect(() => {
     if (targetDeparture) {

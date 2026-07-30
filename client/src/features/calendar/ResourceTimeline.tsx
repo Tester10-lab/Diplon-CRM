@@ -11,11 +11,16 @@ interface ResourceTimelineProps {
 
 export const ResourceTimeline: React.FC<ResourceTimelineProps> = ({
   currentDate,
-  departures,
-  vehicles,
-  drivers,
-  guides,
+  departures = [],
+  vehicles = [],
+  drivers = [],
+  guides = [],
 }) => {
+  const safeDepartures = departures || [];
+  const safeVehicles = vehicles || [];
+  const safeDrivers = drivers || [];
+  const safeGuides = guides || [];
+
   const startOfWeek = new Date(currentDate);
   startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
 
@@ -44,8 +49,8 @@ export const ResourceTimeline: React.FC<ResourceTimelineProps> = ({
           <div className="px-4 py-2 bg-slate-950/40 text-[11px] font-bold text-indigo-400 uppercase tracking-wider">
             Vehicle Fleet Gantt Timeline
           </div>
-          {vehicles.map(v => {
-            const assigned = departures.find(d => d.vehicleReg === v.registrationNumber);
+          {safeVehicles.map(v => {
+            const assigned = safeDepartures.find(d => d.vehicleReg === v.registrationNumber);
             return (
               <div key={v._id} className="grid grid-cols-8 py-2.5 items-center hover:bg-slate-800/20">
                 <div className="px-4 text-xs font-bold text-slate-200 truncate">
