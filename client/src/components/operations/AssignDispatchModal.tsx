@@ -295,12 +295,12 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
                 isDispatched ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
               }`}
             >
-              <option value="Bus">🚌 Bus</option>
-              <option value="EV">⚡ EV</option>
-              <option value="Van">🚐 Van</option>
-              <option value="Jeep">🚘 Jeep</option>
-              <option value="Trek">🥾 Trek</option>
-              <option value="Hike">🏔️ Hike</option>
+              <option value="Bus">Bus (Tourist Deluxe)</option>
+              <option value="EV">EV (Electric Vehicle)</option>
+              <option value="Van">Van (Passenger / HiAce)</option>
+              <option value="Jeep">Jeep (4WD Scorpio)</option>
+              <option value="Trek">Overland Trek</option>
+              <option value="Hike">Mountain Hike</option>
               {vehicles.map(v => (
                 <option key={v._id} value={`${v.registrationNumber}`}>
                   {v.name} ({v.registrationNumber}) - {v.type}
@@ -347,10 +347,10 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
               disabled={isDispatched && !isAdminOrSuper}
               className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs font-semibold text-white focus:outline-none focus:border-indigo-500"
             >
-              <option value="Active">🟢 Active / Scheduled</option>
-              <option value="Dispatched">🔒 Dispatched (Freeze Resource Lock)</option>
-              <option value="Completed">✅ Completed</option>
-              <option value="Cancelled">🔴 Cancelled</option>
+              <option value="Active">Active / Scheduled</option>
+              <option value="Dispatched">Dispatched (Freeze Resource Lock)</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
 

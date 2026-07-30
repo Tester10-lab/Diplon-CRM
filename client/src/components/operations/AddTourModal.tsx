@@ -15,12 +15,12 @@ export interface AddTourModalProps {
 }
 
 export const VEHICLE_TYPES = [
-  { value: 'Bus', label: '🚌 Bus' },
-  { value: 'EV', label: '⚡ EV' },
-  { value: 'Van', label: '🚐 Van' },
-  { value: 'Jeep', label: '🚘 Jeep' },
-  { value: 'Trek', label: '🥾 Trek' },
-  { value: 'Hike', label: '🏔️ Hike' }
+  { value: 'Bus', label: 'Bus (Tourist Deluxe)' },
+  { value: 'EV', label: 'EV (Electric Vehicle)' },
+  { value: 'Van', label: 'Van (Passenger / HiAce)' },
+  { value: 'Jeep', label: 'Jeep (4WD Scorpio)' },
+  { value: 'Trek', label: 'Overland Trek' },
+  { value: 'Hike', label: 'Mountain Hike' }
 ];
 
 export function extractDurationDays(packageName: string, pkg?: TourPackage): number {
