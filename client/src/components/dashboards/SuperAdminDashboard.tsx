@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { openBookingModal, openAddTourModal } from '../../store/modalStore';
 import { useDashboardMetrics } from '../../shared/hooks/useDashboardMetrics';
@@ -7,6 +7,9 @@ import { ErrorState } from '../feedback/ErrorState';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
+
+const NOTES_KEY = 'diplon_dashboard_notes';
+const REMINDERS_KEY = 'diplon_dashboard_reminders';
 import {
   Calendar as CalendarIcon,
   Compass,
@@ -47,20 +50,44 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   // Interactive Sticky Notes State
-  const [notes, setNotes] = useState<{ id: string; text: string; color: string; time: string; pinned?: boolean }[]>([
-    { id: 'n1', text: 'Confirm Pokhara Scorpio fuel advance NPR 5,000', color: 'bg-amber-500/15 text-amber-300 border-amber-500/30', time: '10 mins ago', pinned: true },
-    { id: 'n2', text: 'Muktinath 8 Pax hotel booking confirmation at Grand Hotel', color: 'bg-[#C8FF2D]/15 text-[#C8FF2D] border-[#C8FF2D]/35', time: '1 hour ago' },
-    { id: 'n3', text: 'Collect driver license renewal copy from Babu Driver', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', time: '2 hours ago' },
-  ]);
+  const [notes, setNotes] = useState<{ id: string; text: string; color: string; time: string; pinned?: boolean }[]>(() => {
+    try {
+      const saved = localStorage.getItem(NOTES_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return [
+      { id: 'n1', text: 'Confirm Pokhara Scorpio fuel advance NPR 5,000', color: 'bg-amber-500/15 text-amber-300 border-amber-500/30', time: '10 mins ago', pinned: true },
+      { id: 'n2', text: 'Muktinath 8 Pax hotel booking confirmation at Grand Hotel', color: 'bg-[#C8FF2D]/15 text-[#C8FF2D] border-[#C8FF2D]/35', time: '1 hour ago' },
+      { id: 'n3', text: 'Collect driver license renewal copy from Babu Driver', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', time: '2 hours ago' },
+    ];
+  });
   const [newNoteInput, setNewNoteInput] = useState('');
 
   // Operations Reminders State
-  const [reminders, setReminders] = useState<{ id: string; text: string; due: string; completed: boolean }[]>([
-    { id: 'r1', text: 'Dispatch Mustang Scorpio at 06:00 AM', due: '06:00 AM Today', completed: true },
-    { id: 'r2', text: 'Settle Muktinath guide Pasang Sherpa allowance', due: '02:00 PM Today', completed: false },
-    { id: 'r3', text: 'Verify tomorrow Chitwan Safari bus seat capacity', due: '05:00 PM Today', completed: false },
-    { id: 'r4', text: 'Confirm VIP airport transfer pickup for Annapurna Group', due: 'Tomorrow 08:00 AM', completed: false }
-  ]);
+  const [reminders, setReminders] = useState<{ id: string; text: string; due: string; completed: boolean }[]>(() => {
+    try {
+      const saved = localStorage.getItem(REMINDERS_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return [
+      { id: 'r1', text: 'Dispatch Mustang Scorpio at 06:00 AM', due: '06:00 AM Today', completed: true },
+      { id: 'r2', text: 'Settle Muktinath guide Pasang Sherpa allowance', due: '02:00 PM Today', completed: false },
+      { id: 'r3', text: 'Verify tomorrow Chitwan Safari bus seat capacity', due: '05:00 PM Today', completed: false },
+      { id: 'r4', text: 'Confirm VIP airport transfer pickup for Annapurna Group', due: 'Tomorrow 08:00 AM', completed: false }
+    ];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+    } catch (e) {}
+  }, [notes]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(REMINDERS_KEY, JSON.stringify(reminders));
+    } catch (e) {}
+  }, [reminders]);
 
   const triggerToast = (msg: string) => {
     setToastMsg(msg);
