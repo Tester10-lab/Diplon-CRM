@@ -13,8 +13,8 @@ const LOCKOUT_DURATION_SECONDS = 30;
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const { login } = useAuthStore();
-  const [email, setEmail] = useState('superadmin@diplon.com');
-  const [password, setPassword] = useState('••••••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -50,7 +50,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
     setTimeout(() => {
       // Simulate password validation (demo accepts valid email or demo password)
-      const isValidDemo = email in DEMO_USERS || password.length >= 6;
+      const isValidDemo = email.toLowerCase().trim() in DEMO_USERS || (email.includes('@') && password.length >= 6);
 
       if (isValidDemo) {
         setIsLoading(false);
@@ -75,7 +75,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const handleQuickDemoSelect = (demoEmail: string) => {
     if (isLockedOut) return;
     setEmail(demoEmail);
-    setPassword('demoPass123!');
+    setPassword('');
     setErrorMsg(null);
   };
 
