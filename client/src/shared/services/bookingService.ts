@@ -2,13 +2,17 @@ import { Booking } from '../../types';
 import { apiClient } from './apiClient';
 import { mockBookings } from '../mocks/mockBookings';
 
-const BOOKINGS_STORAGE_KEY = 'diplon_bookings_pipeline';
+const BOOKINGS_STORAGE_KEY = 'diplon_bookings_pipeline_v3';
 
 function getStoredBookings(): Booking[] {
   try {
+    localStorage.removeItem('diplon_bookings_pipeline');
     const saved = localStorage.getItem(BOOKINGS_STORAGE_KEY);
     if (saved) {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      const cleaned = parsed.filter((b: any) => !b._id?.startsWith('bk_902'));
+      localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(cleaned));
+      return cleaned;
     }
   } catch (e) {
     console.error('Failed to parse stored bookings:', e);

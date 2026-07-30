@@ -2,17 +2,23 @@ import { Departure, Vehicle, Driver, Guide } from '../../types';
 import { apiClient } from './apiClient';
 import { mockDepartures, mockVehicles, mockDrivers, mockGuides } from '../mocks/mockOperations';
 
-const DEPARTURES_STORAGE_KEY = 'diplon_operations_departures';
+const DEPARTURES_STORAGE_KEY = 'diplon_operations_departures_v3';
 
 function getStoredDepartures(): Departure[] {
   try {
+    localStorage.removeItem('diplon_operations_departures');
     const saved = localStorage.getItem(DEPARTURES_STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const cleaned = parsed.filter((d: any) => !d._id?.startsWith('dep_884'));
+      localStorage.setItem(DEPARTURES_STORAGE_KEY, JSON.stringify(cleaned));
+      return cleaned;
+    }
   } catch (e) {
     console.error('Failed to parse stored departures:', e);
   }
-  localStorage.setItem(DEPARTURES_STORAGE_KEY, JSON.stringify(mockDepartures));
-  return mockDepartures;
+  localStorage.setItem(DEPARTURES_STORAGE_KEY, JSON.stringify([]));
+  return [];
 }
 
 function saveStoredDepartures(departures: Departure[]) {
