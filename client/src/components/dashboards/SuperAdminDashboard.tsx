@@ -138,15 +138,15 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
   if (isLoading) return <PageSkeleton />;
   if (error || !metrics) return <ErrorState message={error?.message || 'Failed to load metrics'} onRetry={refetch} />;
 
-  // Days of month August 2026 (Starting from Saturday - Aug 1, 2026)
+  // Days of month July 2026 (Starting Wednesday Jul 1, Today = Friday Jul 31, 2026)
   const calendarDays = [
-    { day: 26, isPrev: true }, { day: 27, isPrev: true }, { day: 28, isPrev: true }, { day: 29, isPrev: true }, { day: 30, isPrev: true }, { day: 31, isPrev: true },
-    { day: 1, isCurrent: true, isSelected: true }, { day: 2, isCurrent: true }, { day: 3, isCurrent: true }, { day: 4, isCurrent: true }, { day: 5, isCurrent: true }, { day: 6, isCurrent: true }, { day: 7, isCurrent: true },
-    { day: 8, isCurrent: true }, { day: 9, isCurrent: true }, { day: 10, isCurrent: true }, { day: 11, isCurrent: true }, { day: 12, isCurrent: true }, { day: 13, isCurrent: true }, { day: 14, isCurrent: true },
-    { day: 15, isCurrent: true }, { day: 16, isCurrent: true }, { day: 17, isCurrent: true }, { day: 18, isCurrent: true }, { day: 19, isCurrent: true }, { day: 20, isCurrent: true }, { day: 21, isCurrent: true },
-    { day: 22, isCurrent: true }, { day: 23, isCurrent: true }, { day: 24, isCurrent: true }, { day: 25, isCurrent: true }, { day: 26, isCurrent: true }, { day: 27, isCurrent: true }, { day: 28, isCurrent: true },
-    { day: 29, isCurrent: true }, { day: 30, isCurrent: true }, { day: 31, isCurrent: true },
-    { day: 1, isNext: true }, { day: 2, isNext: true }, { day: 3, isNext: true }, { day: 4, isNext: true }
+    { day: 28, isPrev: true }, { day: 29, isPrev: true }, { day: 30, isPrev: true },
+    { day: 1, isCurrent: true }, { day: 2, isCurrent: true }, { day: 3, isCurrent: true }, { day: 4, isCurrent: true },
+    { day: 5, isCurrent: true }, { day: 6, isCurrent: true }, { day: 7, isCurrent: true }, { day: 8, isCurrent: true }, { day: 9, isCurrent: true }, { day: 10, isCurrent: true }, { day: 11, isCurrent: true },
+    { day: 12, isCurrent: true }, { day: 13, isCurrent: true }, { day: 14, isCurrent: true }, { day: 15, isCurrent: true }, { day: 16, isCurrent: true }, { day: 17, isCurrent: true }, { day: 18, isCurrent: true },
+    { day: 19, isCurrent: true }, { day: 20, isCurrent: true }, { day: 21, isCurrent: true }, { day: 22, isCurrent: true }, { day: 23, isCurrent: true }, { day: 24, isCurrent: true }, { day: 25, isCurrent: true },
+    { day: 26, isCurrent: true }, { day: 27, isCurrent: true }, { day: 28, isCurrent: true }, { day: 29, isCurrent: true }, { day: 30, isCurrent: true }, { day: 31, isCurrent: true, isSelected: true },
+    { day: 1, isNext: true }, { day: 2, isNext: true }, { day: 3, isNext: true }, { day: 4, isNext: true }, { day: 5, isNext: true }, { day: 6, isNext: true }, { day: 7, isNext: true }, { day: 8, isNext: true }
   ];
 
   const containerVariants = {
@@ -392,9 +392,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2">
               <CalendarIcon className="w-4 h-4 text-[#C8FF2D]" />
-              <span className="text-xs font-black text-white">August 2026</span>
+              <span className="text-xs font-black text-white">July 2026</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
-                Shrawan / Bhadra 2083 BS
+                Shrawan 2083 BS
               </span>
             </div>
             <div className="flex items-center gap-1">
@@ -434,7 +434,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           {/* Today's Selected Tour Departure Note */}
           <div className="p-3 rounded-2xl bg-[#0B0E14] border border-white/10 space-y-1">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-extrabold text-[#C8FF2D]">Next Departure (Aug 1)</span>
+              <span className="font-extrabold text-[#C8FF2D]">Departing Tomorrow (Aug 1)</span>
               <span className="text-[10px] text-emerald-400 font-bold font-mono">2 Tours Ready</span>
             </div>
             <div className="text-xs font-bold text-white truncate">Halesi 25 Pax Sofa Bus • Jiri 6 Pax Private</div>

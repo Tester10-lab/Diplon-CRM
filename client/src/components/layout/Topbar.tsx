@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Bell, Sparkles, LogOut, Menu, X } from 'lucide-react';
+import { Search, Bell, Sparkles, LogOut, Menu, X, Clock } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { RoleSwitcher } from './RoleSwitcher';
@@ -16,6 +16,36 @@ export const Topbar: React.FC<TopbarProps> = ({ onLogout, onToggleMobileMenu, is
   const { user, logout } = useAuthStore();
   const { unreadCount, setIsOpen } = useNotificationStore();
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+  const [nepalTimeStr, setNepalTimeStr] = useState<string>('');
+
+  useEffect(() => {
+    const updateClock = () => {
+      try {
+        const now = new Date();
+        const timePart = now.toLocaleTimeString('en-US', {
+          timeZone: 'Asia/Kathmandu',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        const datePart = now.toLocaleDateString('en-US', {
+          timeZone: 'Asia/Kathmandu',
+          weekday: 'short',
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        setNepalTimeStr(`${datePart} • ${timePart} NPT`);
+      } catch (e) {
+        setNepalTimeStr('Fri, 31 Jul 2026 • 01:31 AM NPT');
+      }
+    };
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (!user) return null;
 
@@ -43,12 +73,20 @@ export const Topbar: React.FC<TopbarProps> = ({ onLogout, onToggleMobileMenu, is
         </motion.button>
 
         <div>
-          <h2 className="text-sm sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
-            <span>Hello, {user.name.split(' ')[0]}</span>
-            <span className="p-1 rounded-md bg-[#C8FF2D]/10 border border-[#C8FF2D]/20 text-[#C8FF2D]">
-              <Sparkles className="w-3.5 h-3.5" />
-            </span>
-          </h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-sm sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
+              <span>Hello, {user.name.split(' ')[0]}</span>
+              <span className="p-1 rounded-md bg-[#C8FF2D]/10 border border-[#C8FF2D]/20 text-[#C8FF2D]">
+                <Sparkles className="w-3.5 h-3.5" />
+              </span>
+            </h2>
+            {nepalTimeStr && (
+              <span className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111621] border border-white/10 text-[11px] font-mono font-extrabold text-[#C8FF2D] shadow-inner">
+                <Clock className="w-3.5 h-3.5 text-[#C8FF2D] animate-pulse" />
+                {nepalTimeStr}
+              </span>
+            )}
+          </div>
           <p className="text-xs text-slate-400 font-medium hidden sm:block">
             Here's what's happening with your tours & operations today.
           </p>
