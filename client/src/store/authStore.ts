@@ -26,6 +26,18 @@ export const DEMO_USERS: Record<string, UserContext> = {
     avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
     token: 'jwt_admin_token_112233'
   },
+  'agency@lalitpurholidays.com': {
+    userId: 'usr_agency_lalitpur',
+    name: 'Lalitpur Holidays (Agency Partner)',
+    email: 'agency@lalitpurholidays.com',
+    role: 'AGENCY',
+    companyId: 'cmp_lalitpur_01',
+    companyName: 'Lalitpur Holidays',
+    branchId: 'br_lalitpur_01',
+    branchName: 'Lalitpur Agency Branch',
+    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    token: 'jwt_agency_lalitpur_token_990011'
+  },
   'agency@hikeontrek.com': {
     userId: 'usr_agency_003',
     name: 'Hike on Trek (Agency Partner)',

@@ -28,19 +28,19 @@ function getStoredNotes(): CalendarNote[] {
   const defaultNotes: CalendarNote[] = [
     {
       id: 'note_1',
-      title: 'Check Kalinchowk jeep road & weather report',
-      date: '2026-08-02',
+      title: 'Halesi 28-seater Sofa Bus departure at Shangri-la Hotel',
+      date: '2026-08-01',
       category: 'Operational',
-      description: 'Confirm 4WD Scorpio jeep driver Babu Driver departs by 6:00 AM from Ratna Rajya School',
-      createdAt: '2026-07-28'
+      description: 'Chandra man Maharjan group (85,000/- Rs collect on bus)',
+      createdAt: '2026-07-31'
     },
     {
       id: 'note_2',
-      title: 'Collect advance 5,000 Rs from Nirvik Sapkota',
-      date: '2026-07-28',
+      title: 'Collect 34,400 Rs for Muktinath Tour (Lalitpur Holidays)',
+      date: '2026-10-25',
       category: 'Payment',
-      description: 'Remaining 33,500/- Rs to collect on Scorpio jeep during tour',
-      createdAt: '2026-07-28'
+      description: 'Abhijit Ghosh group (2 Pax private tour, Lalitpur Holidays referral)',
+      createdAt: '2026-07-31'
     }
   ];
   localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(defaultNotes));
@@ -170,39 +170,12 @@ export function useCalendarData(currentDate: Date) {
         status: 'CONFIRMED'
       }));
 
-      // 5. Default Tour Events for July / August 2026
-      const defaultJulyEvents: CalendarEvent[] = [
-        {
-          id: 'def_sailung_july',
-          title: '📌 Sailung–Kalinchowk Tour (Nirvik Sapkota - 7 Pax)',
-          start: '2026-08-02',
-          end: '2026-08-03',
-          startDate: '2026-08-02',
-          endDate: '2026-08-03',
-          type: 'DEPARTURE',
-          color: '#6366f1',
-          status: 'CONFIRMED'
-        },
-        {
-          id: 'def_pokhara_july',
-          title: '📍 Pokhara & Ghandruk Deluxe Tour (5 Pax)',
-          start: '2026-07-29',
-          end: '2026-08-01',
-          startDate: '2026-07-29',
-          endDate: '2026-08-01',
-          type: 'TOUR',
-          color: '#10b981',
-          status: 'CONFIRMED'
-        }
-      ];
-
       const mergedEvents = [
         ...eventsRes,
         ...departureEvents,
         ...bookingEvents,
         ...invoiceEvents,
-        ...noteEvents,
-        ...defaultJulyEvents
+        ...noteEvents
       ];
 
       const uniqueMap = new Map<string, CalendarEvent>();
