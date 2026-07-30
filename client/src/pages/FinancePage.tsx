@@ -21,38 +21,34 @@ export interface FinanceRecord {
   notes?: string;
 }
 
+const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v4';
+
 const INITIAL_FINANCE_RECORDS: FinanceRecord[] = [
-  { id: 'FIN-101', type: 'COLLECTION', title: 'Sailung–Kalinchowk Tour Advance - Nirvik Sapkota', category: 'Customer Booking', amount: 38500, date: '2026-07-28' },
-  { id: 'FIN-102', type: 'COLLECTION', title: 'Upper Mustang Booking - Narayan Shrestha', category: 'Customer Booking', amount: 120000, date: '2026-07-27' },
-  { id: 'FIN-103', type: 'EXPENSE', title: 'Scorpio Fuel & Driver Allowance (Pradip Bhai)', category: 'Transport & Fuel', amount: 18000, date: '2026-07-27' },
-  { id: 'FIN-104', type: 'EXPENSE', title: 'Lo Manthang Hotel Advance Allocation', category: 'Accommodation', amount: 25000, date: '2026-07-26' },
-  { id: 'FIN-105', type: 'COLLECTION', title: 'Pokhara Tour Settlement - bimala chetri', category: 'B2B Referral', amount: 22000, date: '2026-07-26' }
+  { id: 'FIN-101', type: 'COLLECTION', title: 'Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31' },
+  { id: 'FIN-102', type: 'COLLECTION', title: 'Muktinath Tour Advance - Abhijit Ghosh (Lalitpur Holidays)', category: 'Customer Booking', amount: 9600, date: '2026-07-31' }
 ];
 
-const INITIAL_SETTLEMENTS: AgencySettlement[] = [
-  {
-    id: 'SETTL-801',
-    agencyCompanyId: 'cmp_himalayan_02',
-    agencyName: 'Himalayan Treks & B2B Agency',
-    requestedAmount: 137500,
-    totalCollections: 180500,
-    totalExpenses: 43000,
-    status: 'APPROVED',
-    notes: 'Approved by Admin for July cycle.',
-    createdAt: '2026-07-27 15:30',
-    settledAt: '2026-07-28 09:00'
-  },
-  {
-    id: 'SETTL-802',
-    agencyCompanyId: 'cmp_everest_03',
-    agencyName: 'Everest Global B2B',
-    requestedAmount: 45000,
-    totalCollections: 60000,
-    totalExpenses: 15000,
-    status: 'PENDING',
-    createdAt: '2026-07-28 10:15'
+function getStoredFinanceRecords(): FinanceRecord[] {
+  try {
+    localStorage.removeItem('diplon_finance_ledger');
+    localStorage.removeItem('diplon_finance_ledger_v3');
+    const saved = localStorage.getItem(FINANCE_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      const cleaned = parsed.filter((f: any) => f.title?.includes('Halesi') || f.title?.includes('Muktinath'));
+      if (cleaned.length > 0) {
+        localStorage.setItem(FINANCE_STORAGE_KEY, JSON.stringify(cleaned));
+        return cleaned;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to parse finance records:', e);
   }
-];
+  localStorage.setItem(FINANCE_STORAGE_KEY, JSON.stringify(INITIAL_FINANCE_RECORDS));
+  return INITIAL_FINANCE_RECORDS;
+}
+
+const INITIAL_SETTLEMENTS: AgencySettlement[] = [];
 
 export const FinancePage: React.FC = () => {
   const { user } = useAuthStore();
@@ -60,7 +56,7 @@ export const FinancePage: React.FC = () => {
   const isAgency = user.role === 'AGENCY';
 
   const [activeTab, setActiveTab] = useState<'LEDGER' | 'SETTLEMENTS'>('LEDGER');
-  const [financeRecords, setFinanceRecords] = useState<FinanceRecord[]>(INITIAL_FINANCE_RECORDS);
+  const [financeRecords, setFinanceRecords] = useState<FinanceRecord[]>(getStoredFinanceRecords());
   const [settlements, setSettlements] = useState<AgencySettlement[]>(INITIAL_SETTLEMENTS);
 
   // Modal States

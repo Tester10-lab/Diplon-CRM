@@ -8,8 +8,8 @@ import { DriverTripSettlement } from '../types/erp';
 import { Car, Compass, Calendar, Users, Phone, DollarSign, Send, ShieldCheck, Sparkles, AlertTriangle, CheckCircle2, Clock, MapPin, Fuel, Utensils, Hotel, AlertCircle, ArrowRight } from 'lucide-react';
 
 const DRIVER_PASSENGERS = [
-  { id: '1', name: 'Nirvik Sapkota', phone: '9841876047', pax: 7, pickup: 'Thamel HQ (06:00 AM)', rooms: '2 Deluxe Rooms at Kalinchowk Resort', advancePaid: 5000, dueOnArrival: 33500 },
-  { id: '2', name: 'rojina shakya', phone: '9860099335', pax: 7, pickup: 'Koteshwor Chowk (06:30 AM)', rooms: '2 Standard Rooms', advancePaid: 10000, dueOnArrival: 42000 }
+  { id: '1', name: 'Chandra man Maharjan', phone: '9802100125 / 9843500017', pax: 25, pickup: 'Shangri-la Hotel (06:00 AM)', rooms: '28-Seater Sofa Bus (25 Pax)', advancePaid: 2500, dueOnArrival: 85000 },
+  { id: '2', name: 'Tarak Panja', phone: '9841142416', pax: 6, pickup: 'New Road Angan Sweets (06:30 AM)', rooms: '6 Pax Private (2 rooms)', advancePaid: 0, dueOnArrival: 34000 }
 ];
 
 export const DriverDashboardPage: React.FC<{ onNavigate?: (path: string) => void }> = ({ onNavigate }) => {
