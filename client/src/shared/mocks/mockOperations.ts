@@ -1,10 +1,10 @@
 import { Departure, Vehicle, Driver, Guide } from '../../types';
 
 export const mockDepartures: Departure[] = [
-  { _id: 'dep_8841', packageName: 'Everest Base Camp Trek 14 Days', startDate: '2026-10-01', endDate: '2026-10-14', seatsTotal: 10, seatsAvailable: 7, seatsReserved: 3, status: 'Active', travelerCount: 3, guideName: 'Pasang Sherpa', driverName: 'Babu Driver', vehicleReg: 'BA-2-PA-1234' },
-  { _id: 'dep_8842', packageName: 'Annapurna Circuit Trek 12 Days', startDate: '2026-10-05', endDate: '2026-10-17', seatsTotal: 12, seatsAvailable: 8, seatsReserved: 4, status: 'Active', travelerCount: 4, guideName: 'Mingma Sherpa', driverName: 'Kaji Driver', vehicleReg: 'BA-1-PA-5678' },
-  { _id: 'dep_8843', packageName: 'Langtang Valley Trek 9 Days', startDate: '2026-09-01', endDate: '2026-09-10', seatsTotal: 8, seatsAvailable: 0, seatsReserved: 8, status: 'Delayed', travelerCount: 8, guideName: 'Tenzi Sherpa', driverName: 'Babu Driver', vehicleReg: 'BA-3-PA-9900' },
-  { _id: 'dep_8844', packageName: 'Manaslu Circuit Trek 16 Days', startDate: '2026-10-15', endDate: '2026-10-31', seatsTotal: 10, seatsAvailable: 6, seatsReserved: 4, status: 'Active', travelerCount: 4, guideName: 'Lhakpa Sherpa', driverName: 'Suman Driver', vehicleReg: 'BA-4-PA-4422' },
+  { _id: 'dep_halesi_01', packageName: 'Halesi Tour Package (1N/2D)', startDate: '2026-08-01', endDate: '2026-08-02', seatsTotal: 28, seatsAvailable: 3, seatsReserved: 25, status: 'Active', travelerCount: 25, guideName: 'Unassigned Guide', driverName: 'Sofa Bus Driver (Chandra Maharjan)', vehicleReg: '28-Seater Sofa Bus' },
+  { _id: 'dep_jiri_02', packageName: 'Jiri Tour (1N/2D)', startDate: '2026-08-01', endDate: '2026-08-02', seatsTotal: 7, seatsAvailable: 1, seatsReserved: 6, status: 'Active', travelerCount: 6, guideName: 'Unassigned Guide', driverName: 'Scorpio Driver (Tarak Panja)', vehicleReg: '4WD Scorpio Jeep' },
+  { _id: 'dep_mustang_03', packageName: 'Upper Mustang Package (4N/5D)', startDate: '2026-10-28', endDate: '2026-11-01', seatsTotal: 7, seatsAvailable: 0, seatsReserved: 7, status: 'Active', travelerCount: 7, guideName: 'Unassigned Guide', driverName: 'Scorpio Driver (Bishnu Kafle)', vehicleReg: '4WD Scorpio Jeep' },
+  { _id: 'dep_muktinath_04', packageName: 'Muktinath Tour (2N/3D)', startDate: '2026-10-25', endDate: '2026-10-27', seatsTotal: 7, seatsAvailable: 5, seatsReserved: 2, status: 'Active', travelerCount: 2, guideName: 'Unassigned Guide', driverName: 'Scorpio Driver (Abhijit Ghosh)', vehicleReg: '4WD Scorpio Jeep' },
 ];
 
 export const mockVehicles: Vehicle[] = [
