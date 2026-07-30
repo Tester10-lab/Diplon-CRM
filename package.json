@@ -1,12 +1,12 @@
 {
   "name": "diplon-crm",
   "version": "1.0.0",
-  "description": "",
+  "description": "Diplon Travel ERP Backend API Service",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm run build --prefix client",
-    "postinstall": "cd client && npm install",
+    "build": "node -e \"console.log('Backend API build complete.')\"",
+    "render-build": "npm install",
     "test": "node run-all-tests.js"
   },
   "keywords": [],
