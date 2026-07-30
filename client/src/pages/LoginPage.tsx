@@ -49,10 +49,18 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setErrorMsg(null);
 
     setTimeout(() => {
-      // Simulate password validation (demo accepts valid email or demo password)
-      const isValidDemo = email.toLowerCase().trim() in DEMO_USERS || (email.includes('@') && password.length >= 6);
+      const normalizedEmail = email.toLowerCase().trim();
+      const isAdminOrSuperAdmin = normalizedEmail === 'admin@diplon.com' || normalizedEmail === 'superadmin@diplon.com';
 
-      if (isValidDemo) {
+      // Check password: Admin/SuperAdmin requires 'sudip123'
+      let isValidPassword = true;
+      if (isAdminOrSuperAdmin) {
+        isValidPassword = password === 'sudip123';
+      } else {
+        isValidPassword = password.trim() === 'sudip123' || password.length >= 4;
+      }
+
+      if (isValidPassword && (normalizedEmail in DEMO_USERS || normalizedEmail.includes('@'))) {
         setIsLoading(false);
         setFailedAttempts(0); // Reset counter on success
         login(email);
@@ -66,7 +74,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           setLockoutSecondsLeft(LOCKOUT_DURATION_SECONDS);
           setErrorMsg(`🚨 Brute-Force Rate Limiter Triggered: ${MAX_FAILED_ATTEMPTS} failed attempts. Login locked for ${LOCKOUT_DURATION_SECONDS} seconds.`);
         } else {
-          setErrorMsg(`Invalid credentials. Failed attempts: ${nextAttempts}/${MAX_FAILED_ATTEMPTS}. (${MAX_FAILED_ATTEMPTS - nextAttempts} attempts remaining before lockout)`);
+          setErrorMsg(`Invalid credentials. Required password for admin: sudip123. Failed attempts: ${nextAttempts}/${MAX_FAILED_ATTEMPTS}.`);
         }
       }
     }, 600);
@@ -75,7 +83,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const handleQuickDemoSelect = (demoEmail: string) => {
     if (isLockedOut) return;
     setEmail(demoEmail);
-    setPassword('');
+    setPassword('sudip123');
     setErrorMsg(null);
   };
 

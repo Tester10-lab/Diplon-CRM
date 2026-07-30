@@ -27,9 +27,10 @@ async function seed() {
 
   // Use withContext so scoping plugins and RBAC work during seeding
   await withContext({ branchId: branch._id, companyId: company._id, currentUserRole: 'ADMIN' }, async () => {
+    const { hashPassword } = require('./utils/auth');
     const user = await User.create({
       email: 'admin@diplon.com',
-      passwordHash: 'hashed_password', // Dummy
+      passwordHash: hashPassword('sudip123'),
       role: 'ADMIN',
       branchId: branch._id,
       companyId: company._id
