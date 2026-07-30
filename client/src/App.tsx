@@ -16,6 +16,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   public state: ErrorBoundaryState = { hasError: false };
 
   public static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    // Auto-reload browser if dynamic module fetch failed due to new deployment bundle hashes
+    if (
+      error.message?.includes('dynamically imported module') ||
+      error.message?.includes('Importing a module script failed') ||
+      error.message?.includes('Loading chunk')
+    ) {
+      const reloadKey = 'chunk_reload_attempts';
+      const attempts = parseInt(sessionStorage.getItem(reloadKey) || '0', 10);
+      if (attempts < 2) {
+        sessionStorage.setItem(reloadKey, String(attempts + 1));
+        window.location.reload();
+      }
+    }
     return { hasError: true, error };
   }
 
