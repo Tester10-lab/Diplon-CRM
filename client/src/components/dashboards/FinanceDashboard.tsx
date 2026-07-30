@@ -33,8 +33,8 @@ export const FinanceDashboard: React.FC<{ onNavigate: (path: string) => void }> 
             <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500"><DollarSign className="w-4 h-4" /></div>
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">NPR 240,000</div>
-            <div className="text-xs text-emerald-500 font-semibold mt-1">Cash & Bank Transfer</div>
+            <div className="text-2xl font-extrabold text-white font-mono font-tabular-nums">NPR 240,000</div>
+            <div className="text-xs text-emerald-400 font-semibold mt-1">Cash & Bank Transfer</div>
           </div>
         </Card>
 
@@ -44,8 +44,8 @@ export const FinanceDashboard: React.FC<{ onNavigate: (path: string) => void }> 
             <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500"><CreditCard className="w-4 h-4" /></div>
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">NPR 450,000</div>
-            <div className="text-xs text-amber-500 font-semibold mt-1">5 Receivables Due</div>
+            <div className="text-2xl font-extrabold text-white font-mono font-tabular-nums">NPR 450,000</div>
+            <div className="text-xs text-amber-400 font-semibold mt-1">5 Receivables Due</div>
           </div>
         </Card>
 
@@ -55,7 +55,7 @@ export const FinanceDashboard: React.FC<{ onNavigate: (path: string) => void }> 
             <div className="p-2 rounded-xl bg-rose-500/10 text-rose-500"><Building2 className="w-4 h-4" /></div>
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">NPR 180,000</div>
+            <div className="text-2xl font-extrabold text-white font-mono font-tabular-nums">NPR 180,000</div>
             <div className="text-xs text-slate-400 mt-1">Yak & Yeti Hotel & Airlines</div>
           </div>
         </Card>
@@ -66,8 +66,8 @@ export const FinanceDashboard: React.FC<{ onNavigate: (path: string) => void }> 
             <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-500"><Wallet className="w-4 h-4" /></div>
           </div>
           <div>
-            <div className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">NPR 1,850,000</div>
-            <div className="text-xs text-emerald-500 font-semibold mt-1">Liquid Treasury</div>
+            <div className="text-2xl font-extrabold text-[#C8FF2D] font-mono font-tabular-nums">NPR 1,850,000</div>
+            <div className="text-xs text-emerald-400 font-semibold mt-1">Liquid Treasury</div>
           </div>
         </Card>
       </div>

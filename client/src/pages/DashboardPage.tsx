@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { SuperAdminDashboard } from '../components/dashboards/SuperAdminDashboard';
 import { SalesDashboard } from '../components/dashboards/SalesDashboard';
@@ -37,40 +38,61 @@ export const DashboardPage: React.FC<{ onNavigate: (path: string) => void }> = (
   return (
     <div className="space-y-4 animate-fade-in select-none">
       {/* Top View Selector Tab */}
-      <div className="flex items-center justify-between bg-[#161D2B] p-2 rounded-2xl border border-[#232D42]">
-        <div className="flex items-center gap-2 text-xs font-extrabold text-[#B9F000] px-3">
-          <Layers className="w-4 h-4 text-[#B9F000]" />
+      <div className="flex items-center justify-between bg-[#111621] p-2 rounded-2xl border border-white/10 shadow-lg">
+        <div className="flex items-center gap-2 text-xs font-extrabold text-[#C8FF2D] px-3">
+          <Layers className="w-4 h-4 text-[#C8FF2D]" />
           <span>Dashboard View Center</span>
         </div>
 
-        <div className="p-1 rounded-xl bg-[#0B0F17] border border-[#232D42] flex items-center text-xs">
+        <div className="p-1 rounded-xl bg-[#0B0E14] border border-white/10 flex items-center gap-1 text-xs relative">
           <button
             onClick={() => setActiveTab('EXECUTIVE')}
-            className={`px-4 py-1.5 rounded-lg font-extrabold transition-all flex items-center gap-1.5 ${
-              activeTab === 'EXECUTIVE'
-                ? 'bg-[#B9F000] text-slate-950 shadow-lg shadow-[#B9F000]/25'
-                : 'text-slate-400 hover:text-slate-200'
+            className={`relative px-4 py-2 rounded-lg font-extrabold transition-all flex items-center gap-2 z-10 ${
+              activeTab === 'EXECUTIVE' ? 'text-[#0B0E14]' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <LayoutDashboard className="w-3.5 h-3.5" />
-            ⚡ Executive ERP Dashboard
+            {activeTab === 'EXECUTIVE' && (
+              <motion.div
+                layoutId="activeDashboardTab"
+                className="absolute inset-0 bg-[#C8FF2D] rounded-lg shadow-md shadow-[#C8FF2D]/20 z-[-1]"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <LayoutDashboard className="w-4 h-4" />
+            <span>Executive ERP Dashboard</span>
           </button>
+
           <button
             onClick={() => setActiveTab('OPERATIONS')}
-            className={`px-4 py-1.5 rounded-lg font-extrabold transition-all flex items-center gap-1.5 ${
-              activeTab === 'OPERATIONS'
-                ? 'bg-[#B9F000] text-slate-950 shadow-lg shadow-[#B9F000]/25'
-                : 'text-slate-400 hover:text-slate-200'
+            className={`relative px-4 py-2 rounded-lg font-extrabold transition-all flex items-center gap-2 z-10 ${
+              activeTab === 'OPERATIONS' ? 'text-[#0B0E14]' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Compass className="w-3.5 h-3.5" />
-            🚌 Operations Overview
+            {activeTab === 'OPERATIONS' && (
+              <motion.div
+                layoutId="activeDashboardTab"
+                className="absolute inset-0 bg-[#C8FF2D] rounded-lg shadow-md shadow-[#C8FF2D]/20 z-[-1]"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <Compass className="w-4 h-4" />
+            <span>Operations Overview</span>
           </button>
         </div>
       </div>
 
-      {/* Render Selected Dashboard */}
-      {renderDashboardContent()}
+      {/* Render Selected Dashboard View with Entry Animation */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          {renderDashboardContent()}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };

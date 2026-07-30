@@ -88,12 +88,26 @@
   box-shadow: 0 0 25px -5px rgba(200, 255, 45, 0.4);
 }
 
+.font-tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Custom Keyframes */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-4px); }
 }
 
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+

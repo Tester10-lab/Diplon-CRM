@@ -105,7 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 whileHover={{ rotate: 5, scale: 1.05 }}
                 className="w-10 h-10 rounded-2xl bg-[#C8FF2D] text-[#0B0E14] flex items-center justify-center font-black text-xl shadow-lg shadow-[#C8FF2D]/20 shrink-0"
               >
-                P
+                D
               </motion.div>
               {!isCollapsed && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>

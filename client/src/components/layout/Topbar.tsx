@@ -43,9 +43,11 @@ export const Topbar: React.FC<TopbarProps> = ({ onLogout, onToggleMobileMenu, is
         </motion.button>
 
         <div>
-          <h2 className="text-sm sm:text-lg font-black text-white tracking-tight flex items-center gap-1.5">
+          <h2 className="text-sm sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
             <span>Hello, {user.name.split(' ')[0]}</span>
-            <span className="inline-block animate-bounce text-xs sm:text-base">👋</span>
+            <span className="p-1 rounded-md bg-[#C8FF2D]/10 border border-[#C8FF2D]/20 text-[#C8FF2D]">
+              <Sparkles className="w-3.5 h-3.5" />
+            </span>
           </h2>
           <p className="text-xs text-slate-400 font-medium hidden sm:block">
             Here's what's happening with your tours & operations today.
