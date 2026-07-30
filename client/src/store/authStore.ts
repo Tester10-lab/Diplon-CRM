@@ -57,12 +57,12 @@ export const DEMO_USERS: Record<string, UserContext> = {
 const AUTH_KEY = 'diplon_auth_user';
 
 export function useAuthStore() {
-  const [user, setUser] = useState<UserContext>(() => {
+  const [user, setUser] = useState<UserContext | null>(() => {
     try {
       const saved = localStorage.getItem(AUTH_KEY);
       if (saved) return JSON.parse(saved);
     } catch (e) {}
-    return DEMO_USERS['superadmin@diplon.com'];
+    return null;
   });
 
   const login = (email: string): boolean => {
@@ -88,7 +88,7 @@ export function useAuthStore() {
 
   const logout = () => {
     localStorage.removeItem(AUTH_KEY);
-    setUser(DEMO_USERS['superadmin@diplon.com']);
+    setUser(null);
   };
 
   const switchRole = (newRole: UserRole) => {

@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Bell, Sparkles } from 'lucide-react';
+import { Search, Bell, Sparkles, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
 import { RoleSwitcher } from './RoleSwitcher';
 import { CommandPaletteModal } from './CommandPaletteModal';
 
-export const Topbar: React.FC = () => {
-  const { user } = useAuthStore();
+export interface TopbarProps {
+  onLogout?: () => void;
+}
+
+export const Topbar: React.FC<TopbarProps> = ({ onLogout }) => {
+  const { user, logout } = useAuthStore();
   const { unreadCount, setIsOpen } = useNotificationStore();
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+
+  if (!user) return null;
+
+  const handleLogout = () => {
+    logout();
+    if (onLogout) onLogout();
+  };
 
   return (
     <motion.header
@@ -71,7 +82,7 @@ export const Topbar: React.FC = () => {
         {/* Command Palette Modal */}
         <CommandPaletteModal isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />
 
-        {/* User Profile Thumbnail */}
+        {/* User Profile Thumbnail & Logout */}
         <div className="flex items-center gap-2.5 pl-2 border-l border-white/10">
           <img
             src={user.avatarUrl}
@@ -82,6 +93,16 @@ export const Topbar: React.FC = () => {
             <div className="text-xs font-extrabold text-white leading-tight">{user.name}</div>
             <div className="text-[10px] text-slate-400 font-medium">{user.role.replace('_', ' ')}</div>
           </div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogout}
+            className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-rose-400 hover:text-rose-300 transition-all text-xs font-bold flex items-center gap-1.5 cursor-pointer ml-1"
+            title="Log Out of Account"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Log Out</span>
+          </motion.button>
         </div>
       </div>
     </motion.header>

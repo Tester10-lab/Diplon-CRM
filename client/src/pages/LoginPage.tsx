@@ -108,8 +108,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               Multi-tenant company isolation, rate-limited login protection, B2B agency portal, Scorpio driver settlements, and tour dispatch lock controls.
             </p>
           </div>
-
-          </div>
         </div>
 
         {/* Right Side: Glassmorphic Login Form with Rate Limiter */}
