@@ -2,16 +2,22 @@ import { Departure, Vehicle, Driver, Guide } from '../../types';
 import { apiClient } from './apiClient';
 import { mockDepartures, mockVehicles, mockDrivers, mockGuides } from '../mocks/mockOperations';
 
-const DEPARTURES_STORAGE_KEY = 'diplon_operations_departures_v4';
+const DEPARTURES_STORAGE_KEY = 'diplon_operations_departures_v5';
 
 function getStoredDepartures(): Departure[] {
   try {
     localStorage.removeItem('diplon_operations_departures');
     localStorage.removeItem('diplon_operations_departures_v3');
+    localStorage.removeItem('diplon_operations_departures_v4');
     const saved = localStorage.getItem(DEPARTURES_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      const cleaned = parsed.filter((d: any) => !d._id?.startsWith('dep_884'));
+      const cleaned = parsed.filter((d: any) => 
+        d.packageName?.includes('Halesi') ||
+        d.packageName?.includes('Jiri') ||
+        d.packageName?.includes('Mustang') ||
+        d.packageName?.includes('Muktinath')
+      );
       if (cleaned.length > 0) {
         localStorage.setItem(DEPARTURES_STORAGE_KEY, JSON.stringify(cleaned));
         return cleaned;

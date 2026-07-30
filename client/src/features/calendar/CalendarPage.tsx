@@ -25,7 +25,7 @@ import { DepartureData } from '../../types/erp';
 
 export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = ({ onNavigate }) => {
   const { user } = useAuthStore();
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2026, 6, 1)); // Default July 2026
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2026, 7, 1)); // Default August 2026
   const [displayMode, setDisplayMode] = useState<CalendarDisplayMode>('DUAL_BS_AD');
   const [viewType, setViewType] = useState<'MONTH' | 'WEEK' | 'DAY' | 'TIMELINE'>('MONTH');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
