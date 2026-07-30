@@ -88,17 +88,13 @@ const DocsPage = lazy(() => import('./pages/DocsPage').then(m => ({ default: m.D
 
 export function App() {
   const { user, logout } = useAuthStore();
-  const [authTick, setAuthTick] = useState(0);
   const [currentPath, setCurrentPath] = useState<string>('/');
 
-  // Derive authentication from the authStore user directly
-  const isAuthenticated = !!user;
-
-  if (!isAuthenticated) {
+  if (!user) {
     return (
       <ErrorBoundary>
         <Suspense fallback={<PageSkeleton />}>
-          <LoginPage onLoginSuccess={() => setAuthTick(t => t + 1)} />
+          <LoginPage onLoginSuccess={() => {}} />
         </Suspense>
       </ErrorBoundary>
     );
@@ -158,7 +154,7 @@ export function App() {
 
   return (
     <ErrorBoundary>
-      <AppLayout currentPath={currentPath} onNavigate={setCurrentPath} onLogout={() => { logout(); setAuthTick(t => t + 1); }}>
+      <AppLayout currentPath={currentPath} onNavigate={setCurrentPath} onLogout={() => logout()}>
         <Suspense fallback={<PageSkeleton />}>
           {renderPage()}
         </Suspense>

@@ -72,14 +72,35 @@ DEMO_USERS['srijan@diplon.com'] = DEMO_USERS['driver@diplon.com'];
 
 const AUTH_KEY = 'diplon_auth_user';
 
+let globalUser: UserContext | null = (() => {
+  try {
+    const saved = localStorage.getItem(AUTH_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return null;
+})();
+
+const listeners = new Set<(user: UserContext | null) => void>();
+
+function setGlobalUser(newUser: UserContext | null) {
+  globalUser = newUser;
+  if (newUser) {
+    localStorage.setItem(AUTH_KEY, JSON.stringify(newUser));
+  } else {
+    localStorage.removeItem(AUTH_KEY);
+  }
+  listeners.forEach(listener => listener(globalUser));
+}
+
 export function useAuthStore() {
-  const [user, setUser] = useState<UserContext | null>(() => {
-    try {
-      const saved = localStorage.getItem(AUTH_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch (e) {}
-    return null;
-  });
+  const [user, setUser] = useState<UserContext | null>(globalUser);
+
+  useEffect(() => {
+    listeners.add(setUser);
+    return () => {
+      listeners.delete(setUser);
+    };
+  }, []);
 
   const login = (email: string): boolean => {
     const key = email.toLowerCase().trim();
@@ -98,14 +119,12 @@ export function useAuthStore() {
       assignedVehicleReg: 'Ba 21 Ch 4501'
     };
 
-    setUser(target);
-    localStorage.setItem(AUTH_KEY, JSON.stringify(target));
+    setGlobalUser(target);
     return true;
   };
 
   const logout = () => {
-    localStorage.removeItem(AUTH_KEY);
-    setUser(null);
+    setGlobalUser(null);
   };
 
   const switchRole = (newRole: UserRole) => {
@@ -115,8 +134,7 @@ export function useAuthStore() {
     if (newRole === 'DRIVER') targetEmail = 'driver@diplon.com';
 
     const targetUser = DEMO_USERS[targetEmail];
-    setUser(targetUser);
-    localStorage.setItem(AUTH_KEY, JSON.stringify(targetUser));
+    setGlobalUser(targetUser);
   };
 
   return {
