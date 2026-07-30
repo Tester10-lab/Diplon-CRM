@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -6,7 +6,7 @@ import { PackageSelect } from '../bookings/PackageSelect';
 import { usePackages } from '../../shared/hooks/packages/usePackages';
 import { useFleet, useDrivers, useGuides } from '../../shared/hooks/operations/useOperations';
 import { Departure, TourPackage } from '../../types';
-import { Compass, Calendar, Users, Car, UserCheck, ShieldCheck } from 'lucide-react';
+import { Compass, Calendar, Users, Car, UserCheck, ShieldCheck, Sparkles, Clock } from 'lucide-react';
 
 export interface AddTourModalProps {
   isOpen: boolean;
@@ -23,6 +23,34 @@ export const VEHICLE_TYPES = [
   { value: 'Hike', label: '🏔️ Hike' }
 ];
 
+export function extractDurationDays(packageName: string, pkg?: TourPackage): number {
+  if (pkg?.durationDays && pkg.durationDays > 0) {
+    return pkg.durationDays;
+  }
+  if (pkg?.description) {
+    const descMatch = pkg.description.match(/(\d+)\s*N\s*\/\s*(\d+)\s*D/i) || pkg.description.match(/(\d+)\s*days?/i);
+    if (descMatch) {
+      return parseInt(descMatch[2] || descMatch[1], 10);
+    }
+  }
+  const nameMatch = packageName.match(/(\d+)\s*N(?:ights?)?\s*(?:[\/&]|\s+)\s*(\d+)\s*D(?:ays?)?/i) ||
+                    packageName.match(/(\d+)\s*days?/i) ||
+                    packageName.match(/(\d+)\s*D\b/i);
+  if (nameMatch) {
+    return parseInt(nameMatch[2] || nameMatch[1], 10);
+  }
+  return 2; // Default 2 days (1N/2D)
+}
+
+export function calculateEndDateFromDuration(startDateStr: string, days: number): string {
+  if (!startDateStr || isNaN(Date.parse(startDateStr))) return startDateStr;
+  const daysToAdd = Math.max(1, days) - 1; // e.g. 2 Days tour starting July 30 -> return July 31
+  const start = new Date(startDateStr);
+  const end = new Date(start);
+  end.setDate(start.getDate() + daysToAdd);
+  return end.toISOString().split('T')[0];
+}
+
 export const AddTourModal: React.FC<AddTourModalProps> = ({
   isOpen,
   onClose,
@@ -35,7 +63,7 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
 
   const [packageName, setPackageName] = useState('Sailung–Kalinchowk Tour Package');
   const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState(new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState('');
   const [seatsTotal, setSeatsTotal] = useState<number>(10);
   const [seatsReserved, setSeatsReserved] = useState<number>(0);
   const [vehicleType, setVehicleType] = useState<string>('Jeep');
@@ -43,17 +71,35 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
   const [guideName, setGuideName] = useState<string>('');
   const [status, setStatus] = useState<'Active' | 'Delayed' | 'Completed'>('Active');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [durationDays, setDurationDays] = useState<number>(2);
+
+  // Auto-calculate Return End Date whenever package or start date changes
+  useEffect(() => {
+    const selectedPkg = packages.find(p => p.name.toLowerCase() === packageName.toLowerCase());
+    const days = extractDurationDays(packageName, selectedPkg);
+    setDurationDays(days);
+    if (startDate) {
+      const calculatedEnd = calculateEndDateFromDuration(startDate, days);
+      setEndDate(calculatedEnd);
+    }
+  }, [packageName, startDate, packages]);
 
   const handlePackageChange = (selectedName: string, pkg?: TourPackage) => {
     setPackageName(selectedName);
+    const days = extractDurationDays(selectedName, pkg);
+    setDurationDays(days);
+    if (startDate) {
+      setEndDate(calculateEndDateFromDuration(startDate, days));
+    }
   };
 
   const handleCreatePackage = async (name: string) => {
+    const days = extractDurationDays(name);
     const created = await createPackage({
       name,
       basePricing: 5500,
       category: 'Custom Tour',
-      durationDays: 2
+      durationDays: days
     });
     return created;
   };
@@ -89,42 +135,56 @@ export const AddTourModal: React.FC<AddTourModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Schedule New Tour Departure"
-      description="Select or type a new tour package, assign dates, seating capacity, vehicle type, driver & guide."
+      description="Select package from Packages roster to automatically calculate return date based on duration."
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Package Autoselect */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
-            Tour Package (Autoselect / Type-to-Create)
+            Tour Package (Autoselect from Packages Roster)
           </label>
           <PackageSelect
             packages={packages}
             value={packageName}
             onChange={handlePackageChange}
             onCreatePackage={handleCreatePackage}
-            placeholder="Select or type package (e.g. Sailung–Kalinchowk Tour Package)..."
+            placeholder="Search or select package from roster..."
           />
         </div>
 
-        {/* Start & End Dates */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            label="Departure Start Date"
-            type="date"
-            icon={<Calendar className="w-4 h-4" />}
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-          />
-          <Input
-            label="Return End Date"
-            type="date"
-            icon={<Calendar className="w-4 h-4" />}
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
+        {/* Start & End Dates with Auto-Calculate Badge */}
+        <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Input
+              label="Departure Start Date"
+              type="date"
+              icon={<Calendar className="w-4 h-4 text-indigo-400" />}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+            <div>
+              <Input
+                label="Return End Date (Auto-Calculated)"
+                type="date"
+                icon={<Calendar className="w-4 h-4 text-emerald-400" />}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-emerald-400" />
+              <span>Itinerary Duration: <strong>{durationDays - 1} Night(s) / {durationDays} Day(s)</strong></span>
+            </span>
+            <span className="text-[10px] font-mono font-bold bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-200">
+              Auto Return: {endDate}
+            </span>
+          </div>
         </div>
 
         {/* Seating Capacity & Initial Reserved */}

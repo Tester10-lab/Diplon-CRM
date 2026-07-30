@@ -38,9 +38,10 @@ export const PackageSelect: React.FC<PackageSelectProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredPackages = packages.filter(pkg =>
-    pkg.name.toLowerCase().includes(query.toLowerCase())
-  );
+  // Show all packages when query is empty, or filter by search term
+  const filteredPackages = query.trim()
+    ? packages.filter(pkg => pkg.name.toLowerCase().includes(query.toLowerCase()))
+    : packages;
 
   const exactMatch = packages.find(
     pkg => pkg.name.toLowerCase() === query.trim().toLowerCase()
@@ -138,7 +139,7 @@ export const PackageSelect: React.FC<PackageSelectProps> = ({
                     </span>
                     {pkg.category && (
                       <span className="text-[10px] text-slate-400">
-                        {pkg.category} {pkg.durationDays ? `• ${pkg.durationDays} Days` : ''}
+                        {pkg.category} {pkg.durationDays ? `• ${pkg.durationDays - 1}N/${pkg.durationDays}D` : ''}
                       </span>
                     )}
                   </div>
@@ -153,13 +154,9 @@ export const PackageSelect: React.FC<PackageSelectProps> = ({
                 </button>
               );
             })
-          ) : !query.trim() ? (
+          ) : (
             <div className="px-4 py-3 text-xs text-slate-400 text-center">
               Type to search or add a custom tour package
-            </div>
-          ) : exactMatch ? null : (
-            <div className="px-4 py-2 text-[11px] text-slate-400 text-center italic">
-              No other matching packages found
             </div>
           )}
         </div>
