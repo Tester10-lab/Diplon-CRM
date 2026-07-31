@@ -21,13 +21,13 @@ export interface FinanceRecord {
   notes?: string;
 }
 
-const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v6';
+const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v7';
 
 const INITIAL_FINANCE_RECORDS: FinanceRecord[] = [
-  { id: 'FIN-101', type: 'COLLECTION', title: '[Icon Trek Travel] Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31', notes: '85,000/- Rs Collect on 28-seater sofa bus' },
-  { id: 'FIN-102', type: 'COLLECTION', title: '[Icon Trek Travel] Jiri Tour Booking - Tarak Panja', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '34,000 Rs collect on Scorpio' },
-  { id: 'FIN-103', type: 'COLLECTION', title: '[Icon Trek Travel] Upper Mustang Booking - Bishnu Prasad Kafle', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '1,21,000 Rs collect on Scorpio' },
-  { id: 'FIN-104', type: 'COLLECTION', title: '[Icon Trek Travel / Lalitpur Holidays] Muktinath Advance - Abhijit Ghosh', category: 'Customer Booking', amount: 9600, date: '2026-07-31', notes: '34,400 Rs collect on Scorpio (Advance 9,600 paid)' }
+  { id: 'FIN-101', type: 'COLLECTION', title: '[Hike on Trek Travel] Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31', notes: '85,000/- Rs Collect on 28-seater sofa bus' },
+  { id: 'FIN-102', type: 'COLLECTION', title: '[Hike on Trek Travel] Jiri Tour Booking - Tarak Panja', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '34,000 Rs collect on Scorpio' },
+  { id: 'FIN-103', type: 'COLLECTION', title: '[Hike on Trek Travel] Upper Mustang Booking - Bishnu Prasad Kafle', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '1,21,000 Rs collect on Scorpio' },
+  { id: 'FIN-104', type: 'COLLECTION', title: '[Hike on Trek Travel] Muktinath Advance - Abhijit Ghosh', category: 'Customer Booking', amount: 9600, date: '2026-07-31', notes: '34,400 Rs collect on Scorpio (Advance 9,600 paid)' }
 ];
 
 function getStoredFinanceRecords(): FinanceRecord[] {
@@ -36,6 +36,7 @@ function getStoredFinanceRecords(): FinanceRecord[] {
     localStorage.removeItem('diplon_finance_ledger_v3');
     localStorage.removeItem('diplon_finance_ledger_v4');
     localStorage.removeItem('diplon_finance_ledger_v5');
+    localStorage.removeItem('diplon_finance_ledger_v6');
     const saved = localStorage.getItem(FINANCE_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -51,8 +52,8 @@ function getStoredFinanceRecords(): FinanceRecord[] {
 const INITIAL_SETTLEMENTS: AgencySettlement[] = [
   {
     id: 'SETTLE-801',
-    agencyCompanyId: 'cmp_icontrek_01',
-    agencyName: 'Icon Trek Travel',
+    agencyCompanyId: 'cmp_hikeontrek_01',
+    agencyName: 'Hike on Trek Travel',
     totalCollections: 280000,
     agreedCommissionMargin: 15,
     netSettlementAmount: 238000,

@@ -20,7 +20,7 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '85,000/- Rs Collect on 28-seater sofa bus',
     groupType: 'group',
     roomDetails: '28-seater sofa bus (25 Pax)',
-    agencyName: 'Icon Trek Travel'
+    agencyName: 'Hike on Trek Travel'
   },
   {
     _id: 'bk_jiri_02',
@@ -41,7 +41,7 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '34,000 Rs collect on Scorpio',
     groupType: 'private',
     roomDetails: '6 Pax private, 2 rooms normal sharing',
-    agencyName: 'Icon Trek Travel'
+    agencyName: 'Hike on Trek Travel'
   },
   {
     _id: 'bk_mustang_03',
@@ -62,7 +62,7 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '1,21,000/- Rs Collect on Scorpio',
     groupType: 'private',
     roomDetails: '7 Pax private tour, 2 rooms (Bharatpur to Bharatpur)',
-    agencyName: 'Icon Trek Travel'
+    agencyName: 'Hike on Trek Travel'
   },
   {
     _id: 'bk_muktinath_04',
@@ -83,6 +83,6 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '34,400/- Rs Collect on Scorpio (Lalitpur Holidays)',
     groupType: 'private',
     roomDetails: '2 Pax private (Lalitpur Holidays)',
-    agencyName: 'Icon Trek Travel (Lalitpur Holidays)'
+    agencyName: 'Hike on Trek Travel'
   }
 ];

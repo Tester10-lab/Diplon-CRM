@@ -18,12 +18,12 @@ export interface B2BRecord {
   notes: string;
 }
 
-const B2B_STORAGE_KEY = 'diplon_b2b_company_ledger_v5';
+const B2B_STORAGE_KEY = 'diplon_b2b_company_ledger_v6';
 
 export const INITIAL_B2B_RECORDS: B2BRecord[] = [
   {
     id: 'b2b_halesi_01',
-    companyName: 'Icon Trek Travel',
+    companyName: 'Hike on Trek Travel',
     travelDate: '1st Aug 2026',
     packageName: 'Halesi Tour Package',
     tourDuration: '1N/2D',
@@ -42,7 +42,7 @@ export const INITIAL_B2B_RECORDS: B2BRecord[] = [
   },
   {
     id: 'b2b_jiri_02',
-    companyName: 'Icon Trek Travel',
+    companyName: 'Hike on Trek Travel',
     travelDate: '1st Aug 2026',
     packageName: 'Jiri Tour',
     tourDuration: '1N/2D',
@@ -61,7 +61,7 @@ export const INITIAL_B2B_RECORDS: B2BRecord[] = [
   },
   {
     id: 'b2b_mustang_03',
-    companyName: 'Icon Trek Travel',
+    companyName: 'Hike on Trek Travel',
     travelDate: 'Oct 28 2026',
     packageName: 'Upper Mustang Package',
     tourDuration: '4N/5D',
@@ -80,7 +80,7 @@ export const INITIAL_B2B_RECORDS: B2BRecord[] = [
   },
   {
     id: 'b2b_muktinath_04',
-    companyName: 'Icon Trek Travel (Lalitpur Holidays)',
+    companyName: 'Hike on Trek Travel',
     travelDate: 'Oct 25 2026',
     packageName: 'Muktinath Tour',
     tourDuration: '2N/3D',
@@ -104,6 +104,7 @@ export function getB2BRecords(): B2BRecord[] {
     localStorage.removeItem('diplon_b2b_company_ledger');
     localStorage.removeItem('diplon_b2b_company_ledger_v3');
     localStorage.removeItem('diplon_b2b_company_ledger_v4');
+    localStorage.removeItem('diplon_b2b_company_ledger_v5');
     const saved = localStorage.getItem(B2B_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);

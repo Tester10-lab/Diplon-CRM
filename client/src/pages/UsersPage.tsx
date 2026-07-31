@@ -22,43 +22,33 @@ export interface SystemUser {
 const INITIAL_USERS: SystemUser[] = [
   {
     id: 'usr_super_001',
-    name: 'Diplon',
+    name: 'Diplon (Super Admin)',
     email: 'superadmin@diplon.com',
     role: 'SUPER_ADMIN',
-    companyId: 'cmp_diplon_global',
-    companyName: 'Diplon Travel ERP Headquarters',
+    companyId: 'cmp_lalitpur_hq',
+    companyName: 'Lalitpur Holidays ERP Headquarters',
     status: 'ACTIVE',
-    lastLogin: '2026-07-30 15:45'
+    lastLogin: '2026-07-31 10:45'
   },
   {
     id: 'usr_admin_002',
-    name: 'Sudip Thapa',
+    name: 'Sudip Thapa (Admin)',
     email: 'admin@diplon.com',
     role: 'ADMIN',
-    companyId: 'cmp_ktm_01',
-    companyName: 'Kathmandu Travels & Tours Ltd',
+    companyId: 'cmp_lalitpur_01',
+    companyName: 'Lalitpur Holidays',
     status: 'ACTIVE',
-    lastLogin: '2026-07-30 14:20'
+    lastLogin: '2026-07-31 10:30'
   },
   {
     id: 'usr_agency_003',
-    name: 'Icon Trek Travel',
-    email: 'agency@icontrektravel.com',
+    name: 'Hike on Trek Travel',
+    email: 'agency@hikeontrek.com',
     role: 'AGENCY',
-    companyId: 'cmp_icontrek_01',
-    companyName: 'Icon Trek Travel',
+    companyId: 'cmp_hikeontrek_01',
+    companyName: 'Hike on Trek Travel',
     status: 'ACTIVE',
     lastLogin: '2026-07-31 10:15'
-  },
-  {
-    id: 'usr_agency_004',
-    name: 'Lalitpur Holidays',
-    email: 'agency@lalitpurholidays.com',
-    role: 'AGENCY',
-    companyId: 'cmp_lalitpur_02',
-    companyName: 'Lalitpur Holidays',
-    status: 'ACTIVE',
-    lastLogin: '2026-07-31 09:30'
   },
   {
     id: 'usr_driver_005',
