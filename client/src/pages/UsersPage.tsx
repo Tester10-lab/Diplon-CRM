@@ -42,23 +42,23 @@ const INITIAL_USERS: SystemUser[] = [
   },
   {
     id: 'usr_agency_003',
-    name: 'Hike on Trek',
-    email: 'agency@hikeontrek.com',
+    name: 'Icon Trek Travel',
+    email: 'agency@icontrektravel.com',
     role: 'AGENCY',
-    companyId: 'cmp_hikeontrek_01',
-    companyName: 'Hike on Trek',
+    companyId: 'cmp_icontrek_01',
+    companyName: 'Icon Trek Travel',
     status: 'ACTIVE',
-    lastLogin: '2026-07-30 12:10'
+    lastLogin: '2026-07-31 10:15'
   },
   {
     id: 'usr_agency_004',
-    name: 'Batuwa Trip',
-    email: 'agency@batuwatrip.com',
+    name: 'Lalitpur Holidays',
+    email: 'agency@lalitpurholidays.com',
     role: 'AGENCY',
-    companyId: 'cmp_batuwatrip_02',
-    companyName: 'Batuwa Trip',
+    companyId: 'cmp_lalitpur_02',
+    companyName: 'Lalitpur Holidays',
     status: 'ACTIVE',
-    lastLogin: '2026-07-30 11:30'
+    lastLogin: '2026-07-31 09:30'
   },
   {
     id: 'usr_driver_005',
