@@ -37,8 +37,17 @@ export const AgencyDashboardPage: React.FC<{ onNavigate?: (path: string) => void
     setTimeout(() => setToastMsg(null), 3500);
   };
 
-  // Agency Specific Financial Calculations
-  const agencyBookings = bookings.filter(b => b.companyId === user.companyId || true); // All or isolated
+  // Agency Specific Financial Calculations (Strict Multi-Tenant Isolation)
+  const agencyBookings = (bookings || []).filter(b => {
+    if (!user) return true;
+    if (b.companyId && user.companyId && b.companyId === user.companyId) return true;
+    if (b.agencyName && user.companyName) {
+      const bAgency = b.agencyName.toLowerCase().trim();
+      const uCompany = user.companyName.toLowerCase().trim();
+      return bAgency.includes(uCompany) || uCompany.includes(bAgency);
+    }
+    return false;
+  });
   const totalCollections = agencyBookings.reduce((sum, b) => sum + (b.totalAmount || 0), 0);
   const totalExpenses = Math.round(totalCollections * 0.15);
   const netProfit = totalCollections - totalExpenses;

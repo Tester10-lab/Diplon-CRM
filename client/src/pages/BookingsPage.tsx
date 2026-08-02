@@ -9,10 +9,24 @@ import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { Plus, Phone, MapPin, Calendar, CreditCard, Sparkles, CheckCircle2 } from 'lucide-react';
 
+import { useAuthStore } from '../store/authStore';
+
 export const BookingsPage: React.FC = () => {
+  const { user } = useAuthStore();
   const { data: bookings, isLoading, error, refetch, createBooking } = useBookings();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const displayBookings = (bookings || []).filter(b => {
+    if (!user || user.role !== 'AGENCY') return true;
+    if (b.companyId && user.companyId && b.companyId === user.companyId) return true;
+    if (b.agencyName && user.companyName) {
+      const bAgency = b.agencyName.toLowerCase().trim();
+      const uCompany = user.companyName.toLowerCase().trim();
+      return bAgency.includes(uCompany) || uCompany.includes(bAgency);
+    }
+    return false;
+  });
 
   const handleSaveBooking = async (bookingData: Partial<BookingData>) => {
     await createBooking(bookingData as any);
@@ -160,7 +174,7 @@ export const BookingsPage: React.FC = () => {
       <DataTable
         title="Active Tour Reservations"
         description="All confirmed and pending customer bookings with seat count, vehicle collect note, and payment status"
-        data={bookings as any}
+        data={displayBookings as any}
         columns={columns}
         searchPlaceholder="Search bookings by customer name, package, contact number, or ref..."
       />

@@ -29,6 +29,15 @@ export const FleetPage: React.FC = () => {
     return driverName;
   };
 
+  const isOwnAgencyGuest = (guestAgencyName?: string) => {
+    if (!isAgency) return true;
+    if (!user || !user.companyName) return true;
+    if (!guestAgencyName) return true;
+    const gAgency = guestAgencyName.toLowerCase().trim();
+    const uCompany = user.companyName.toLowerCase().trim();
+    return gAgency.includes(uCompany) || uCompany.includes(gAgency);
+  };
+
   const [activeTab, setActiveTab] = useState<'SCORPIO_ROSTER' | 'FLEET_CATALOG'>('SCORPIO_ROSTER');
   const [viewStyle, setViewStyle] = useState<'CARDS' | 'TABLE'>('CARDS');
 
@@ -728,38 +737,41 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                         Guest Bookings Assigned ({items.length} Group)
                       </span>
-                      {items.map(guest => (
-                        <div key={guest.id} className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-1.5 hover:border-slate-700 transition-all">
-                          <div className="flex items-center justify-between">
-                            <span className="font-extrabold text-white text-xs flex items-center gap-1.5">
-                              {guest.name}
-                            </span>
-                            <div className="flex items-center gap-1.5">
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
-                                {guest.pax} Pax
+                      {items.map(guest => {
+                        const isMine = isOwnAgencyGuest((guest as any).agencyName);
+                        return (
+                          <div key={guest.id} className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-1.5 hover:border-slate-700 transition-all">
+                            <div className="flex items-center justify-between">
+                              <span className="font-extrabold text-white text-xs flex items-center gap-1.5">
+                                {isMine ? guest.name : '🔒 Partner Agency Group'}
                               </span>
-                              {!isAgency && (
-                                <button
-                                  onClick={() => handleDeleteGuestAssignment(guest.id, guest.name)}
-                                  className="text-slate-500 hover:text-rose-400 p-0.5 transition-colors"
-                                  title={`Delete ${guest.name} assignment`}
-                                >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              )}
+                              <div className="flex items-center gap-1.5">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
+                                  {guest.pax} Pax
+                                </span>
+                                {!isAgency && (
+                                  <button
+                                    onClick={() => handleDeleteGuestAssignment(guest.id, guest.name)}
+                                    className="text-slate-500 hover:text-rose-400 p-0.5 transition-colors"
+                                    title={`Delete ${guest.name} assignment`}
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between text-[11px] text-slate-400">
+                              <span className="flex items-center gap-1">
+                                <Phone className="w-3 h-3 text-slate-500" /> {isMine ? guest.number : 'Protected Number'}
+                              </span>
+                              <span className="flex items-center gap-1 text-slate-300 font-medium">
+                                <Bed className="w-3 h-3 text-emerald-400" /> {guest.rooms}
+                              </span>
                             </div>
                           </div>
-
-                          <div className="flex items-center justify-between text-[11px] text-slate-400">
-                            <span className="flex items-center gap-1">
-                              <Phone className="w-3 h-3 text-slate-500" /> {guest.number}
-                            </span>
-                            <span className="flex items-center gap-1 text-slate-300 font-medium">
-                              <Bed className="w-3 h-3 text-emerald-400" /> {guest.rooms}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 );
@@ -787,18 +799,20 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60 text-xs">
-                    {filteredVehicles.map(item => (
-                      <tr key={item.id} className="hover:bg-slate-800/30 transition-all font-medium">
-                        <td className="p-3.5 pl-5 font-black text-amber-400 font-mono">#{item.sn}</td>
-                        <td className="p-3.5 font-bold text-slate-200">{item.vehicleType || 'Scorpio 4WD'}</td>
-                        <td className="p-3.5 font-bold text-white">{item.tour}</td>
-                        <td className="p-3.5 font-mono text-indigo-300">{item.date || '2026-08-01'}</td>
-                        <td className="p-3.5 font-bold text-indigo-400">{cleanDriverName(item.driver)}</td>
-                        <td className="p-3.5 font-mono font-bold text-amber-300">{item.pax} Pax</td>
-                        <td className="p-3.5 font-mono text-slate-400">{item.vehicleCapacity || 7} Seats</td>
-                        <td className="p-3.5 font-mono text-emerald-400">{item.rooms}</td>
-                        <td className="p-3.5 font-bold text-slate-100">{item.name}</td>
-                        <td className="p-3.5 font-mono text-slate-400">{item.number}</td>
+                    {filteredVehicles.map(item => {
+                      const isMine = isOwnAgencyGuest((item as any).agencyName);
+                      return (
+                        <tr key={item.id} className="hover:bg-slate-800/30 transition-all font-medium">
+                          <td className="p-3.5 pl-5 font-black text-amber-400 font-mono">#{item.sn}</td>
+                          <td className="p-3.5 font-bold text-slate-200">{item.vehicleType || 'Scorpio 4WD'}</td>
+                          <td className="p-3.5 font-bold text-white">{item.tour}</td>
+                          <td className="p-3.5 font-mono text-indigo-300">{item.date || '2026-08-01'}</td>
+                          <td className="p-3.5 font-bold text-indigo-400">{cleanDriverName(item.driver)}</td>
+                          <td className="p-3.5 font-mono font-bold text-amber-300">{item.pax} Pax</td>
+                          <td className="p-3.5 font-mono text-slate-400">{item.vehicleCapacity || 7} Seats</td>
+                          <td className="p-3.5 font-mono text-emerald-400">{item.rooms}</td>
+                          <td className="p-3.5 font-bold text-slate-100">{isMine ? item.name : '🔒 Partner Agency Group'}</td>
+                          <td className="p-3.5 font-mono text-slate-400">{isMine ? item.number : 'Protected'}</td>
                         <td className="p-3.5">
                           {item.isPrivate ? (
                             <span className="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">
@@ -833,7 +847,8 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           )}
                         </td>
                       </tr>
-                    ))}
+                    );
+                  })}
                   </tbody>
                 </table>
               </div>
