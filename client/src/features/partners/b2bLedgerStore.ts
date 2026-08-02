@@ -18,7 +18,7 @@ export interface B2BRecord {
   notes: string;
 }
 
-const B2B_STORAGE_KEY = 'diplon_b2b_company_ledger_v6';
+const B2B_STORAGE_KEY = 'diplon_b2b_company_ledger_v7';
 
 export const INITIAL_B2B_RECORDS: B2BRecord[] = [
   {
@@ -96,6 +96,44 @@ export const INITIAL_B2B_RECORDS: B2BRecord[] = [
     paymentStatus: '34,400 Rs collect on Scorpio (Advance 9,600 paid)',
     tourStatus: 'Confirmed',
     notes: '2 person private tour | Total: 44,000 Rs | Advance: 9,600 Rs paid | 34,400 Rs collect on Scorpio'
+  },
+  {
+    id: 'b2b_batuwa_01',
+    companyName: 'Batuwa Trip',
+    travelDate: '5th Aug 2026',
+    packageName: 'Pokhara Tour Package',
+    tourDuration: '2N/3D',
+    customerName: 'Sujan Thapa',
+    contactNumber: '9841998877',
+    pax: 4,
+    ratePerPax: 12000,
+    vehicleType: 'EV Luxury Van',
+    pickupLocation: 'Gongabu Bus Park, Kathmandu',
+    buyingPrice: 48000,
+    collectionAmount: 36000,
+    profit: 12000,
+    paymentStatus: '36,000/- Rs Collect at Pokhara hotel check-in',
+    tourStatus: 'Confirmed',
+    notes: '4 Person sharing, 2 deluxe rooms | Rate: 12,000*4=48,000/- Rs'
+  },
+  {
+    id: 'b2b_batuwa_02',
+    companyName: 'Batuwa Trip',
+    travelDate: '10th Aug 2026',
+    packageName: 'Chitwan Jungle Safari',
+    tourDuration: '2N/3D',
+    customerName: 'Pooja Shrestha',
+    contactNumber: '9801239988',
+    pax: 5,
+    ratePerPax: 13000,
+    vehicleType: '4WD Scorpio Jeep',
+    pickupLocation: 'Kalanki Chok, Kathmandu',
+    buyingPrice: 65000,
+    collectionAmount: 65000,
+    profit: 0,
+    paymentStatus: 'Full payment settled via eSewa',
+    tourStatus: 'Confirmed',
+    notes: '5 Person private resort package | Rate: 13,000*5=65,000/- Rs'
   }
 ];
 

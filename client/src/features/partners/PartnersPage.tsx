@@ -312,6 +312,7 @@ export const PartnersPage: React.FC = () => {
             {/* Header Row Matching Excel Blue Header */}
             <thead>
               <tr className="bg-indigo-950/90 border-b border-indigo-900/80 text-slate-200 font-extrabold uppercase tracking-wider">
+                <th className="p-3 border-r border-indigo-900/60">B2B Agency</th>
                 <th className="p-3 border-r border-indigo-900/60">Travel Date</th>
                 <th className="p-3 border-r border-indigo-900/60">Package Name</th>
                 <th className="p-3 border-r border-indigo-900/60">Tour Duration</th>
@@ -333,7 +334,7 @@ export const PartnersPage: React.FC = () => {
             <tbody className="divide-y divide-slate-800/60 font-medium">
               {filteredRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={15} className="p-8 text-center text-slate-500 font-semibold">
+                  <td colSpan={16} className="p-8 text-center text-slate-500 font-semibold">
                     No B2B records found matching query.
                   </td>
                 </tr>
@@ -343,6 +344,13 @@ export const PartnersPage: React.FC = () => {
                     key={r.id || idx}
                     className="hover:bg-slate-800/40 transition-colors border-b border-slate-800/40"
                   >
+                    <td className="p-3 border-r border-slate-800/40 font-bold text-amber-300 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
+                        <Building2 className="w-3.5 h-3.5" />
+                        <span>{r.companyName}</span>
+                      </span>
+                    </td>
+
                     <td className="p-3 font-semibold text-slate-200 whitespace-nowrap border-r border-slate-800/40">
                       {r.travelDate}
                     </td>
