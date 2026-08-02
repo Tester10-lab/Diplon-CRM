@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Search, Bell, Sparkles, LogOut, Menu, X, Clock } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNotificationStore } from '../../store/notificationStore';
-import { RoleSwitcher } from './RoleSwitcher';
 import { CommandPaletteModal } from './CommandPaletteModal';
 
 export interface TopbarProps {
@@ -112,9 +111,6 @@ export const Topbar: React.FC<TopbarProps> = ({ onLogout, onToggleMobileMenu, is
             ⌘K
           </kbd>
         </motion.div>
-
-        {/* Role Switcher Pill */}
-        <RoleSwitcher />
 
         {/* Notifications Bell */}
         <motion.button

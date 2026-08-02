@@ -14,7 +14,7 @@ export const PartnersPage: React.FC = () => {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   // Form State for + Add B2B Record
-  const [formCompany, setFormCompany] = useState('Himalayan Treks & Travels');
+  const [formCompany, setFormCompany] = useState('');
   const [formDate, setFormDate] = useState('29th Sep 2025');
   const [formPkg, setFormPkg] = useState('Upper Mustang');
   const [formDuration, setFormDuration] = useState('4N/5D');
@@ -421,18 +421,13 @@ export const PartnersPage: React.FC = () => {
       >
         <form onSubmit={handleCreateRecord} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-300 block mb-1">Select B2B Company</label>
-              <select
-                value={formCompany}
-                onChange={e => setFormCompany(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
-              >
-                <option value="Himalayan Treks & Travels">Himalayan Treks & Travels</option>
-                <option value="Kathmandu B2B Agency">Kathmandu B2B Agency</option>
-                <option value="Everest Global B2B">Everest Global B2B</option>
-              </select>
-            </div>
+            <Input
+              label="B2B Company Name"
+              value={formCompany}
+              onChange={e => setFormCompany(e.target.value)}
+              placeholder="e.g. B2B Partner Agency"
+              required
+            />
             <Input label="Travel Date" value={formDate} onChange={e => setFormDate(e.target.value)} placeholder="e.g. 29th Sep 2025" required />
           </div>
 
