@@ -46,10 +46,9 @@ export const DriversPage: React.FC = () => {
   const [newName, setNewName] = useState('');
   const [newLicense, setNewLicense] = useState('');
   const [newPhone, setNewPhone] = useState('');
-  const [newVehicleType, setNewVehicleType] = useState('Scorpio 4WD Jeep (Ba 21 Ch 4501)');
+  const [newVehicleType, setNewVehicleType] = useState('Scorpio 4WD Jeep (7 Seats)');
   const [newTripsDone, setNewTripsDone] = useState<number>(0);
   const [newRemainingBalance, setNewRemainingBalance] = useState<number>(0);
-  const [newAvailability, setNewAvailability] = useState<'Available' | 'Assigned to Tour' | 'Off Duty'>('Available');
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -70,8 +69,7 @@ export const DriversPage: React.FC = () => {
       performanceRating: 5.0,
       leaveBalance: 12,
       status: 'Active',
-      availability: newAvailability === 'Available',
-      assignedTour: newAvailability === 'Assigned to Tour' ? 'Upper Mustang Jeep Safari' : undefined,
+      availability: true,
     };
 
     setDriverList(prev => [newDriver, ...prev]);
@@ -268,11 +266,12 @@ export const DriversPage: React.FC = () => {
                 onChange={e => setNewVehicleType(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500"
               >
-                <option value="Scorpio 4WD Jeep (Ba 21 Ch 4501)">Scorpio 4WD Jeep (Ba 21 Ch 4501)</option>
-                <option value="Scorpio 4WD Jeep (Ba 2 Kha 1234)">Scorpio 4WD Jeep (Ba 2 Kha 1234)</option>
-                <option value="Toyota Coaster Tourist Bus (Ba 1 Jha 9876)">Toyota Coaster Tourist Bus (Ba 1 Jha 9876)</option>
-                <option value="HiAce 14-Seater Tourist Van (Ba 3 Kha 5544)">HiAce 14-Seater Tourist Van (Ba 3 Kha 5544)</option>
-                <option value="EV Tourist Bus (Ba 4 Kha 9900)">EV Tourist Bus (Ba 4 Kha 9900)</option>
+                <option value="Scorpio 4WD Jeep (7 Seats)">Scorpio 4WD Jeep (7 Seats)</option>
+                <option value="28-Seater Sofa Bus (28 Seats)">28-Seater Sofa Bus (28 Seats)</option>
+                <option value="Toyota Coaster Bus (22 Seats)">Toyota Coaster Bus (22 Seats)</option>
+                <option value="Toyota HiAce Super GL (14 Seats)">Toyota HiAce Super GL (14 Seats)</option>
+                <option value="Prado 4WD Jeep (5 Seats)">Prado 4WD Jeep (5 Seats)</option>
+                <option value="EV Tourist Bus (30 Seats)">EV Tourist Bus (30 Seats)</option>
               </select>
             </div>
           </div>
@@ -295,21 +294,6 @@ export const DriversPage: React.FC = () => {
               onChange={e => setNewRemainingBalance(Number(e.target.value))}
               required
             />
-          </div>
-
-          <div>
-            <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1.5">
-              Availability Status
-            </label>
-            <select
-              value={newAvailability}
-              onChange={e => setNewAvailability(e.target.value as any)}
-              className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500"
-            >
-              <option value="Available">🟢 Available for Dispatch</option>
-              <option value="Assigned to Tour">🟡 Currently Assigned to Tour</option>
-              <option value="Off Duty">🔴 Off Duty / On Leave</option>
-            </select>
           </div>
 
           <div className="flex justify-end gap-2 pt-3">
