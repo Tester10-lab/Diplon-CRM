@@ -6,12 +6,25 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Building2, Plus, Download, Search, DollarSign, ArrowUpRight, ArrowDownRight, CheckCircle2, FileSpreadsheet, Calculator } from 'lucide-react';
 
+import { useAuthStore } from '../../store/authStore';
+
 export const PartnersPage: React.FC = () => {
-  const [records, setRecords] = useState<B2BRecord[]>(getB2BRecords());
+  const { user } = useAuthStore();
+  const isAgency = user?.role === 'AGENCY';
+
+  const [rawRecords, setRawRecords] = useState<B2BRecord[]>(getB2BRecords());
   const [selectedCompany, setSelectedCompany] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  // Agency Multi-Tenant Filter
+  const records = rawRecords.filter(r => {
+    if (!isAgency || !user) return true;
+    const uCompany = (user.companyName || user.name || '').toLowerCase().trim();
+    const rCompany = (r.companyName || '').toLowerCase().trim();
+    return rCompany.includes(uCompany) || uCompany.includes(rCompany);
+  });
 
   // Form State for + Add B2B Record
   const [formCompany, setFormCompany] = useState('');
@@ -88,8 +101,8 @@ export const PartnersPage: React.FC = () => {
       notes: formNotes || `Buying calc: ${formRatePerPax}*${formPax}=${computedBuying} | Collection line: ${formCollection}/- Rs collect on ${formVehicle}`
     };
 
-    const updated = [newRec, ...records];
-    setRecords(updated);
+    const updated = [newRec, ...rawRecords];
+    setRawRecords(updated);
     saveB2BRecords(updated);
     setIsAddOpen(false);
     showToast(`✅ Added B2B record for ${formCustomer} (${formCompany})!`);

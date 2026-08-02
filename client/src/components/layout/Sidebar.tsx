@@ -63,7 +63,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="w-4.5 h-4.5" />, path: '/' },
       { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-4.5 h-4.5" />, path: '/calendar' },
       { id: 'bookings', label: 'Bookings', icon: <FileText className="w-4.5 h-4.5" />, path: '/bookings' },
-      { id: 'b2b', label: 'B2B Details', icon: <Building2 className="w-4.5 h-4.5" />, path: '/partners' },
       { id: 'packages', label: 'Packages', icon: <Package className="w-4.5 h-4.5" />, path: '/packages' },
       { id: 'fleet', label: 'Vehicles', icon: <Car className="w-4.5 h-4.5" />, path: '/fleet' },
       { id: 'drivers', label: 'Drivers', icon: <UserSquare2 className="w-4.5 h-4.5" />, path: '/drivers' },
