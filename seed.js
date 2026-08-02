@@ -30,7 +30,7 @@ async function seed() {
     const { hashPassword } = require('./utils/auth');
     const user = await User.create({
       email: 'admin@diplon.com',
-      passwordHash: hashPassword('sudip123'),
+      passwordHash: hashPassword('Admin@2026!'),
       role: 'ADMIN',
       branchId: branch._id,
       companyId: company._id

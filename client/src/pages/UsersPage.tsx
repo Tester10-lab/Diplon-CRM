@@ -49,16 +49,6 @@ const INITIAL_USERS: SystemUser[] = [
     companyName: 'Hike on Trek Travel',
     status: 'ACTIVE',
     lastLogin: '2026-07-31 10:15'
-  },
-  {
-    id: 'usr_driver_005',
-    name: 'Srijan',
-    email: 'driver@diplon.com',
-    role: 'DRIVER',
-    companyId: 'cmp_diplon_global',
-    companyName: 'Diplon Scorpio Fleet Services',
-    status: 'ACTIVE',
-    lastLogin: '2026-07-30 10:15'
   }
 ];
 

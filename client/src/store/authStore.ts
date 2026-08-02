@@ -49,26 +49,8 @@ export const DEMO_USERS: Record<string, UserContext> = {
     branchName: 'Kathmandu Agency Branch',
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
     token: 'jwt_agency_token_778811'
-  },
-  'driver@diplon.com': {
-    userId: 'usr_driver_004',
-    name: 'Srijan (Scorpio Driver #1)',
-    email: 'driver@diplon.com',
-    role: 'DRIVER',
-    companyId: 'cmp_diplon_global',
-    companyName: 'Diplon Scorpio Fleet Services',
-    branchId: 'br_garage_01',
-    branchName: 'Kathmandu Scorpio Garage',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
-    token: 'jwt_driver_token_778899',
-    driverSn: 1,
-    assignedVehicleReg: 'Ba 21 Ch 4501'
   }
 };
-
-// Aliases for legacy lookups
-DEMO_USERS['agency@himalayan.com'] = DEMO_USERS['agency@hikeontrek.com'];
-DEMO_USERS['srijan@diplon.com'] = DEMO_USERS['driver@diplon.com'];
 
 const AUTH_KEY = 'diplon_auth_user';
 
@@ -131,9 +113,9 @@ export function useAuthStore() {
     let targetEmail = 'superadmin@diplon.com';
     if (newRole === 'ADMIN') targetEmail = 'admin@diplon.com';
     if (newRole === 'AGENCY') targetEmail = 'agency@hikeontrek.com';
-    if (newRole === 'DRIVER') targetEmail = 'driver@diplon.com';
+    if (newRole === 'DRIVER') targetEmail = 'admin@diplon.com';
 
-    const targetUser = DEMO_USERS[targetEmail];
+    const targetUser = DEMO_USERS[targetEmail] || DEMO_USERS['admin@diplon.com'];
     setGlobalUser(targetUser);
   };
 

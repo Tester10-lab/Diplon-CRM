@@ -11,6 +11,13 @@ interface LoginPageProps {
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_DURATION_SECONDS = 30;
 
+const ACCOUNT_PASSWORDS: Record<string, string> = {
+  'superadmin@diplon.com': 'SuperAdmin@2026!',
+  'admin@diplon.com': 'Admin@2026!',
+  'agency@hikeontrek.com': 'HikeAgency@2026!',
+  'agency@batuwatrip.com': 'BatuwaAgency@2026!'
+};
+
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const { login } = useAuthStore();
   const [email, setEmail] = useState('');
@@ -50,14 +57,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
     setTimeout(() => {
       const normalizedEmail = email.toLowerCase().trim();
-      const isAdminOrSuperAdmin = normalizedEmail === 'admin@diplon.com' || normalizedEmail === 'superadmin@diplon.com';
+      const expectedPassword = ACCOUNT_PASSWORDS[normalizedEmail];
 
-      // Check password: Admin/SuperAdmin requires 'sudip123'
-      let isValidPassword = true;
-      if (isAdminOrSuperAdmin) {
-        isValidPassword = password === 'sudip123';
+      let isValidPassword = false;
+      if (expectedPassword) {
+        isValidPassword = password === expectedPassword;
       } else {
-        isValidPassword = password.trim() === 'sudip123' || password.length >= 4;
+        isValidPassword = password.length >= 6;
       }
 
       if (isValidPassword && (normalizedEmail in DEMO_USERS || normalizedEmail.includes('@'))) {
@@ -74,7 +80,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           setLockoutSecondsLeft(LOCKOUT_DURATION_SECONDS);
           setErrorMsg(`🚨 Brute-Force Rate Limiter Triggered: ${MAX_FAILED_ATTEMPTS} failed attempts. Login locked for ${LOCKOUT_DURATION_SECONDS} seconds.`);
         } else {
-          setErrorMsg(`Invalid credentials. Required password for admin: sudip123. Failed attempts: ${nextAttempts}/${MAX_FAILED_ATTEMPTS}.`);
+          setErrorMsg(`Invalid credentials. Please check your email address and password. Failed attempts: ${nextAttempts}/${MAX_FAILED_ATTEMPTS}.`);
         }
       }
     }, 600);
