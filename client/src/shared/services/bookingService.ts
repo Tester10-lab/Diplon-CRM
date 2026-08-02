@@ -2,12 +2,14 @@ import { Booking } from '../../types';
 import { apiClient } from './apiClient';
 import { mockBookings } from '../mocks/mockBookings';
 
-const BOOKINGS_STORAGE_KEY = 'diplon_bookings_pipeline_v4';
+const BOOKINGS_STORAGE_KEY = 'diplon_bookings_pipeline_v6';
 
 function getStoredBookings(): Booking[] {
   try {
     localStorage.removeItem('diplon_bookings_pipeline');
     localStorage.removeItem('diplon_bookings_pipeline_v3');
+    localStorage.removeItem('diplon_bookings_pipeline_v4');
+    localStorage.removeItem('diplon_bookings_pipeline_v5');
     const saved = localStorage.getItem(BOOKINGS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);

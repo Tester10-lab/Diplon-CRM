@@ -20,7 +20,8 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '85,000/- Rs Collect on 28-seater sofa bus',
     groupType: 'group',
     roomDetails: '28-seater sofa bus (25 Pax)',
-    agencyName: 'Hike on Trek Travel'
+    agencyName: 'Hike on Trek Travel',
+    companyId: 'cmp_hikeontrek_01'
   },
   {
     _id: 'bk_jiri_02',
@@ -41,7 +42,8 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '34,000 Rs collect on Scorpio',
     groupType: 'private',
     roomDetails: '6 Pax private, 2 rooms normal sharing',
-    agencyName: 'Hike on Trek Travel'
+    agencyName: 'Hike on Trek Travel',
+    companyId: 'cmp_hikeontrek_01'
   },
   {
     _id: 'bk_mustang_03',
@@ -62,7 +64,8 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '1,21,000/- Rs Collect on Scorpio',
     groupType: 'private',
     roomDetails: '7 Pax private tour, 2 rooms (Bharatpur to Bharatpur)',
-    agencyName: 'Hike on Trek Travel'
+    agencyName: 'Hike on Trek Travel',
+    companyId: 'cmp_hikeontrek_01'
   },
   {
     _id: 'bk_muktinath_04',
@@ -83,7 +86,8 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '34,400/- Rs Collect on Scorpio (Lalitpur Holidays)',
     groupType: 'private',
     roomDetails: '2 Pax private (Lalitpur Holidays)',
-    agencyName: 'Hike on Trek Travel'
+    agencyName: 'Hike on Trek Travel',
+    companyId: 'cmp_hikeontrek_01'
   },
   {
     _id: 'bk_batuwa_01',
@@ -104,7 +108,8 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: '36,000/- Rs Collect at Pokhara hotel check-in',
     groupType: 'group',
     roomDetails: '4 Pax sharing, 2 rooms',
-    agencyName: 'Batuwa Trip'
+    agencyName: 'Batuwa Trip',
+    companyId: 'cmp_batuwatrip_01'
   },
   {
     _id: 'bk_batuwa_02',
@@ -125,6 +130,7 @@ export const mockBookings: Booking[] = [
     paymentCollectionNote: 'Full payment settled via eSewa',
     groupType: 'private',
     roomDetails: '5 Pax private deluxe resort accommodation',
-    agencyName: 'Batuwa Trip'
+    agencyName: 'Batuwa Trip',
+    companyId: 'cmp_batuwatrip_01'
   }
 ];

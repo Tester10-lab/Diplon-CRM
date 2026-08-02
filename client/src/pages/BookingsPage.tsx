@@ -19,12 +19,18 @@ export const BookingsPage: React.FC = () => {
 
   const displayBookings = (bookings || []).filter(b => {
     if (!user || user.role !== 'AGENCY') return true;
+
     if (b.companyId && user.companyId && b.companyId === user.companyId) return true;
-    if (b.agencyName && user.companyName) {
+
+    if (b.agencyName) {
       const bAgency = b.agencyName.toLowerCase().trim();
-      const uCompany = user.companyName.toLowerCase().trim();
-      return bAgency.includes(uCompany) || uCompany.includes(bAgency);
+      const uCompany = (user.companyName || '').toLowerCase().trim();
+      const uName = (user.name || '').toLowerCase().trim();
+
+      if (uCompany && (bAgency.includes(uCompany) || uCompany.includes(bAgency))) return true;
+      if (uName && (bAgency.includes(uName) || uName.includes(bAgency))) return true;
     }
+
     return false;
   });
 
