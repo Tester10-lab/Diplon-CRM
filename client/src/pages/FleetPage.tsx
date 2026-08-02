@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useAuthStore } from '../store/authStore';
 import { useFleet, useDrivers, useDepartures } from '../shared/hooks/operations/useOperations';
 import { useBookings } from '../shared/hooks/bookings/useBookings';
 import { DataTable, Column } from '../components/tables/DataTable';
@@ -12,10 +13,21 @@ import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from
 import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2 } from 'lucide-react';
 
 export const FleetPage: React.FC = () => {
+  const { user } = useAuthStore();
+  const isAgency = user?.role === 'AGENCY';
+
   const { data: vehicles, isLoading, error } = useFleet();
   const { data: driverList } = useDrivers();
   const { data: departures } = useDepartures();
   const { data: bookings } = useBookings();
+
+  const cleanDriverName = (driverName: string) => {
+    if (!driverName) return 'Unassigned';
+    if (isAgency) {
+      return driverName.replace(/\s*\(\d+\)/g, '').replace(/\s*\+?\d[\d\s-]{8,}/g, '').trim();
+    }
+    return driverName;
+  };
 
   const [activeTab, setActiveTab] = useState<'SCORPIO_ROSTER' | 'FLEET_CATALOG'>('SCORPIO_ROSTER');
   const [viewStyle, setViewStyle] = useState<'CARDS' | 'TABLE'>('CARDS');
@@ -529,15 +541,22 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 Export CSV
               </Button>
 
-              <Button
-                variant="primary"
-                size="sm"
-                className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
-                icon={<Plus className="w-4 h-4" />}
-                onClick={() => setIsAddModalOpen(true)}
-              >
-                + Assign Vehicle
-              </Button>
+              {!isAgency ? (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
+                  icon={<Plus className="w-4 h-4" />}
+                  onClick={() => setIsAddModalOpen(true)}
+                >
+                  + Assign Vehicle
+                </Button>
+              ) : (
+                <div className="px-3.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Agency Read-Only View</span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -620,34 +639,39 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         {/* Private Toggle Button */}
                         <button
                           onClick={() => handleToggleJeepPrivate(sn)}
+                          disabled={isAgency}
                           className={`p-1.5 rounded-xl border text-xs font-bold transition-all ${
                             isPrivateJeep
                               ? 'bg-amber-500 text-slate-950 border-amber-400'
                               : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
-                          }`}
+                          } ${isAgency ? 'cursor-not-allowed opacity-80' : ''}`}
                           title="Toggle Private Tour Group Protection"
                         >
                           <Lock className="w-3.5 h-3.5" />
                         </button>
 
-                        {/* WhatsApp Dispatch Button */}
-                        <button
-                          onClick={() => handleSendDriverDispatchSMS(sn, items)}
-                          className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all text-xs font-bold flex items-center gap-1"
-                          title="Open WhatsApp Driver Dispatch Message"
-                        >
-                          <Send className="w-3.5 h-3.5" />
-                          <span>Dispatch</span>
-                        </button>
+                        {/* WhatsApp Dispatch Button (Hidden for Agency) */}
+                        {!isAgency && (
+                          <button
+                            onClick={() => handleSendDriverDispatchSMS(sn, items)}
+                            className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all text-xs font-bold flex items-center gap-1"
+                            title="Open WhatsApp Driver Dispatch Message"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Dispatch</span>
+                          </button>
+                        )}
 
-                        {/* Delete Vehicle Unit Button */}
-                        <button
-                          onClick={() => handleDeleteVehicleUnit(sn)}
-                          className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-all text-xs font-bold"
-                          title={`Delete Vehicle Unit #${sn}`}
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        {/* Delete Vehicle Unit Button (Hidden for Agency) */}
+                        {!isAgency && (
+                          <button
+                            onClick={() => handleDeleteVehicleUnit(sn)}
+                            className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-all text-xs font-bold"
+                            title={`Delete Vehicle Unit #${sn}`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -658,17 +682,26 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         <UserCheck className="w-3.5 h-3.5 text-indigo-400" />
                       </label>
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-extrabold text-sm text-indigo-300 truncate">{mainDriver}</span>
-                        <select
-                          value={mainDriver}
-                          onChange={(e) => handleDriverChangeBySN(sn, e.target.value)}
-                          className="bg-slate-900 text-xs border border-slate-800 rounded-lg px-2 py-1 text-slate-200 focus:outline-none"
-                        >
-                          <option value={mainDriver}>{mainDriver}</option>
-                          {driverOptions.filter(drv => drv !== mainDriver).map(drv => (
-                            <option key={drv} value={drv}>{drv}</option>
-                          ))}
-                        </select>
+                        <span className="font-extrabold text-sm text-indigo-300 truncate">
+                          {cleanDriverName(mainDriver)}
+                        </span>
+
+                        {!isAgency ? (
+                          <select
+                            value={mainDriver}
+                            onChange={(e) => handleDriverChangeBySN(sn, e.target.value)}
+                            className="bg-slate-900 text-xs border border-slate-800 rounded-lg px-2 py-1 text-slate-200 focus:outline-none"
+                          >
+                            <option value={mainDriver}>{mainDriver}</option>
+                            {driverOptions.filter(drv => drv !== mainDriver).map(drv => (
+                              <option key={drv} value={drv}>{drv}</option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="text-[10px] font-extrabold text-[#C8FF2D] bg-[#C8FF2D]/10 px-2.5 py-1 rounded-lg border border-[#C8FF2D]/20">
+                            Assigned
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -705,13 +738,15 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                               <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
                                 {guest.pax} Pax
                               </span>
-                              <button
-                                onClick={() => handleDeleteGuestAssignment(guest.id, guest.name)}
-                                className="text-slate-500 hover:text-rose-400 p-0.5 transition-colors"
-                                title={`Delete ${guest.name} assignment`}
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
+                              {!isAgency && (
+                                <button
+                                  onClick={() => handleDeleteGuestAssignment(guest.id, guest.name)}
+                                  className="text-slate-500 hover:text-rose-400 p-0.5 transition-colors"
+                                  title={`Delete ${guest.name} assignment`}
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              )}
                             </div>
                           </div>
 
@@ -758,7 +793,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         <td className="p-3.5 font-bold text-slate-200">{item.vehicleType || 'Scorpio 4WD'}</td>
                         <td className="p-3.5 font-bold text-white">{item.tour}</td>
                         <td className="p-3.5 font-mono text-indigo-300">{item.date || '2026-08-01'}</td>
-                        <td className="p-3.5 font-bold text-indigo-400">{item.driver}</td>
+                        <td className="p-3.5 font-bold text-indigo-400">{cleanDriverName(item.driver)}</td>
                         <td className="p-3.5 font-mono font-bold text-amber-300">{item.pax} Pax</td>
                         <td className="p-3.5 font-mono text-slate-400">{item.vehicleCapacity || 7} Seats</td>
                         <td className="p-3.5 font-mono text-emerald-400">{item.rooms}</td>
@@ -776,20 +811,26 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           )}
                         </td>
                         <td className="p-3.5 pr-5 text-right flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => handleSendDriverDispatchSMS(item.sn, [item])}
-                            className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px] flex items-center gap-1"
-                          >
-                            <Send className="w-3 h-3" />
-                            Dispatch
-                          </button>
-                          <button
-                            onClick={() => handleDeleteGuestAssignment(item.id, item.name)}
-                            className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 font-bold text-[11px]"
-                            title="Delete assignment"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          {!isAgency ? (
+                            <>
+                              <button
+                                onClick={() => handleSendDriverDispatchSMS(item.sn, [item])}
+                                className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px] flex items-center gap-1"
+                              >
+                                <Send className="w-3 h-3" />
+                                Dispatch
+                              </button>
+                              <button
+                                onClick={() => handleDeleteGuestAssignment(item.id, item.name)}
+                                className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 font-bold text-[11px]"
+                                title="Delete assignment"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </>
+                          ) : (
+                            <span className="text-slate-500 text-[11px] font-mono">Read-Only</span>
+                          )}
                         </td>
                       </tr>
                     ))}
