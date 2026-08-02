@@ -6,7 +6,7 @@ import { Modal } from '../components/ui/Modal';
 import { Input } from '../components/ui/Input';
 import { UserRole } from '../types/erp';
 import { useAuthStore } from '../store/authStore';
-import { UserCog, Plus, ShieldCheck, Mail, Lock, Building2, Key, CheckCircle2, UserX, Sparkles, RefreshCw } from 'lucide-react';
+import { UserCog, Plus, ShieldCheck, Mail, Lock, Building2, Key, CheckCircle2, UserX, Sparkles, RefreshCw, Trash2 } from 'lucide-react';
 
 export interface SystemUser {
   id: string;
@@ -19,6 +19,8 @@ export interface SystemUser {
   lastLogin: string;
 }
 
+const USERS_STORAGE_KEY = 'diplon_system_users_v2';
+
 const INITIAL_USERS: SystemUser[] = [
   {
     id: 'usr_super_001',
@@ -28,7 +30,7 @@ const INITIAL_USERS: SystemUser[] = [
     companyId: 'cmp_lalitpur_hq',
     companyName: 'Lalitpur Holidays ERP Headquarters',
     status: 'ACTIVE',
-    lastLogin: '2026-07-31 10:45'
+    lastLogin: '2026-08-02 15:30'
   },
   {
     id: 'usr_admin_002',
@@ -38,7 +40,7 @@ const INITIAL_USERS: SystemUser[] = [
     companyId: 'cmp_lalitpur_01',
     companyName: 'Lalitpur Holidays',
     status: 'ACTIVE',
-    lastLogin: '2026-07-31 10:30'
+    lastLogin: '2026-08-02 14:20'
   },
   {
     id: 'usr_agency_003',
@@ -48,13 +50,48 @@ const INITIAL_USERS: SystemUser[] = [
     companyId: 'cmp_hikeontrek_01',
     companyName: 'Hike on Trek Travel',
     status: 'ACTIVE',
-    lastLogin: '2026-07-31 10:15'
+    lastLogin: '2026-08-02 12:15'
+  },
+  {
+    id: 'usr_agency_004',
+    name: 'Batuwa Trip Agency',
+    email: 'batuwa@batuwatrip.com',
+    role: 'AGENCY',
+    companyId: 'cmp_batuwatrip_01',
+    companyName: 'Batuwa Trip',
+    status: 'ACTIVE',
+    lastLogin: '2026-08-02 11:00'
+  },
+  {
+    id: 'usr_driver_005',
+    name: 'Srijan Maharjan (Driver)',
+    email: 'srijan@diplon.com',
+    role: 'DRIVER',
+    companyId: 'cmp_scorpio_drivers',
+    companyName: 'Scorpio Fleet Service',
+    status: 'ACTIVE',
+    lastLogin: '2026-08-02 09:10'
   }
 ];
 
+function getStoredUsers(): SystemUser[] {
+  try {
+    localStorage.removeItem('diplon_system_users');
+    const saved = localStorage.getItem(USERS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.error('Failed to parse users from localStorage:', e);
+  }
+  localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(INITIAL_USERS));
+  return INITIAL_USERS;
+}
+
 export const UsersPage: React.FC = () => {
   const { user } = useAuthStore();
-  const [usersList, setUsersList] = useState<SystemUser[]>(INITIAL_USERS);
+  const [usersList, setUsersList] = useState<SystemUser[]>(getStoredUsers());
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -63,6 +100,11 @@ export const UsersPage: React.FC = () => {
   const [formEmail, setFormEmail] = useState('');
   const [formRole, setFormRole] = useState<UserRole>('AGENCY');
   const [formCompanyName, setFormCompanyName] = useState('Hike on Trek');
+
+  const saveAndSetUsers = (newUsers: SystemUser[]) => {
+    setUsersList(newUsers);
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(newUsers));
+  };
 
   const showToast = (msg: string) => {
     setToastMsg(msg);
@@ -84,7 +126,8 @@ export const UsersPage: React.FC = () => {
       lastLogin: 'Just registered'
     };
 
-    setUsersList(prev => [newUser, ...prev]);
+    const updated = [newUser, ...usersList];
+    saveAndSetUsers(updated);
     setIsAddModalOpen(false);
     showToast(`✅ Created user account for ${formName} (${formRole})`);
 
@@ -93,14 +136,23 @@ export const UsersPage: React.FC = () => {
   };
 
   const handleToggleStatus = (id: string) => {
-    setUsersList(prev => prev.map(u => {
+    const updated = usersList.map(u => {
       if (u.id === id) {
         const nextStatus = u.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
         showToast(`⚡ Account status for ${u.name} updated to ${nextStatus}`);
         return { ...u, status: nextStatus as any };
       }
       return u;
-    }));
+    });
+    saveAndSetUsers(updated);
+  };
+
+  const handleDeleteUser = (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to permanently delete user account "${name}"?`)) {
+      const updated = usersList.filter(u => u.id !== id);
+      saveAndSetUsers(updated);
+      showToast(`🗑️ Account "${name}" was permanently deleted.`);
+    }
   };
 
   const handleResetPassword = (email: string) => {
@@ -177,7 +229,7 @@ export const UsersPage: React.FC = () => {
             variant={u.status === 'ACTIVE' ? 'secondary' : 'primary'}
             className={`text-xs ${
               u.status === 'ACTIVE'
-                ? 'bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border-rose-500/30'
+                ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 border-amber-500/30'
                 : 'bg-emerald-600 hover:bg-emerald-500 text-white font-bold'
             }`}
             onClick={() => handleToggleStatus(u.id)}
@@ -185,6 +237,19 @@ export const UsersPage: React.FC = () => {
             {u.status === 'ACTIVE' ? <UserX className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
             <span>{u.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}</span>
           </Button>
+
+          {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && u.id !== user.userId && (
+            <Button
+              size="sm"
+              variant="secondary"
+              className="text-xs bg-rose-500/10 text-rose-400 hover:bg-rose-600 hover:text-white border-rose-500/30 transition-all"
+              onClick={() => handleDeleteUser(u.id, u.name)}
+              title="Delete Account"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete</span>
+            </Button>
+          )}
         </div>
       )
     }
