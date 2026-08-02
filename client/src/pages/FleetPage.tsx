@@ -10,7 +10,95 @@ import { Input } from '../components/ui/Input';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from '../features/fleet/scorpioStore';
-import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2 } from 'lucide-react';
+import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2, CheckCircle2 } from 'lucide-react';
+
+interface SearchableDriverSelectProps {
+  currentDriver: string;
+  driverOptions: string[];
+  onSelectDriver: (driverName: string) => void;
+  disabled?: boolean;
+}
+
+const SearchableDriverSelect: React.FC<SearchableDriverSelectProps> = ({
+  currentDriver,
+  driverOptions,
+  onSelectDriver,
+  disabled
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const filteredOptions = useMemo(() => {
+    if (!search.trim()) return driverOptions;
+    const q = search.toLowerCase();
+    return driverOptions.filter(d => d.toLowerCase().includes(q));
+  }, [driverOptions, search]);
+
+  if (disabled) {
+    return (
+      <span className="text-[10px] font-extrabold text-[#C8FF2D] bg-[#C8FF2D]/10 px-2.5 py-1 rounded-lg border border-[#C8FF2D]/20">
+        Assigned
+      </span>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-slate-950 text-xs border border-slate-700 hover:border-amber-400 rounded-xl px-3 py-1.5 text-slate-200 flex items-center justify-between gap-2 min-w-[150px] transition-all shadow-sm group"
+      >
+        <span className="truncate font-bold text-amber-300 group-hover:text-amber-200">
+          {currentDriver || 'Unassigned Driver'}
+        </span>
+        <Search className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+      </button>
+
+      {isOpen && (
+        <div className="absolute right-0 top-full mt-1.5 w-64 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 p-2.5 space-y-2 animate-fade-in backdrop-blur-xl">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              autoFocus
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search driver name or phone..."
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+            />
+          </div>
+
+          <div className="max-h-48 overflow-y-auto space-y-1 custom-scrollbar">
+            {filteredOptions.length === 0 ? (
+              <div className="text-[11px] text-slate-500 text-center py-2 font-medium">No driver matching "{search}".</div>
+            ) : (
+              filteredOptions.map(drv => (
+                <button
+                  key={drv}
+                  type="button"
+                  onClick={() => {
+                    onSelectDriver(drv);
+                    setIsOpen(false);
+                    setSearch('');
+                  }}
+                  className={`w-full text-left px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between ${
+                    currentDriver === drv
+                      ? 'bg-amber-500 text-slate-950 font-black shadow-md'
+                      : 'text-slate-200 hover:bg-slate-800 hover:text-white'
+                  }`}
+                >
+                  <span className="truncate">{drv}</span>
+                  {currentDriver === drv && <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const FleetPage: React.FC = () => {
   const { user } = useAuthStore();
@@ -129,20 +217,12 @@ export const FleetPage: React.FC = () => {
     ])
   );
 
-  const defaultDrivers = [
-    'Suman Dai (9851090895)',
-    'Pradip Bhai (9841000001)',
-    'Ramesh Dai (9851000002)',
-    'Sabin Dai (9860000003)',
-    'Surendra Bhai (9841234567)',
-    'Aakash Bhujel (9801122334)',
-    'Shankar Bhai (9812345678)'
-  ];
   const driverOptions = Array.from(
     new Set([
       'Unassigned Driver',
       ...(driverList || []).map(d => d.phone ? `${d.name} (${d.phone})` : d.name),
-      ...defaultDrivers
+      'Srijan Maharjan (9801234567)',
+      'Suman Dai (9851090895)'
     ])
   );
 
@@ -695,22 +775,12 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           {cleanDriverName(mainDriver)}
                         </span>
 
-                        {!isAgency ? (
-                          <select
-                            value={mainDriver}
-                            onChange={(e) => handleDriverChangeBySN(sn, e.target.value)}
-                            className="bg-slate-900 text-xs border border-slate-800 rounded-lg px-2 py-1 text-slate-200 focus:outline-none"
-                          >
-                            <option value={mainDriver}>{mainDriver}</option>
-                            {driverOptions.filter(drv => drv !== mainDriver).map(drv => (
-                              <option key={drv} value={drv}>{drv}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          <span className="text-[10px] font-extrabold text-[#C8FF2D] bg-[#C8FF2D]/10 px-2.5 py-1 rounded-lg border border-[#C8FF2D]/20">
-                            Assigned
-                          </span>
-                        )}
+                        <SearchableDriverSelect
+                          currentDriver={mainDriver}
+                          driverOptions={driverOptions}
+                          onSelectDriver={(drvName) => handleDriverChangeBySN(sn, drvName)}
+                          disabled={isAgency}
+                        />
                       </div>
                     </div>
 
@@ -807,7 +877,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           <td className="p-3.5 font-bold text-slate-200">{item.vehicleType || 'Scorpio 4WD'}</td>
                           <td className="p-3.5 font-bold text-white">{item.tour}</td>
                           <td className="p-3.5 font-mono text-indigo-300">{item.date || '2026-08-01'}</td>
-                          <td className="p-3.5 font-bold text-indigo-400">{cleanDriverName(item.driver)}</td>
+                          <td className="p-3.5 font-bold text-indigo-400">
+                            <SearchableDriverSelect
+                              currentDriver={item.driver}
+                              driverOptions={driverOptions}
+                              onSelectDriver={(drvName) => handleDriverChangeBySN(item.sn, drvName)}
+                              disabled={isAgency}
+                            />
+                          </td>
                           <td className="p-3.5 font-mono font-bold text-amber-300">{item.pax} Pax</td>
                           <td className="p-3.5 font-mono text-slate-400">{item.vehicleCapacity || 7} Seats</td>
                           <td className="p-3.5 font-mono text-emerald-400">{item.rooms}</td>
@@ -919,29 +996,18 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 />
               </div>
 
-              {/* Typable Driver Name Input with Datalist Suggestions */}
+              {/* Searchable Driver Selection */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                     <span>Assigned Driver Name</span>
-                    <span className="text-[10px] text-amber-400 font-normal">Type new or select</span>
+                    <span className="text-[10px] text-amber-400 font-normal">Click to search</span>
                   </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      list="drivers-datalist-modal"
-                      value={formDriver}
-                      onChange={e => handleSelectDriver(e.target.value)}
-                      placeholder="Type custom driver name..."
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
-                      required
-                    />
-                    <datalist id="drivers-datalist-modal">
-                      {driverOptions.map(drv => (
-                        <option key={drv} value={drv} />
-                      ))}
-                    </datalist>
-                  </div>
+                  <SearchableDriverSelect
+                    currentDriver={formDriver}
+                    driverOptions={driverOptions}
+                    onSelectDriver={(drvName) => handleSelectDriver(drvName)}
+                  />
                 </div>
 
                 <Input

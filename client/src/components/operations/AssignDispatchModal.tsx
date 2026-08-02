@@ -244,24 +244,65 @@ export const AssignDispatchModal: React.FC<AssignDispatchModalProps> = ({
               )}
             </div>
 
-            <select
-              value={selectedDriverName}
-              onChange={e => setSelectedDriverName(e.target.value)}
-              disabled={isDriverLocked}
-              className={`w-full bg-slate-900 border rounded-xl p-3 text-xs font-semibold text-white focus:outline-none transition-all ${
-                isDriverLocked ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-indigo-500'
-              }`}
-            >
-              <option value="">-- None / Unassigned (No Driver Required) --</option>
-              {drivers.map(d => (
-                <option key={d._id} value={d.name}>
-                  {d.name} ({d.vehicleType || 'Scorpio 4WD'} • {d.availability ? 'Available' : 'Assigned'})
-                </option>
-              ))}
-              {!drivers.some(d => d.name === selectedDriverName) && selectedDriverName && (
-                <option value={selectedDriverName}>{selectedDriverName}</option>
+            <div className="relative">
+              <input
+                type="text"
+                value={selectedDriverName}
+                onChange={e => setSelectedDriverName(e.target.value)}
+                disabled={isDriverLocked}
+                placeholder="Type or search driver name..."
+                className={`w-full bg-slate-900 border rounded-xl p-3 text-xs font-extrabold text-amber-300 focus:outline-none transition-all ${
+                  isDriverLocked ? 'opacity-60 cursor-not-allowed border-slate-800 bg-slate-950' : 'border-slate-700 focus:border-amber-400'
+                }`}
+              />
+              {!isDriverLocked && (
+                <div className="mt-1 flex flex-wrap gap-1 max-h-32 overflow-y-auto p-1.5 bg-slate-950 border border-slate-800 rounded-xl">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDriverName('')}
+                    className={`text-[10px] font-bold px-2 py-1 rounded-lg transition-all ${
+                      !selectedDriverName ? 'bg-amber-500 text-slate-950' : 'bg-slate-900 text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    🚫 Unassigned
+                  </button>
+                  {drivers.map(d => (
+                    <button
+                      key={d._id}
+                      type="button"
+                      onClick={() => setSelectedDriverName(d.name)}
+                      className={`text-[10px] font-bold px-2 py-1 rounded-lg transition-all ${
+                        selectedDriverName === d.name ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 text-slate-200 hover:bg-slate-800'
+                      }`}
+                    >
+                      {d.name} {d.phone ? `(${d.phone})` : ''}
+                    </button>
+                  ))}
+                  {drivers.every(d => d.name !== 'Srijan Maharjan') && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDriverName('Srijan Maharjan')}
+                      className={`text-[10px] font-bold px-2 py-1 rounded-lg transition-all ${
+                        selectedDriverName === 'Srijan Maharjan' ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 text-indigo-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      Srijan Maharjan (9801234567)
+                    </button>
+                  )}
+                  {drivers.every(d => d.name !== 'Suman Dai') && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDriverName('Suman Dai')}
+                      className={`text-[10px] font-bold px-2 py-1 rounded-lg transition-all ${
+                        selectedDriverName === 'Suman Dai' ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 text-indigo-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      Suman Dai (9851090895)
+                    </button>
+                  )}
+                </div>
               )}
-            </select>
+            </div>
 
             {/* Selected Driver Schedule Card */}
             {selectedDriverName && driverScheduleHistory.length > 0 && (
