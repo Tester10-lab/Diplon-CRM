@@ -21,29 +21,31 @@ export const mockBookings: Booking[] = [
     groupType: 'group',
     roomDetails: '28-seater sofa bus (25 Pax)',
     agencyName: 'Hike on Trek Travel',
-    companyId: 'cmp_hikeontrek_01'
+    companyId: 'cmp_hikeontrek_01',
+    bookingStatus: 'IN_TRIP'
   },
   {
     _id: 'bk_jiri_02',
     bookingNumber: 'BK-JIRI-02',
     customerName: 'Jiri Tour Lead',
     packageName: 'Jiri Tour (1N/2D)',
-    departureDate: '2026-08-01',
+    departureDate: '2026-07-30',
     seatsReserved: 6,
     totalAmount: 33000,
-    paidAmount: 0,
+    paidAmount: 33000,
     status: 'CONFIRMED',
-    createdAt: '2026-07-31',
+    createdAt: '2026-07-29',
     contactPhone: '9841140000',
     pickupPoint: 'New Road Angan Sweets',
     ratePerPerson: 5500,
-    advanceAmount: 0,
-    remainingAmount: 34000,
-    paymentCollectionNote: '34,000 Rs collect on Scorpio',
+    advanceAmount: 33000,
+    remainingAmount: 0,
+    paymentCollectionNote: '34,000 Rs collect on Scorpio - Settled',
     groupType: 'private',
     roomDetails: '6 Pax private, 2 rooms normal sharing',
     agencyName: 'Hike on Trek Travel',
-    companyId: 'cmp_hikeontrek_01'
+    companyId: 'cmp_hikeontrek_01',
+    bookingStatus: 'COMPLETED'
   },
   {
     _id: 'bk_mustang_03',
@@ -65,7 +67,8 @@ export const mockBookings: Booking[] = [
     groupType: 'private',
     roomDetails: '7 Pax private tour, 2 rooms (Bharatpur to Bharatpur)',
     agencyName: 'Hike on Trek Travel',
-    companyId: 'cmp_hikeontrek_01'
+    companyId: 'cmp_hikeontrek_01',
+    bookingStatus: 'ASSIGNED'
   },
   {
     _id: 'bk_muktinath_04',
@@ -87,7 +90,8 @@ export const mockBookings: Booking[] = [
     groupType: 'private',
     roomDetails: '2 Pax private (Lalitpur Holidays)',
     agencyName: 'Hike on Trek Travel',
-    companyId: 'cmp_hikeontrek_01'
+    companyId: 'cmp_hikeontrek_01',
+    bookingStatus: 'GROUPED'
   },
   {
     _id: 'bk_batuwa_01',
@@ -109,19 +113,20 @@ export const mockBookings: Booking[] = [
     groupType: 'group',
     roomDetails: '4 Pax sharing, 2 rooms',
     agencyName: 'Batuwa Trip',
-    companyId: 'cmp_batuwatrip_01'
+    companyId: 'cmp_batuwatrip_01',
+    bookingStatus: 'ASSIGNED'
   },
   {
     _id: 'bk_batuwa_02',
     bookingNumber: 'BK-BATUWA-02',
     customerName: 'Pooja Shrestha',
     packageName: 'Chitwan Jungle Safari (2N/3D)',
-    departureDate: '2026-08-10',
+    departureDate: '2026-07-28',
     seatsReserved: 5,
     totalAmount: 65000,
     paidAmount: 65000,
     status: 'CONFIRMED',
-    createdAt: '2026-08-02',
+    createdAt: '2026-07-27',
     contactPhone: '9801239988',
     pickupPoint: 'Kalanki Chok, Kathmandu',
     ratePerPerson: 13000,
@@ -131,6 +136,7 @@ export const mockBookings: Booking[] = [
     groupType: 'private',
     roomDetails: '5 Pax private deluxe resort accommodation',
     agencyName: 'Batuwa Trip',
-    companyId: 'cmp_batuwatrip_01'
+    companyId: 'cmp_batuwatrip_01',
+    bookingStatus: 'COMPLETED'
   }
 ];

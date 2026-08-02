@@ -7,9 +7,59 @@ import { BookingModal } from '../components/bookings/BookingModal';
 import { BookingData } from '../types/erp';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
-import { Plus, Phone, MapPin, Calendar, CreditCard, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Plus, Phone, MapPin, Calendar, CreditCard, Sparkles, CheckCircle2, Building2, Car, Navigation, Layers } from 'lucide-react';
 
 import { useAuthStore } from '../store/authStore';
+
+export type BookingLifecycleStatus = 'GROUPED' | 'ASSIGNED' | 'IN_TRIP' | 'COMPLETED';
+
+function getComputedBookingStatus(b: any): {
+  status: BookingLifecycleStatus;
+  label: string;
+  badgeClass: string;
+  icon: string;
+} {
+  if (b.bookingStatus) {
+    if (b.bookingStatus === 'COMPLETED') return { status: 'COMPLETED', label: 'COMPLETED', badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30', icon: '✅' };
+    if (b.bookingStatus === 'IN_TRIP') return { status: 'IN_TRIP', label: 'IN TRIP', badgeClass: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30', icon: '🏔️' };
+    if (b.bookingStatus === 'ASSIGNED') return { status: 'ASSIGNED', label: 'ASSIGNED', badgeClass: 'bg-amber-500/10 text-amber-300 border-amber-500/30', icon: '🚘' };
+    if (b.bookingStatus === 'GROUPED') return { status: 'GROUPED', label: 'GROUPED', badgeClass: 'bg-slate-800 text-slate-300 border-slate-700', icon: '📦' };
+  }
+
+  const depStr = b.departureDate || '2026-08-01';
+  const depDate = new Date(depStr);
+
+  let durationDays = 2;
+  if (b.packageName) {
+    const match = b.packageName.match(/(\d+)\s*D/i) || b.packageName.match(/(\d+)\s*Days?/i);
+    if (match && match[1]) {
+      durationDays = parseInt(match[1], 10);
+    }
+  }
+
+  const startDate = new Date(depDate);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(depDate);
+  endDate.setDate(depDate.getDate() + Math.max(1, durationDays - 1));
+  endDate.setHours(23, 59, 59, 999);
+
+  const now = new Date();
+
+  if (now > endDate) {
+    return { status: 'COMPLETED', label: 'COMPLETED', badgeClass: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30', icon: '✅' };
+  }
+
+  if (now >= startDate && now <= endDate) {
+    return { status: 'IN_TRIP', label: 'IN TRIP', badgeClass: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30', icon: '🏔️' };
+  }
+
+  if (b.assignedDriver || b.assignedVehicle || (b.roomDetails && (b.roomDetails.toLowerCase().includes('scorpio') || b.roomDetails.toLowerCase().includes('bus')))) {
+    return { status: 'ASSIGNED', label: 'ASSIGNED', badgeClass: 'bg-amber-500/10 text-amber-300 border-amber-500/30', icon: '🚘' };
+  }
+
+  return { status: 'GROUPED', label: 'GROUPED', badgeClass: 'bg-slate-800 text-slate-300 border-slate-700', icon: '📦' };
+}
 
 export const BookingsPage: React.FC = () => {
   const { user } = useAuthStore();
@@ -72,6 +122,18 @@ export const BookingsPage: React.FC = () => {
       )
     },
     {
+      key: 'agencyName',
+      header: 'Agency',
+      accessor: b => (
+        <div className="flex items-center gap-1.5">
+          <Building2 className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+          <span className="font-extrabold text-xs text-indigo-300">
+            {(b as any).agencyName || 'Direct Booking'}
+          </span>
+        </div>
+      )
+    },
+    {
       key: 'packageName',
       header: 'Package & Travel Details',
       accessor: b => (
@@ -99,11 +161,15 @@ export const BookingsPage: React.FC = () => {
     {
       key: 'status',
       header: 'Status',
-      accessor: b => (
-        <Badge variant={b.status === 'CONFIRMED' ? 'success' : b.status === 'PENDING' ? 'warning' : 'info'} dot>
-          {b.status}
-        </Badge>
-      )
+      accessor: b => {
+        const info = getComputedBookingStatus(b);
+        return (
+          <span className={`px-2.5 py-1 rounded-full text-[10px] font-black border flex items-center gap-1.5 w-fit ${info.badgeClass}`}>
+            <span>{info.icon}</span>
+            <span>{info.label}</span>
+          </span>
+        );
+      }
     },
     {
       key: 'totalAmount',
