@@ -19,15 +19,19 @@ export interface FinanceRecord {
   amount: number;
   date: string;
   notes?: string;
+  agencyName?: string;
+  companyId?: string;
 }
 
-const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v7';
+const FINANCE_STORAGE_KEY = 'diplon_finance_ledger_v9';
 
 const INITIAL_FINANCE_RECORDS: FinanceRecord[] = [
-  { id: 'FIN-101', type: 'COLLECTION', title: '[Hike on Trek Travel] Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31', notes: '85,000/- Rs Collect on 28-seater sofa bus' },
-  { id: 'FIN-102', type: 'COLLECTION', title: '[Hike on Trek Travel] Jiri Tour Booking - Tarak Panja', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '34,000 Rs collect on Scorpio' },
-  { id: 'FIN-103', type: 'COLLECTION', title: '[Hike on Trek Travel] Upper Mustang Booking - Bishnu Prasad Kafle', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '1,21,000 Rs collect on Scorpio' },
-  { id: 'FIN-104', type: 'COLLECTION', title: '[Hike on Trek Travel] Muktinath Advance - Abhijit Ghosh', category: 'Customer Booking', amount: 9600, date: '2026-07-31', notes: '34,400 Rs collect on Scorpio (Advance 9,600 paid)' }
+  { id: 'FIN-101', type: 'COLLECTION', title: '[Hike on Trek Travel] Halesi Tour Advance - Chandra man Maharjan', category: 'Customer Booking', amount: 2500, date: '2026-07-31', notes: '85,000/- Rs Collect on 28-seater sofa bus', agencyName: 'Hike on Trek Travel', companyId: 'cmp_hikeontrek_01' },
+  { id: 'FIN-102', type: 'COLLECTION', title: '[Hike on Trek Travel] Jiri Tour Booking - Tarak Panja', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '34,000 Rs collect on Scorpio', agencyName: 'Hike on Trek Travel', companyId: 'cmp_hikeontrek_01' },
+  { id: 'FIN-103', type: 'COLLECTION', title: '[Hike on Trek Travel] Upper Mustang Booking - Bishnu Prasad Kafle', category: 'Customer Booking', amount: 0, date: '2026-07-31', notes: '1,21,000 Rs collect on Scorpio', agencyName: 'Hike on Trek Travel', companyId: 'cmp_hikeontrek_01' },
+  { id: 'FIN-104', type: 'COLLECTION', title: '[Hike on Trek Travel] Muktinath Advance - Abhijit Ghosh', category: 'Customer Booking', amount: 9600, date: '2026-07-31', notes: '34,400 Rs collect on Scorpio (Advance 9,600 paid)', agencyName: 'Hike on Trek Travel', companyId: 'cmp_hikeontrek_01' },
+  { id: 'FIN-201', type: 'COLLECTION', title: '[Batuwa Trip] Pokhara Advance - Sujan Thapa', category: 'Customer Booking', amount: 12000, date: '2026-08-01', notes: '36,000/- Rs Collect at Pokhara hotel check-in', agencyName: 'Batuwa Trip', companyId: 'cmp_batuwatrip_01' },
+  { id: 'FIN-202', type: 'COLLECTION', title: '[Batuwa Trip] Chitwan Safari Booking - Pooja Shrestha', category: 'Customer Booking', amount: 65000, date: '2026-08-02', notes: 'Full payment settled via eSewa', agencyName: 'Batuwa Trip', companyId: 'cmp_batuwatrip_01' }
 ];
 
 function getStoredFinanceRecords(): FinanceRecord[] {
@@ -37,6 +41,8 @@ function getStoredFinanceRecords(): FinanceRecord[] {
     localStorage.removeItem('diplon_finance_ledger_v4');
     localStorage.removeItem('diplon_finance_ledger_v5');
     localStorage.removeItem('diplon_finance_ledger_v6');
+    localStorage.removeItem('diplon_finance_ledger_v7');
+    localStorage.removeItem('diplon_finance_ledger_v8');
     const saved = localStorage.getItem(FINANCE_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
@@ -61,6 +67,18 @@ const INITIAL_SETTLEMENTS: AgencySettlement[] = [
     notes: 'B2B settlement for 4 confirmed tour packages (Halesi 25 Pax, Jiri 6 Pax, Upper Mustang 7 Pax, Muktinath 2 Pax).',
     requestedAt: '2026-07-31 10:00',
     settledAt: '2026-07-31 10:15'
+  },
+  {
+    id: 'SETTLE-802',
+    agencyCompanyId: 'cmp_batuwatrip_01',
+    agencyName: 'Batuwa Trip',
+    totalCollections: 113000,
+    agreedCommissionMargin: 15,
+    netSettlementAmount: 96050,
+    payoutStatus: 'APPROVED',
+    notes: 'B2B settlement for 2 confirmed tour packages (Pokhara 4 Pax, Chitwan 5 Pax).',
+    requestedAt: '2026-08-02 11:00',
+    settledAt: '2026-08-02 11:30'
   }
 ];
 
@@ -97,9 +115,37 @@ export const FinancePage: React.FC = () => {
   if (isLoading) return <PageSkeleton />;
   if (error) return <ErrorState message={error.message} onRetry={refetch} />;
 
+  // Multi-Tenant Isolation Filtering for Agency Users
+  const displayFinanceRecords = (financeRecords || []).filter(r => {
+    if (!isAgency || !user) return true;
+    if (r.companyId && user.companyId && r.companyId === user.companyId) return true;
+    if (r.agencyName) {
+      const bAgency = r.agencyName.toLowerCase().trim();
+      const uCompany = (user.companyName || user.name || '').toLowerCase().trim();
+      if (bAgency.includes(uCompany) || uCompany.includes(bAgency)) return true;
+    }
+    if (r.title && user.companyName) {
+      const titleLower = r.title.toLowerCase();
+      const uCompany = user.companyName.toLowerCase().trim();
+      if (titleLower.includes(uCompany)) return true;
+    }
+    return false;
+  });
+
+  const displaySettlements = (settlements || []).filter(s => {
+    if (!isAgency || !user) return true;
+    if (s.agencyCompanyId && user.companyId && s.agencyCompanyId === user.companyId) return true;
+    if (s.agencyName) {
+      const sAgency = s.agencyName.toLowerCase().trim();
+      const uCompany = (user.companyName || user.name || '').toLowerCase().trim();
+      if (sAgency.includes(uCompany) || uCompany.includes(sAgency)) return true;
+    }
+    return false;
+  });
+
   // Financial Calculations
-  const totalCollections = financeRecords.filter(r => r.type === 'COLLECTION').reduce((sum, r) => sum + r.amount, 0);
-  const totalExpenses = financeRecords.filter(r => r.type === 'EXPENSE').reduce((sum, r) => sum + r.amount, 0);
+  const totalCollections = displayFinanceRecords.filter(r => r.type === 'COLLECTION').reduce((sum, r) => sum + r.amount, 0);
+  const totalExpenses = displayFinanceRecords.filter(r => r.type === 'EXPENSE').reduce((sum, r) => sum + r.amount, 0);
   const netProfitLoss = totalCollections - totalExpenses;
 
   const handleCreateRecord = (e: React.FormEvent) => {
@@ -407,7 +453,7 @@ export const FinancePage: React.FC = () => {
             activeTab === 'LEDGER' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white'
           }`}
         >
-          💳 Collections & Expenses Ledger ({financeRecords.length})
+          💳 Collections & Expenses Ledger ({displayFinanceRecords.length})
         </button>
         <button
           onClick={() => setActiveTab('SETTLEMENTS')}
@@ -415,7 +461,7 @@ export const FinancePage: React.FC = () => {
             activeTab === 'SETTLEMENTS' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-white'
           }`}
         >
-          💰 Payment Settlement History ({settlements.length})
+          💰 Payment Settlement History ({displaySettlements.length})
         </button>
       </div>
 
@@ -423,7 +469,7 @@ export const FinancePage: React.FC = () => {
         <DataTable
           title="Collections & Expenses Statement"
           description="Detailed breakdown of incoming customer collections and outgoing operational costs"
-          data={financeRecords as any}
+          data={displayFinanceRecords as any}
           columns={recordColumns}
           searchPlaceholder="Search finance records..."
         />
@@ -431,7 +477,7 @@ export const FinancePage: React.FC = () => {
         <DataTable
           title="Agency Profit Settlement Requests & Approvals"
           description="Track submitted payment requests, admin approval status, and settlement history"
-          data={settlements as any}
+          data={displaySettlements as any}
           columns={settlementColumns}
           searchPlaceholder="Search settlements..."
         />
