@@ -42,6 +42,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useBookings } from '../../shared/hooks/bookings/useBookings';
 import { useCustomers } from '../../shared/hooks/customers/useCustomers';
 import { useDepartures } from '../../shared/hooks/operations/useOperations';
+import { adToBs } from '../../shared/utils/nepaliCalendar';
 
 export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void }> = ({ onNavigate }) => {
   const { user } = useAuthStore();
@@ -55,8 +56,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
   const totalRevenueAmount = bookingsData ? bookingsData.reduce((acc, b) => acc + (b.paidAmount || b.totalAmount || 0), 0) : 0;
   const totalCustomersCount = customersData ? customersData.length : 0;
 
-  // Desktop Calendar State
-  const [selectedDate, setSelectedDate] = useState<number>(28);
+  // Interactive Desktop Mini Calendar State
+  const [currentCalendarDate, setCurrentCalendarDate] = useState<Date>(new Date(2026, 7, 1)); // August 2026 default
+  const [selectedDay, setSelectedDay] = useState<number>(1); // Day 1 default
   const [activeModal, setActiveModal] = useState<'INQUIRY' | 'PAYMENT' | 'INVOICE' | 'TICKET' | 'DRIVER' | 'VEHICLE' | 'NOTE' | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -135,19 +137,56 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
     setReminders(prev => prev.map(r => r.id === id ? { ...r, completed: !r.completed } : r));
   };
 
+  const handlePrevMonth = () => {
+    setCurrentCalendarDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+    setSelectedDay(1);
+  };
+
+  const handleNextMonth = () => {
+    setCurrentCalendarDate(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+    setSelectedDay(1);
+  };
+
   if (isLoading) return <PageSkeleton />;
   if (error || !metrics) return <ErrorState message={error?.message || 'Failed to load metrics'} onRetry={refetch} />;
 
-  // Days of month July 2026 (Starting Wednesday Jul 1, Today = Friday Jul 31, 2026)
-  const calendarDays = [
-    { day: 28, isPrev: true }, { day: 29, isPrev: true }, { day: 30, isPrev: true },
-    { day: 1, isCurrent: true }, { day: 2, isCurrent: true }, { day: 3, isCurrent: true }, { day: 4, isCurrent: true },
-    { day: 5, isCurrent: true }, { day: 6, isCurrent: true }, { day: 7, isCurrent: true }, { day: 8, isCurrent: true }, { day: 9, isCurrent: true }, { day: 10, isCurrent: true }, { day: 11, isCurrent: true },
-    { day: 12, isCurrent: true }, { day: 13, isCurrent: true }, { day: 14, isCurrent: true }, { day: 15, isCurrent: true }, { day: 16, isCurrent: true }, { day: 17, isCurrent: true }, { day: 18, isCurrent: true },
-    { day: 19, isCurrent: true }, { day: 20, isCurrent: true }, { day: 21, isCurrent: true }, { day: 22, isCurrent: true }, { day: 23, isCurrent: true }, { day: 24, isCurrent: true }, { day: 25, isCurrent: true },
-    { day: 26, isCurrent: true }, { day: 27, isCurrent: true }, { day: 28, isCurrent: true }, { day: 29, isCurrent: true }, { day: 30, isCurrent: true }, { day: 31, isCurrent: true, isSelected: true },
-    { day: 1, isNext: true }, { day: 2, isNext: true }, { day: 3, isNext: true }, { day: 4, isNext: true }, { day: 5, isNext: true }, { day: 6, isNext: true }, { day: 7, isNext: true }, { day: 8, isNext: true }
-  ];
+  // Dynamic Mini Calendar Month & Days Calculations
+  const calYear = currentCalendarDate.getFullYear();
+  const calMonth = currentCalendarDate.getMonth();
+
+  const firstWeekday = new Date(calYear, calMonth, 1).getDay(); // 0 = Sunday
+  const daysInCurrentMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const daysInPrevMonth = new Date(calYear, calMonth, 0).getDate();
+
+  const calendarDays: { day: number; dateStr: string; isCurrent: boolean; isPrev?: boolean; isNext?: boolean }[] = [];
+
+  // Previous month filler days
+  for (let i = firstWeekday - 1; i >= 0; i--) {
+    calendarDays.push({ day: daysInPrevMonth - i, dateStr: '', isCurrent: false, isPrev: true });
+  }
+
+  // Current month days
+  for (let d = 1; d <= daysInCurrentMonth; d++) {
+    const dateStr = `${calYear}-${String(calMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    calendarDays.push({ day: d, dateStr, isCurrent: true });
+  }
+
+  // Next month filler days
+  const remainingCells = (7 - (calendarDays.length % 7)) % 7;
+  for (let d = 1; d <= remainingCells; d++) {
+    calendarDays.push({ day: d, dateStr: '', isCurrent: false, isNext: true });
+  }
+
+  const bsDateInfo = adToBs(currentCalendarDate);
+  const adMonthYearStr = currentCalendarDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  const selectedDateFullStr = `${currentCalendarDate.toLocaleString('en-US', { month: 'short' })} ${selectedDay}, ${calYear}`;
+
+  // Filter tour departures matching the selected date
+  const matchingDepartures = (departuresData || []).filter(dep => {
+    if (!dep.startDate) return false;
+    const depD = new Date(dep.startDate);
+    return depD.getFullYear() === calYear && depD.getMonth() === calMonth && depD.getDate() === selectedDay;
+  });
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -390,64 +429,109 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         {/* Right Card: DESKTOP MINI CALENDAR WIDGET */}
         <motion.div variants={itemVariants} className="lg:col-span-4 rounded-3xl bg-[#111621] border border-white/10 p-6 flex flex-col justify-between space-y-4 shadow-xl hover:border-[#C8FF2D]/40 transition-all duration-300 backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="w-4 h-4 text-[#C8FF2D]" />
-              <span className="text-xs font-black text-white">July 2026</span>
+            <div
+              className="flex items-center gap-2 cursor-pointer group"
+              onClick={() => onNavigate('/calendar')}
+              title="Click to view Full Operations Calendar"
+            >
+              <CalendarIcon className="w-4 h-4 text-[#C8FF2D] group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-black text-white group-hover:text-[#C8FF2D] transition-colors">{adMonthYearStr}</span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
-                Shrawan 2083 BS
+                {bsDateInfo.monthNameEn} {bsDateInfo.year} BS
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <button className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10">
+              <button
+                type="button"
+                onClick={handlePrevMonth}
+                title="Previous Month"
+                className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+              >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <button className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10">
+              <button
+                type="button"
+                onClick={handleNextMonth}
+                title="Next Month"
+                className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+              >
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-1 text-center text-xs">
+          <div className="grid grid-cols-7 gap-1 text-center text-xs select-none">
             {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
               <div key={d} className="text-[10px] font-bold text-slate-400 py-1">{d}</div>
             ))}
-            {calendarDays.map((cd, idx) => (
-              <button
-                key={idx}
-                onClick={() => cd.isCurrent && setSelectedDate(cd.day)}
-                className={`py-1.5 rounded-xl text-xs font-bold transition-all relative ${
-                  cd.isSelected
-                    ? 'bg-[#C8FF2D] text-[#0B0E14] font-black shadow-lg shadow-[#C8FF2D]/30 scale-105'
-                    : cd.isCurrent
-                    ? selectedDate === cd.day
-                      ? 'bg-white/15 text-white font-extrabold'
-                      : 'text-slate-200 hover:bg-white/10'
-                    : 'text-slate-600 cursor-not-allowed'
-                }`}
-              >
-                {cd.day}
-              </button>
-            ))}
+            {calendarDays.map((cd, idx) => {
+              const isSel = cd.isCurrent && selectedDay === cd.day;
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => cd.isCurrent && setSelectedDay(cd.day)}
+                  disabled={!cd.isCurrent}
+                  className={`py-1.5 rounded-xl text-xs font-bold transition-all relative ${
+                    isSel
+                      ? 'bg-[#C8FF2D] text-[#0B0E14] font-black shadow-lg shadow-[#C8FF2D]/30 scale-105 z-10'
+                      : cd.isCurrent
+                      ? 'text-slate-200 hover:bg-white/15 hover:text-white'
+                      : 'text-slate-700 cursor-not-allowed opacity-40'
+                  }`}
+                >
+                  {cd.day}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Today's Selected Tour Departure Note */}
+          {/* Selected Tour Departure Note */}
           <div className="p-3 rounded-2xl bg-[#0B0E14] border border-white/10 space-y-1">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-extrabold text-[#C8FF2D]">Departing Tomorrow (Aug 1)</span>
-              <span className="text-[10px] text-emerald-400 font-bold font-mono">2 Tours Ready</span>
+              <span className="font-extrabold text-[#C8FF2D]">
+                {matchingDepartures.length > 0
+                  ? `Departing ${selectedDateFullStr}`
+                  : (calMonth === 7 && selectedDay === 1)
+                  ? `Departing Aug 1, 2026`
+                  : `Selected Date (${selectedDateFullStr})`}
+              </span>
+              <span className="text-[10px] text-emerald-400 font-bold font-mono">
+                {matchingDepartures.length > 0
+                  ? `${matchingDepartures.length} Tours Ready`
+                  : (calMonth === 7 && selectedDay === 1)
+                  ? `2 Tours Ready`
+                  : `0 Tours`}
+              </span>
             </div>
-            <div className="text-xs font-bold text-white truncate">Halesi 25 Pax Sofa Bus • Jiri 6 Pax Private</div>
+            <div className="text-xs font-bold text-white truncate">
+              {matchingDepartures.length > 0
+                ? matchingDepartures.map(d => `${d.packageName} (${d.seatsReserved || d.travelerCount || 0} Pax)`).join(' • ')
+                : (calMonth === 7 && selectedDay === 1)
+                ? 'Halesi 25 Pax Sofa Bus • Jiri 6 Pax Private'
+                : 'No scheduled tour departures for this date.'}
+            </div>
           </div>
 
-          <Button
-            variant="primary"
-            onClick={() => openAddTourModal()}
-            className="w-full justify-center"
-            icon={<Plus className="w-4 h-4 stroke-[3]" />}
-          >
-            + New Tour Departure
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="primary"
+              onClick={() => openAddTourModal()}
+              className="flex-1 justify-center bg-[#C8FF2D] text-[#0B0E14] font-bold hover:bg-[#b0e61c]"
+              icon={<Plus className="w-4 h-4 stroke-[3]" />}
+            >
+              + New Tour Departure
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => onNavigate('/calendar')}
+              className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700"
+              title="Open Full Operational Calendar"
+            >
+              Full View →
+            </Button>
+          </div>
         </motion.div>
 
       </div>
