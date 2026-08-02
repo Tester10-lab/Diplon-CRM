@@ -9,7 +9,7 @@ import { Input } from '../components/ui/Input';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from '../features/fleet/scorpioStore';
-import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone } from 'lucide-react';
+import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2 } from 'lucide-react';
 
 export const FleetPage: React.FC = () => {
   const { data: vehicles, isLoading, error } = useFleet();
@@ -109,18 +109,36 @@ export const FleetPage: React.FC = () => {
   );
 
   const defaultDrivers = [
-    'Chandra Driver',
-    'Sofa Bus Driver',
-    'Pradip Bhai',
-    'Surendra Bhai',
-    'Aakash Bhujel',
     'Suman Dai (9851090895)',
-    'Shankar Bhai',
-    'Manish Bhai',
-    'Ramesh Dai (Dekohali)',
-    'Sabin Dai'
+    'Pradip Bhai (9841000001)',
+    'Ramesh Dai (9851000002)',
+    'Sabin Dai (9860000003)',
+    'Surendra Bhai (9841234567)',
+    'Aakash Bhujel (9801122334)',
+    'Shankar Bhai (9812345678)'
   ];
-  const driverOptions = Array.from(new Set([...defaultDrivers, ...(driverList || []).map(d => d.name)]));
+  const driverOptions = Array.from(
+    new Set([
+      'Unassigned Driver',
+      ...(driverList || []).map(d => d.phone ? `${d.name} (${d.phone})` : d.name),
+      ...defaultDrivers
+    ])
+  );
+
+  const getDriverPhoneNumber = (driverName: string): string => {
+    if (!driverName || driverName === 'Unassigned Driver') return '';
+    const phoneMatch = driverName.match(/\b(9\d{9})\b/);
+    if (phoneMatch) return phoneMatch[0];
+
+    const found = (driverList || []).find(
+      d => d.name && driverName.toLowerCase().includes(d.name.toLowerCase())
+    );
+    if (found && found.phone) {
+      const cleaned = found.phone.replace(/\D/g, '');
+      if (cleaned.length >= 9) return cleaned;
+    }
+    return '';
+  };
 
   // Filtered Vehicle List
   const tourList = Array.from(new Set(scorpioData.map(s => s.tour)));
@@ -224,11 +242,27 @@ export const FleetPage: React.FC = () => {
     showToast(`✅ Vehicle Unit #${formSN} (${formVehicleType} - Driver ${formDriver || 'Assigned'}) saved!`);
   };
 
-  const handleDriverChange = (id: string, newDriver: string) => {
-    const updated = scorpioData.map(item => item.id === id ? { ...item, driver: newDriver } : item);
+  const handleDriverChangeBySN = (sn: number, newDriver: string) => {
+    const updated = scorpioData.map(item => item.sn === sn ? { ...item, driver: newDriver } : item);
     setScorpioData(updated);
     saveScorpioAssignments(updated);
-    showToast(`✅ Updated driver to ${newDriver}`);
+    showToast(`✅ Assigned driver for Vehicle #${sn} to "${newDriver}"`);
+  };
+
+  const handleDeleteVehicleUnit = (sn: number) => {
+    if (window.confirm(`Are you sure you want to delete Vehicle Unit #${sn}?`)) {
+      const updated = scorpioData.filter(item => item.sn !== sn);
+      setScorpioData(updated);
+      saveScorpioAssignments(updated);
+      showToast(`🗑️ Vehicle Unit #${sn} deleted!`);
+    }
+  };
+
+  const handleDeleteGuestAssignment = (id: string, name: string) => {
+    const updated = scorpioData.filter(item => item.id !== id);
+    setScorpioData(updated);
+    saveScorpioAssignments(updated);
+    showToast(`🗑️ Removed guest assignment for ${name}`);
   };
 
   const handleToggleJeepPrivate = (sn: number) => {
@@ -294,7 +328,23 @@ Travel Date: ${travelDate}
 Please report to Kathmandu Departure Spot by 06:00 AM!`;
 
     navigator.clipboard.writeText(text);
-    showToast(`📱 Driver Dispatch Order for Vehicle #${sn} (${mainDriver}) copied for WhatsApp!`);
+
+    let rawPhone = getDriverPhoneNumber(mainDriver);
+    if (!rawPhone) {
+      const inputPhone = prompt(`Enter WhatsApp Phone Number for Driver "${mainDriver}":`);
+      if (inputPhone) {
+        rawPhone = inputPhone.replace(/\D/g, '');
+      }
+    }
+
+    if (rawPhone) {
+      const formattedPhone = rawPhone.startsWith('977') ? rawPhone : `977${rawPhone.replace(/^0+/, '')}`;
+      const waUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(text)}`;
+      window.open(waUrl, '_blank');
+      showToast(`💬 Opening WhatsApp for Driver (${mainDriver})!`);
+    } else {
+      showToast(`📱 Dispatch order copied for Vehicle #${sn}!`);
+    }
   };
 
   // Fleet Catalog Columns
@@ -584,10 +634,19 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         <button
                           onClick={() => handleSendDriverDispatchSMS(sn, items)}
                           className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition-all text-xs font-bold flex items-center gap-1"
-                          title="Copy Driver WhatsApp Dispatch Message"
+                          title="Open WhatsApp Driver Dispatch Message"
                         >
                           <Send className="w-3.5 h-3.5" />
                           <span>Dispatch</span>
+                        </button>
+
+                        {/* Delete Vehicle Unit Button */}
+                        <button
+                          onClick={() => handleDeleteVehicleUnit(sn)}
+                          className="p-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-all text-xs font-bold"
+                          title={`Delete Vehicle Unit #${sn}`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -602,11 +661,11 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                         <span className="font-extrabold text-sm text-indigo-300 truncate">{mainDriver}</span>
                         <select
                           value={mainDriver}
-                          onChange={(e) => handleDriverChange(items[0]?.id, e.target.value)}
+                          onChange={(e) => handleDriverChangeBySN(sn, e.target.value)}
                           className="bg-slate-900 text-xs border border-slate-800 rounded-lg px-2 py-1 text-slate-200 focus:outline-none"
                         >
                           <option value={mainDriver}>{mainDriver}</option>
-                          {driverOptions.map(drv => (
+                          {driverOptions.filter(drv => drv !== mainDriver).map(drv => (
                             <option key={drv} value={drv}>{drv}</option>
                           ))}
                         </select>
@@ -642,9 +701,18 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                             <span className="font-extrabold text-white text-xs flex items-center gap-1.5">
                               {guest.name}
                             </span>
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
-                              {guest.pax} Pax
-                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/20 text-indigo-300 font-mono">
+                                {guest.pax} Pax
+                              </span>
+                              <button
+                                onClick={() => handleDeleteGuestAssignment(guest.id, guest.name)}
+                                className="text-slate-500 hover:text-rose-400 p-0.5 transition-colors"
+                                title={`Delete ${guest.name} assignment`}
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
                           </div>
 
                           <div className="flex items-center justify-between text-[11px] text-slate-400">
@@ -707,12 +775,20 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                             </span>
                           )}
                         </td>
-                        <td className="p-3.5 pr-5 text-right">
+                        <td className="p-3.5 pr-5 text-right flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => handleSendDriverDispatchSMS(item.sn, [item])}
-                            className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px]"
+                            className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px] flex items-center gap-1"
                           >
+                            <Send className="w-3 h-3" />
                             Dispatch
+                          </button>
+                          <button
+                            onClick={() => handleDeleteGuestAssignment(item.id, item.name)}
+                            className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 font-bold text-[11px]"
+                            title="Delete assignment"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </td>
                       </tr>
