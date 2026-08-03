@@ -123,7 +123,7 @@ export const PackagesPage: React.FC = () => {
     if (!editingPackage || !editName.trim()) return;
 
     // Update in local storage
-    const STORAGE_KEY = 'diplon_packages_catalog_v3';
+    const STORAGE_KEY = 'diplon_packages_catalog_v5';
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       const currentList: TourPackage[] = saved ? JSON.parse(saved) : packages;
