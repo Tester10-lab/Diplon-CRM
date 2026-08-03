@@ -123,7 +123,7 @@ export const PackagesPage: React.FC = () => {
     if (!editingPackage || !editName.trim()) return;
 
     // Update in local storage
-    const STORAGE_KEY = 'diplon_packages_catalog_v5';
+    const STORAGE_KEY = 'diplon_packages_catalog_v6';
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       const currentList: TourPackage[] = saved ? JSON.parse(saved) : packages;
@@ -185,9 +185,14 @@ export const PackagesPage: React.FC = () => {
       header: 'PACKAGE NAME & DESCRIPTION',
       accessor: p => (
         <div className="space-y-1">
-          <div className="font-extrabold text-white text-sm flex items-center gap-2">
+          <div className="font-extrabold text-white text-sm flex items-center gap-2 flex-wrap">
             <Compass className="w-4 h-4 text-amber-400 shrink-0" />
             <span>{p.name}</span>
+            {p.isPrivate && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                🔒 Private ({p.agencyName || 'Agency Only'})
+              </span>
+            )}
           </div>
           {p.description && (
             <div className="text-xs text-slate-300 font-medium line-clamp-1">{p.description}</div>

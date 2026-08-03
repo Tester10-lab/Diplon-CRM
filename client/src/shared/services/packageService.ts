@@ -2,7 +2,7 @@ import { TourPackage } from '../../types';
 import { apiClient } from './apiClient';
 import { mockPackages } from '../mocks/mockPackages';
 
-const PACKAGES_STORAGE_KEY = 'diplon_packages_catalog_v5';
+const PACKAGES_STORAGE_KEY = 'diplon_packages_catalog_v6';
 
 function getStoredPackages(): TourPackage[] {
   try {
@@ -10,6 +10,7 @@ function getStoredPackages(): TourPackage[] {
     localStorage.removeItem('diplon_packages_catalog_v2');
     localStorage.removeItem('diplon_packages_catalog_v3');
     localStorage.removeItem('diplon_packages_catalog_v4');
+    localStorage.removeItem('diplon_packages_catalog_v5');
     const saved = localStorage.getItem(PACKAGES_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);

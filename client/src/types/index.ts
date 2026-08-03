@@ -60,6 +60,8 @@ export interface TourPackage {
   description?: string;
   itinerary?: string;
   createdAt?: string;
+  isPrivate?: boolean;
+  agencyName?: string;
 }
 
 export interface Booking {
