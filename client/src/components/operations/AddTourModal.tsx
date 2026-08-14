@@ -15,8 +15,10 @@ export interface AddTourModalProps {
 }
 
 export const VEHICLE_TYPES = [
-  { value: 'Bus', label: 'Bus (Tourist Deluxe)' },
-  { value: 'EV', label: 'EV (Electric Vehicle)' },
+  { value: 'Scorpio', label: 'Scorpio' },
+  { value: 'EV Van', label: 'EV Van' },
+  { value: 'Bus', label: 'Bus' },
+  { value: '28-Seater Sofa Bus', label: '28-Seater Sofa Bus' },
   { value: 'Van', label: 'Van (Passenger / HiAce)' },
   { value: 'Jeep', label: 'Jeep (4WD Scorpio)' },
   { value: 'Trek', label: 'Overland Trek' },

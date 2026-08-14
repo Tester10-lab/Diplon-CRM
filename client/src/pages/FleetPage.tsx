@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useFleet, useDrivers, useDepartures } from '../shared/hooks/operations/useOperations';
 import { useBookings } from '../shared/hooks/bookings/useBookings';
+import { usePackages } from '../shared/hooks/packages/usePackages';
 import { DataTable, Column } from '../components/tables/DataTable';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
@@ -108,6 +109,7 @@ export const FleetPage: React.FC = () => {
   const { data: driverList } = useDrivers();
   const { data: departures } = useDepartures();
   const { data: bookings } = useBookings();
+  const { data: packages } = usePackages();
 
   const cleanDriverName = (driverName: string) => {
     if (!driverName) return 'Unassigned';
@@ -137,8 +139,11 @@ export const FleetPage: React.FC = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Vehicle Presets
+  // Vehicle Presets with Scorpio, EV Van, Bus as standard options
   const vehiclePresets = [
+    { type: 'Scorpio', capacity: 7 },
+    { type: 'EV Van', capacity: 11 },
+    { type: 'Bus', capacity: 28 },
     { type: 'Scorpio 4WD Jeep', capacity: 7 },
     { type: '28-Seater Sofa Bus', capacity: 28 },
     { type: 'Toyota Coaster Bus', capacity: 22 },
@@ -147,18 +152,71 @@ export const FleetPage: React.FC = () => {
     { type: 'Sedan / Car', capacity: 4 }
   ];
 
+  // Dynamic Lists for Dropdowns - includes all active tenant tour packages
+  const tourOptions = useMemo(() => {
+    const options = new Set<string>();
+    
+    // 1. All active packages from package catalog (scoped by tenant)
+    if (packages && Array.isArray(packages)) {
+      packages.forEach(p => {
+        if (p.name && p.name.trim()) options.add(p.name.trim());
+      });
+    }
+
+    // 2. Scheduled tour departures
+    if (departures && Array.isArray(departures)) {
+      departures.forEach(d => {
+        if (d.packageName && d.packageName.trim()) options.add(d.packageName.trim());
+      });
+    }
+
+    // 3. Guest bookings
+    if (bookings && Array.isArray(bookings)) {
+      bookings.forEach(b => {
+        if (b.packageName && b.packageName.trim()) options.add(b.packageName.trim());
+      });
+    }
+
+    // 4. Existing fleet roster assignments
+    if (scorpioData && Array.isArray(scorpioData)) {
+      scorpioData.forEach(s => {
+        if (s.tour && s.tour.trim()) options.add(s.tour.trim());
+      });
+    }
+
+    // 5. Fallback defaults if empty
+    if (options.size === 0) {
+      [
+        'Halesi Tour Package (1N/2D)',
+        'Jiri Tour (1N/2D)',
+        'Upper Mustang Package (4N/5D)',
+        'Muktinath Tour (2N/3D)',
+        'Pokhara & Ghandruk Tour'
+      ].forEach(opt => options.add(opt));
+    }
+
+    return Array.from(options);
+  }, [packages, departures, bookings, scorpioData]);
+
   // Form State for + Assign Vehicle
-  const [formTour, setFormTour] = useState('Halesi Tour Package (1N/2D)');
+  const [formTour, setFormTour] = useState<string>('');
   const [formDate, setFormDate] = useState('2026-08-01');
   const [formSN, setFormSN] = useState<number>(1);
   const [formDriver, setFormDriver] = useState('');
-  const [formVehicleType, setFormVehicleType] = useState('Scorpio 4WD Jeep');
+  const [formVehicleType, setFormVehicleType] = useState('Scorpio');
   const [formVehicleCapacity, setFormVehicleCapacity] = useState<number>(7);
   const [formPax, setFormPax] = useState<number>(7);
   const [formRooms, setFormRooms] = useState('2');
   const [formCustomerName, setFormCustomerName] = useState('');
   const [formContactNumber, setFormContactNumber] = useState('');
   const [formIsPrivate, setFormIsPrivate] = useState<boolean>(false);
+
+  // Synchronize initial formTour when tourOptions load
+  useEffect(() => {
+    if (!formTour && tourOptions.length > 0) {
+      setFormTour(tourOptions[0]);
+    }
+  }, [tourOptions, formTour]);
 
   // Guest Searchable Type-and-Select State
   const [guestSearchQuery, setGuestSearchQuery] = useState('');
@@ -171,16 +229,18 @@ export const FleetPage: React.FC = () => {
     
     let list = bookings;
     if (filterOnlySelectedTourGuests && formTour) {
-      const tourLower = formTour.toLowerCase();
-      const tourSpecific = bookings.filter(b => 
-        b.packageName && (
-          b.packageName.toLowerCase().includes(tourLower) ||
-          tourLower.includes(b.packageName.toLowerCase()) ||
-          (tourLower.includes('halesi') && b.packageName.toLowerCase().includes('halesi')) ||
-          (tourLower.includes('jiri') && b.packageName.toLowerCase().includes('jiri')) ||
-          (tourLower.includes('mustang') && b.packageName.toLowerCase().includes('mustang'))
-        )
-      );
+      const tourLower = formTour.toLowerCase().trim();
+      const tourWords = tourLower.split(/\s+/).filter(w => w.length > 2 && !['tour', 'package', '1n/2d', '2n/3d', '4n/5d', '3n/4d'].includes(w));
+      
+      const tourSpecific = bookings.filter(b => {
+        if (!b.packageName) return false;
+        const bLower = b.packageName.toLowerCase().trim();
+        return (
+          bLower.includes(tourLower) ||
+          tourLower.includes(bLower) ||
+          tourWords.some(word => bLower.includes(word))
+        );
+      });
 
       if (tourSpecific.length > 0) {
         list = tourSpecific;
@@ -188,7 +248,7 @@ export const FleetPage: React.FC = () => {
     }
 
     if (!guestSearchQuery.trim()) return list;
-    const q = guestSearchQuery.toLowerCase();
+    const q = guestSearchQuery.toLowerCase().trim();
     return list.filter(b => 
       (b.customerName && b.customerName.toLowerCase().includes(q)) ||
       (b.contactPhone && b.contactPhone.includes(q)) ||
@@ -205,17 +265,6 @@ export const FleetPage: React.FC = () => {
   if (isLoading) return <PageSkeleton />;
   if (error) return <ErrorState message={error.message} onRetry={() => {}} />;
 
-  // Dynamic Lists for Dropdowns
-  const tourOptions = Array.from(
-    new Set([
-      'Halesi Tour Package (1N/2D)',
-      'Jiri Tour (1N/2D)',
-      'Upper Mustang Package (4N/5D)',
-      'Muktinath Tour (2N/3D)',
-      'Pokhara & Ghandruk Tour',
-      ...(departures || []).map(d => d.packageName)
-    ])
-  );
 
   const driverOptions = Array.from(
     new Set([
@@ -687,7 +736,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 const vehType = items[0]?.vehicleType || 'Scorpio 4WD Jeep';
                 const occupancyPercent = Math.min(100, Math.round((totalJeepPax / capacity) * 100));
                 const mainDriver = items[0]?.driver || 'Unassigned';
-                const tourName = items[0]?.tour || 'Halesi Tour Package';
+                const tourName = items[0]?.tour || 'Tour Package';
                 const travelDate = items[0]?.date || '2026-08-01';
                 const isPrivateJeep = items.some(it => it.isPrivate);
 
@@ -1038,7 +1087,9 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     }`}
                   >
                     <Filter className="w-3 h-3" />
-                    {filterOnlySelectedTourGuests ? `Filter: ${formTour.split(' ')[0]} Only` : 'Show All Guests'}
+                    {filterOnlySelectedTourGuests 
+                      ? `Filter: ${formTour ? (formTour.length > 20 ? formTour.slice(0, 20) + '...' : formTour) : 'Selected Tour'} Only` 
+                      : 'Show All Guests'}
                   </button>
                 </div>
 
@@ -1052,7 +1103,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                       setGuestSearchQuery(e.target.value);
                       setIsGuestDropdownOpen(true);
                     }}
-                    placeholder={`Type guest name for ${formTour.split(' ')[0]}...`}
+                    placeholder={`Type guest name for ${formTour || 'selected tour'}...`}
                     className="w-full bg-slate-900 text-amber-300 font-bold border border-indigo-500/40 rounded-xl pl-9 pr-8 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400"
                   />
                   {guestSearchQuery && (

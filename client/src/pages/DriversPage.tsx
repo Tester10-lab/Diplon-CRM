@@ -266,6 +266,9 @@ export const DriversPage: React.FC = () => {
                 onChange={e => setNewVehicleType(e.target.value)}
                 className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500"
               >
+                <option value="Scorpio">Scorpio (7 Seats)</option>
+                <option value="EV Van">EV Van (11 Seats)</option>
+                <option value="Bus">Bus (28-35 Seats)</option>
                 <option value="Scorpio 4WD Jeep (7 Seats)">Scorpio 4WD Jeep (7 Seats)</option>
                 <option value="28-Seater Sofa Bus (28 Seats)">28-Seater Sofa Bus (28 Seats)</option>
                 <option value="Toyota Coaster Bus (22 Seats)">Toyota Coaster Bus (22 Seats)</option>
