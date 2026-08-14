@@ -1,8 +1,16 @@
 import { Booking } from '../../types';
 import { apiClient } from './apiClient';
 import { mockBookings } from '../mocks/mockBookings';
+import { operationsService } from './operationsService';
 
 const BOOKINGS_STORAGE_KEY = 'diplon_bookings_pipeline_v7';
+
+function notifyDataChange() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('diplon_data_changed'));
+    window.dispatchEvent(new Event('storage'));
+  }
+}
 
 function getStoredBookings(): Booking[] {
   try {
@@ -30,6 +38,7 @@ function getStoredBookings(): Booking[] {
 function saveStoredBookings(bookings: Booking[]) {
   try {
     localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookings));
+    notifyDataChange();
   } catch (e) {
     console.error('Failed to save bookings to localStorage:', e);
   }
@@ -66,11 +75,37 @@ export const bookingService = {
       remainingAmount: booking.remainingAmount,
       paymentCollectionNote: booking.paymentCollectionNote,
       groupType: booking.groupType,
-      roomDetails: booking.roomDetails
+      roomDetails: booking.roomDetails,
+      agencyName: booking.agencyName,
+      companyId: booking.companyId,
+      bookingStatus: booking.bookingStatus || 'GROUPED'
     };
 
     const updated = [newBooking, ...current];
     saveStoredBookings(updated);
+
+    // Sync seats reserved on matching operation departure
+    try {
+      const deps = await operationsService.getDepartures();
+      const matchPkg = (newBooking.packageName || '').toLowerCase();
+      const matchDate = newBooking.departureDate;
+      const depIndex = deps.findIndex(d => {
+        const dPkg = d.packageName.toLowerCase();
+        return (dPkg.includes(matchPkg) || matchPkg.includes(dPkg)) && d.startDate === matchDate;
+      });
+      if (depIndex !== -1) {
+        const dep = deps[depIndex];
+        const newReserved = (dep.seatsReserved || 0) + (newBooking.seatsReserved || 1);
+        const newAvail = Math.max(0, dep.seatsTotal - newReserved);
+        await operationsService.updateDeparture(dep._id, {
+          seatsReserved: newReserved,
+          seatsAvailable: newAvail,
+          travelerCount: newReserved
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to sync booking seats with departure:', e);
+    }
 
     try {
       await apiClient.post<Booking>('/bookings', newBooking, newBooking);
@@ -78,6 +113,7 @@ export const bookingService = {
       console.warn('Backend offline or failed, using local store for booking creation', e);
     }
 
+    notifyDataChange();
     return newBooking;
   },
 
@@ -95,13 +131,18 @@ export const bookingService = {
     saveStoredBookings(current);
 
     try {
-      return await apiClient.put<Booking>(`/bookings/${id}`, booking, updatedBooking);
+      const res = await apiClient.put<Booking>(`/bookings/${id}`, booking, updatedBooking);
+      notifyDataChange();
+      return res;
     } catch (e) {
+      notifyDataChange();
       return updatedBooking;
     }
   },
 
   async cancelBooking(id: string): Promise<Booking> {
-    return this.updateBooking(id, { status: 'CANCELLED' });
+    const res = await this.updateBooking(id, { status: 'CANCELLED' });
+    notifyDataChange();
+    return res;
   }
 };

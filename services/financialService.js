@@ -212,6 +212,13 @@ async function paySupplierBill(payableId, paymentData, user) {
       throw err;
     }
 
+    if (user && user.companyId && payable.companyId && payable.companyId.toString() !== user.companyId.toString()) {
+      const err = new Error('Forbidden: Payable does not belong to your company');
+      err.isAppError = true;
+      err.statusCode = 403;
+      throw err;
+    }
+
     if (paymentData.amount > payable.balanceDue) {
       const err = new Error(`Payment amount (${paymentData.amount}) exceeds remaining balance due (${payable.balanceDue})`);
       err.isAppError = true;

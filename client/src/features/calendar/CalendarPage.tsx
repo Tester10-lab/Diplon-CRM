@@ -267,9 +267,9 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            {conflicts.map(c => (
+            {conflicts.map((c, idx) => (
               <div
-                key={c.id}
+                key={c.id || idx}
                 onClick={() => handleConflictClick(c)}
                 className="p-3 rounded-2xl bg-[#0B0E14] border border-[#EF4444]/40 hover:border-[#EF4444] transition-all cursor-pointer flex items-center justify-between text-xs"
               >

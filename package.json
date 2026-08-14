@@ -7,6 +7,7 @@
     "start": "node server.js",
     "build": "node -e \"console.log('Backend API build complete.')\"",
     "render-build": "npm install",
+    "bootstrap": "node bootstrap-admin.js",
     "test": "node run-all-tests.js"
   },
   "keywords": [],
@@ -19,7 +20,6 @@
     "express": "^4.22.2",
     "express-async-errors": "^3.1.1",
     "mongoose": "^9.7.4",
-    "mongoose-encryption": "^2.1.2",
     "zod": "^4.4.3"
   },
   "devDependencies": {

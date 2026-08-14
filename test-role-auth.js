@@ -1,3 +1,4 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryReplSet } = require('mongodb-memory-server');
@@ -242,6 +243,138 @@ async function runTests() {
     console.log('✅ TEST 9b PASSED: DRIVER role blocked from commission payouts (403 FORBIDDEN)');
   } else {
     throw new Error(`TEST 9b FAILED: Expected 403, got ${driverPayoutRes.status}`);
+  }
+
+  console.log('--- TEST 10: Unauthenticated Requests (No Auth Header, No Mock Header) Rejected (401) Outside Test ---');
+  const prevEnv10 = process.env.NODE_ENV;
+  try {
+    process.env.NODE_ENV = 'production';
+    // 10a: /api/auth/me
+    const unauthMeRes = await request(app).get('/api/auth/me');
+    if (unauthMeRes.status !== 401 || unauthMeRes.body.error?.code !== 'UNAUTHORIZED') {
+      throw new Error(`TEST 10a FAILED: Expected 401 UNAUTHORIZED on /api/auth/me, got ${unauthMeRes.status}`);
+    }
+
+    // 10b: /api/packages (POST)
+    const unauthPkgRes = await request(app).post('/api/packages').send({ name: 'Hack Package', basePricing: 100 });
+    if (unauthPkgRes.status !== 401 || unauthPkgRes.body.error?.code !== 'UNAUTHORIZED') {
+      throw new Error(`TEST 10b FAILED: Expected 401 UNAUTHORIZED on /api/packages, got ${unauthPkgRes.status}`);
+    }
+
+    // 10c: /api/leads (GET and POST)
+    const unauthLeadGetRes = await request(app).get('/api/leads');
+    if (unauthLeadGetRes.status !== 401 || unauthLeadGetRes.body.error?.code !== 'UNAUTHORIZED') {
+      throw new Error(`TEST 10c FAILED: Expected 401 UNAUTHORIZED on /api/leads, got ${unauthLeadGetRes.status}`);
+    }
+
+    // 10d: /api/finance/commissions/payout
+    const unauthPayoutRes = await request(app).post('/api/finance/commissions/payout').send({ payoutAmount: 5000 });
+    if (unauthPayoutRes.status !== 401 || unauthPayoutRes.body.error?.code !== 'UNAUTHORIZED') {
+      throw new Error(`TEST 10d FAILED: Expected 401 UNAUTHORIZED on finance payout, got ${unauthPayoutRes.status}`);
+    }
+
+    // 10e: /api/operations/dashboard
+    const unauthOpsRes = await request(app).get('/api/operations/dashboard');
+    if (unauthOpsRes.status !== 401 || unauthOpsRes.body.error?.code !== 'UNAUTHORIZED') {
+      throw new Error(`TEST 10e FAILED: Expected 401 UNAUTHORIZED on operations dashboard, got ${unauthOpsRes.status}`);
+    }
+  } finally {
+    process.env.NODE_ENV = prevEnv10;
+  }
+  console.log('✅ TEST 10 PASSED: All unauthenticated requests rejected with 401 UNAUTHORIZED');
+
+  console.log('--- TEST 11: Invalid / Expired Bearer Token Rejected (401) ---');
+  const invalidTokenRes = await request(app)
+    .get('/api/auth/me')
+    .set('Authorization', 'Bearer invalid.token.payload');
+  if (invalidTokenRes.status === 401 && invalidTokenRes.body.error?.code === 'UNAUTHORIZED') {
+    console.log('✅ TEST 11 PASSED: Malformed/Invalid token rejected with 401 UNAUTHORIZED');
+  } else {
+    throw new Error(`TEST 11 FAILED: Expected 401 UNAUTHORIZED, got ${invalidTokenRes.status}`);
+  }
+
+  console.log('--- TEST 12: Production Mode Disallows Mock Headers ---');
+  const prevEnv = process.env.NODE_ENV;
+  try {
+    process.env.NODE_ENV = 'production';
+    const prodMockRes = await request(app)
+      .get('/api/operations/dashboard')
+      .set('x-mock-role', 'SUPER_ADMIN');
+    if (prodMockRes.status === 401 && prodMockRes.body.error?.code === 'UNAUTHORIZED') {
+      console.log('✅ TEST 12 PASSED: Mock headers ignored and rejected with 401 in production mode');
+    } else {
+      throw new Error(`TEST 12 FAILED: Expected 401 in production, got ${prodMockRes.status}`);
+    }
+  } finally {
+    process.env.NODE_ENV = prevEnv;
+  }
+
+  console.log('--- TEST 13: JWT_SECRET Required Outside Test Environment ---');
+  const savedNodeEnv = process.env.NODE_ENV;
+  const savedJwtSecret = process.env.JWT_SECRET;
+  try {
+    process.env.NODE_ENV = 'production';
+    delete process.env.JWT_SECRET;
+    delete require.cache[require.resolve('./utils/auth')];
+    let threw = false;
+    try {
+      require('./utils/auth');
+    } catch (e) {
+      threw = true;
+    }
+    if (threw) {
+      console.log('✅ TEST 13a PASSED: Loading utils/auth without JWT_SECRET in production throws error');
+    } else {
+      throw new Error('TEST 13a FAILED: Expected error when loading auth utils without JWT_SECRET in production');
+    }
+  } finally {
+    process.env.NODE_ENV = savedNodeEnv;
+    if (savedJwtSecret) process.env.JWT_SECRET = savedJwtSecret;
+    delete require.cache[require.resolve('./utils/auth')];
+    require('./utils/auth');
+  }
+
+  // TEST 13b: ENCRYPTION_KEY Required Outside Test Environment
+  const savedEncKey = process.env.ENCRYPTION_KEY;
+  try {
+    process.env.NODE_ENV = 'production';
+    delete process.env.ENCRYPTION_KEY;
+    delete require.cache[require.resolve('./models/CustomerTraveler')];
+    let threw = false;
+    try {
+      require('./models/CustomerTraveler');
+    } catch (e) {
+      threw = true;
+    }
+    if (threw) {
+      console.log('✅ TEST 13b PASSED: Loading CustomerTraveler without ENCRYPTION_KEY in production throws error');
+    } else {
+      throw new Error('TEST 13b FAILED: Expected error when loading CustomerTraveler without ENCRYPTION_KEY in production');
+    }
+  } finally {
+    process.env.NODE_ENV = savedNodeEnv;
+    if (savedEncKey) process.env.ENCRYPTION_KEY = savedEncKey;
+    delete require.cache[require.resolve('./models/CustomerTraveler')];
+    require('./models/CustomerTraveler');
+  }
+
+  console.log('--- TEST 14: CORS Allowlist Enforcement ---');
+  const allowedCorsRes = await request(app)
+    .get('/api/health')
+    .set('Origin', 'http://localhost:5173');
+  if (allowedCorsRes.status === 200) {
+    console.log('✅ TEST 14a PASSED: Allowed CORS origin accepted (200 OK)');
+  } else {
+    throw new Error(`TEST 14a FAILED: Expected 200, got ${allowedCorsRes.status}`);
+  }
+
+  const disallowedCorsRes = await request(app)
+    .get('/api/health')
+    .set('Origin', 'http://malicious-site.com');
+  if (disallowedCorsRes.status === 403 && disallowedCorsRes.body.error?.code === 'FORBIDDEN') {
+    console.log('✅ TEST 14b PASSED: Disallowed CORS origin blocked (403 FORBIDDEN)');
+  } else {
+    throw new Error(`TEST 14b FAILED: Expected 403 FORBIDDEN, got status ${disallowedCorsRes.status}`);
   }
 
   console.log('\n🎉 ALL ROLE-BASED AUTHENTICATION & ACCESS CONTROL TESTS PASSED SUCCESSFULLY!');

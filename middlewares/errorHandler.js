@@ -44,6 +44,16 @@ module.exports = (err, req, res, next) => {
 
 
 
+  // CORS origin error
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({
+      error: {
+        code: 'FORBIDDEN',
+        message: 'Not allowed by CORS'
+      }
+    });
+  }
+
   // Fallback 500
   res.status(500).json({
     error: {

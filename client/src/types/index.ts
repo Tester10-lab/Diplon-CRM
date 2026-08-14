@@ -81,8 +81,11 @@ export interface Booking {
   advanceAmount?: number;
   remainingAmount?: number;
   paymentCollectionNote?: string;
-  groupType?: 'private' | 'sharing';
+  groupType?: 'private' | 'sharing' | 'group';
   roomDetails?: string;
+  agencyName?: string;
+  companyId?: string;
+  bookingStatus?: 'GROUPED' | 'ASSIGNED' | 'IN_TRIP' | 'COMPLETED';
 }
 
 export interface Departure {
@@ -98,6 +101,8 @@ export interface Departure {
   guideName?: string;
   driverName?: string;
   vehicleReg?: string;
+  isPublic?: boolean;
+  companyId?: string;
 }
 
 export interface Vehicle {

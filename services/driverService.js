@@ -77,6 +77,13 @@ async function updateDriver(resourceId, driverData, profileData, user) {
       throw err;
     }
 
+    if (user && user.role === 'OPERATIONS' && resource.branchId && user.branchId && resource.branchId.toString() !== user.branchId.toString()) {
+      const err = new Error('Forbidden: Operations staff can only update drivers within their own branch');
+      err.isAppError = true;
+      err.statusCode = 403;
+      throw err;
+    }
+
     if (driverData.name) resource.name = driverData.name;
     if (driverData.status) resource.status = driverData.status;
     if (driverData.availability !== undefined) resource.availability = driverData.availability;

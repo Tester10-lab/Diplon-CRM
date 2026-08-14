@@ -1,4 +1,5 @@
 const request = require('supertest');
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 const mongoose = require('mongoose');
 const { MongoMemoryReplSet } = require('mongodb-memory-server');
 const app = require('./app');

@@ -30,9 +30,17 @@ function getStoredDepartures(): Departure[] {
   return mockDepartures;
 }
 
+function notifyDataChange() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('diplon_data_changed'));
+    window.dispatchEvent(new Event('storage'));
+  }
+}
+
 function saveStoredDepartures(departures: Departure[]) {
   try {
     localStorage.setItem(DEPARTURES_STORAGE_KEY, JSON.stringify(departures));
+    notifyDataChange();
   } catch (e) {
     console.error('Failed to save departures to localStorage:', e);
   }

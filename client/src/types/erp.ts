@@ -58,7 +58,7 @@ export interface BookingData {
   advanceAmount?: number;
   remainingAmount?: number;
   paymentCollectionNote?: string;
-  groupType?: 'private' | 'sharing';
+  groupType?: 'private' | 'sharing' | 'group';
   roomDetails?: string;
 }
 

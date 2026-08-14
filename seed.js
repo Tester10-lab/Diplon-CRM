@@ -7,6 +7,12 @@ const { Package, DepartureInstance } = require('./models/Product');
 const { withContext } = require('./utils/context');
 
 async function seed() {
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_PROD_SEED !== 'true') {
+    console.error('⛔ ERROR: seed.js drops the entire database and is blocked in production mode.');
+    console.error('To bootstrap an initial admin account safely without wiping data, run: node bootstrap-admin.js');
+    process.exit(1);
+  }
+
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/diplon-crm?replicaSet=rs0';
   await mongoose.connect(uri);
 

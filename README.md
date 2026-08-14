@@ -8,6 +8,7 @@ This is the foundation layer for the Diplon Travel CRM system built with Node.js
 - **Scoping Plugin:** Intercepts database reads/writes and automatically enforces tenancy separation.
 - **RBAC & Field-level Guards:** Pre-save hooks prevent unauthorized changes (e.g. users editing their own `salesTarget` or `commissionRate`).
 - **Append-only Ledgers:** Balances are determined by aggregation instead of error-prone direct state mutations.
+- **Data Security & Encryption-at-Rest:** Encryption-at-rest for financial tables, ledgers, and operational documents is handled natively at the database and hosting/infrastructure storage layer. High-sensitivity PII fields (such as traveler passport numbers) are additionally encrypted at the application level via AES-256-CBC pre-save hooks in Mongoose.
 
 ## Getting Started
 

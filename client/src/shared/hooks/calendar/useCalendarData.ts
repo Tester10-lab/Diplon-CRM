@@ -78,6 +78,27 @@ function normalizeDate(dateStr?: string): string {
   return new Date().toISOString().split('T')[0];
 }
 
+// Helper to compute end date for bookings based on package duration in title/packageName
+function calculateBookingEndDate(startDateStr: string, packageNameStr?: string): string {
+  if (!startDateStr) return startDateStr;
+  let durationDays = 1;
+  if (packageNameStr) {
+    const match = packageNameStr.match(/(\d+)\s*D/i) || packageNameStr.match(/(\d+)\s*Days?/i);
+    if (match && match[1]) {
+      durationDays = parseInt(match[1], 10);
+    }
+  }
+  if (durationDays <= 1) return startDateStr;
+  try {
+    const start = new Date(startDateStr);
+    if (isNaN(start.getTime())) return startDateStr;
+    start.setDate(start.getDate() + (durationDays - 1));
+    return start.toISOString().split('T')[0];
+  } catch {
+    return startDateStr;
+  }
+}
+
 export function useCalendarData(currentDate: Date) {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [departures, setDepartures] = useState<DepartureData[]>([]);
@@ -126,16 +147,17 @@ export function useCalendarData(currentDate: Date) {
 
       // 2. Map Tour Customer Bookings to Calendar Events
       const bookingEvents: CalendarEvent[] = bookingsRes.map(bk => {
-        const date = normalizeDate(bk.departureDate);
+        const start = normalizeDate(bk.departureDate);
+        const end = calculateBookingEndDate(start, bk.packageName);
         return {
           id: `bk_evt_${bk._id}`,
           title: `✈ ${bk.customerName}: ${bk.packageName} (${bk.seatsReserved} pax)`,
-          start: date,
-          end: date,
-          startDate: date,
-          endDate: date,
+          start,
+          end,
+          startDate: start,
+          endDate: end,
           type: 'TOUR',
-          color: '#10b981',
+          color: bk.status === 'CONFIRMED' ? '#10b981' : bk.status === 'CANCELLED' ? '#ef4444' : '#f59e0b',
           status: bk.status === 'CONFIRMED' ? 'CONFIRMED' : 'PENDING'
         };
       });
@@ -200,6 +222,18 @@ export function useCalendarData(currentDate: Date) {
 
   useEffect(() => {
     fetchCalendarData();
+
+    const handleUpdate = () => {
+      fetchCalendarData();
+    };
+
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener('diplon_data_changed', handleUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener('diplon_data_changed', handleUpdate);
+    };
   }, [monthStr]);
 
   const addCalendarNote = (note: CalendarNote) => {

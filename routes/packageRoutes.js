@@ -6,9 +6,8 @@ const packageController = require('../controllers/packageController');
 
 const router = express.Router();
 
-
-// View Package catalog (ADMIN, MANAGER, AGENT, OPERATIONS)
-router.get('/', packageController.listPackages);
+// View Package catalog (ADMIN, MANAGER, AGENT, OPERATIONS, FINANCE, AGENCY, DRIVER)
+router.get('/', requireRole(['ADMIN', 'MANAGER', 'AGENT', 'OPERATIONS', 'FINANCE', 'AGENCY', 'DRIVER']), packageController.listPackages);
 
 // Create/edit Package (ADMIN, MANAGER only)
 router.post('/', requireRole(['ADMIN', 'MANAGER']), validate(createPackageSchema), packageController.createPackage);

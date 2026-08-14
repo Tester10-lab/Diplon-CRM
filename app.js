@@ -44,7 +44,7 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
       callback(null, true);
     } else {
-      callback(null, true); // Allow during initial setup
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true

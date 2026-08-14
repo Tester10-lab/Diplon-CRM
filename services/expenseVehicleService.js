@@ -7,6 +7,12 @@ const { getContext } = require('../utils/context');
 
 async function recordOperationalExpense(expenseData, user) {
   const context = getContext();
+  if (user && user.branchId && expenseData.branchId && expenseData.branchId.toString() !== user.branchId.toString()) {
+    const err = new Error('Forbidden: Cannot record expense for a different branch');
+    err.isAppError = true;
+    err.statusCode = 403;
+    throw err;
+  }
   const session = await mongoose.startSession();
   let resultExpense;
 
@@ -53,6 +59,12 @@ async function recordOperationalExpense(expenseData, user) {
 
 async function recordDriverStaffLedger(staffData, user) {
   const context = getContext();
+  if (user && user.branchId && staffData.branchId && staffData.branchId.toString() !== user.branchId.toString()) {
+    const err = new Error('Forbidden: Cannot record staff ledger for a different branch');
+    err.isAppError = true;
+    err.statusCode = 403;
+    throw err;
+  }
   const ledger = await DriverStaffLedger.create({
     ...staffData,
     createdBy: context.employeeId,

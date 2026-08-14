@@ -33,25 +33,31 @@ const authenticate = (req, res, next) => {
     }
   }
 
-  // Fallback for test suites and development using mock headers or default context
-  if (req.headers['x-mock-role'] || req.headers['x-mock-employee-id'] || req.headers['x-mock-branch-id'] || req.headers['x-mock-company-id']) {
+  // Test environment fallbacks (strictly isolated to NODE_ENV === 'test')
+  if (process.env.NODE_ENV === 'test') {
+    // 1. Mock header path for test suites
+    if (req.headers['x-mock-role'] || req.headers['x-mock-employee-id'] || req.headers['x-mock-branch-id'] || req.headers['x-mock-company-id']) {
+      req.user = {
+        employeeId: req.headers['x-mock-employee-id'] || '60d5ecb74d6bb8928a314221',
+        role: req.headers['x-mock-role'] || 'MANAGER',
+        branchId: req.headers['x-mock-branch-id'] || '60d5ecb74d6bb8928a314111',
+        companyId: req.headers['x-mock-company-id'] || '60d5ecb74d6bb8928a314000',
+      };
+      return next();
+    }
+
+    // 2. Default fallback user in test environment when no auth/mock header is specified
     req.user = {
-      employeeId: req.headers['x-mock-employee-id'] || '60d5ecb74d6bb8928a314221',
-      role: req.headers['x-mock-role'] || 'MANAGER',
-      branchId: req.headers['x-mock-branch-id'] || '60d5ecb74d6bb8928a314111',
-      companyId: req.headers['x-mock-company-id'] || '60d5ecb74d6bb8928a314000',
+      employeeId: '60d5ecb74d6bb8928a314221',
+      role: 'MANAGER',
+      branchId: '60d5ecb74d6bb8928a314111',
+      companyId: '60d5ecb74d6bb8928a314000',
     };
     return next();
   }
 
-  // Default fallback for legacy tests if no auth header or mock header specified
-  req.user = {
-    employeeId: '60d5ecb74d6bb8928a314221',
-    role: 'MANAGER',
-    branchId: '60d5ecb74d6bb8928a314111',
-    companyId: '60d5ecb74d6bb8928a314000',
-  };
-
+  // Outside test environment: unauthenticated request
+  req.user = null;
   next();
 };
 

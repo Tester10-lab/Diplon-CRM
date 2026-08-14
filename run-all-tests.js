@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'test';
 const { execSync } = require('child_process');
 
 function runTest(testFile) {
@@ -5,7 +6,7 @@ function runTest(testFile) {
   console.log(`RUNNING: ${testFile}`);
   console.log(`==================================================`);
   try {
-    execSync(`node ${testFile}`, { stdio: 'inherit' });
+    execSync(`node ${testFile}`, { env: { ...process.env, NODE_ENV: 'test' }, stdio: 'inherit' });
     console.log(`✅ ${testFile} PASSED`);
   } catch (err) {
     console.error(`❌ ${testFile} FAILED`);

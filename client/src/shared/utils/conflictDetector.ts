@@ -1,12 +1,15 @@
 import { DepartureData, DriverData, VehicleData, GuideData } from '../../types/erp';
 
 export interface SchedulingConflict {
+  id?: string;
   type: 'DRIVER_DOUBLE_BOOKED' | 'VEHICLE_DOUBLE_BOOKED' | 'GUIDE_DOUBLE_BOOKED' | 'CAPACITY_EXCEEDED';
   resourceId: string;
   resourceName: string;
   departureId: string;
   tourName: string;
   description: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export function isDateOverlapping(startA: string, endA: string, startB: string, endB: string): boolean {
@@ -44,12 +47,15 @@ export function detectResourceConflicts(
     // Check seating capacity vs passengers
     if (depA.seatsReserved > depA.seatsTotal) {
       conflicts.push({
+        id: `conflict_cap_${depA._id}`,
         type: 'CAPACITY_EXCEEDED',
         resourceId: depA._id,
         resourceName: depA.packageName,
         departureId: depA._id,
         tourName: depA.packageName,
         description: `Reserved seats (${depA.seatsReserved}) exceed vehicle capacity (${depA.seatsTotal})`,
+        startDate: depA.startDate,
+        endDate: depA.endDate || depA.startDate
       });
     }
 
@@ -69,36 +75,45 @@ export function detectResourceConflicts(
       // Check vehicle double-booking on overlapping dates
       if (depA.vehicleReg && depB.vehicleReg && depA.vehicleReg === depB.vehicleReg && !isGenericResource(depA.vehicleReg)) {
         conflicts.push({
+          id: `conflict_veh_${depA._id}_${depB._id}`,
           type: 'VEHICLE_DOUBLE_BOOKED',
           resourceId: depA.vehicleReg,
           resourceName: depA.vehicleReg,
           departureId: depA._id,
           tourName: depA.packageName,
           description: `Vehicle ${depA.vehicleReg} assigned to multiple overlapping active tours (${depA.packageName}, ${depB.packageName})`,
+          startDate: startDateA,
+          endDate: endDateA
         });
       }
 
       // Check driver double-booking on overlapping dates
       if (depA.driverName && depB.driverName && depA.driverName === depB.driverName && !isGenericResource(depA.driverName)) {
         conflicts.push({
+          id: `conflict_drv_${depA._id}_${depB._id}`,
           type: 'DRIVER_DOUBLE_BOOKED',
           resourceId: depA.driverName,
           resourceName: depA.driverName,
           departureId: depA._id,
           tourName: depA.packageName,
           description: `Driver ${depA.driverName} assigned to multiple overlapping departures (${depA.packageName}, ${depB.packageName})`,
+          startDate: startDateA,
+          endDate: endDateA
         });
       }
 
       // Check guide double-booking on overlapping dates
       if (depA.guideName && depB.guideName && depA.guideName === depB.guideName && !isGenericResource(depA.guideName)) {
         conflicts.push({
+          id: `conflict_gui_${depA._id}_${depB._id}`,
           type: 'GUIDE_DOUBLE_BOOKED',
           resourceId: depA.guideName,
           resourceName: depA.guideName,
           departureId: depA._id,
           tourName: depA.packageName,
           description: `Guide ${depA.guideName} assigned to multiple overlapping departures (${depA.packageName}, ${depB.packageName})`,
+          startDate: startDateA,
+          endDate: endDateA
         });
       }
     }

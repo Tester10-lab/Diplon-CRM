@@ -1,3 +1,4 @@
+process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { MongoMemoryReplSet } = require('mongodb-memory-server');
@@ -41,9 +42,17 @@ async function runTests() {
     });
     await customer.save();
 
+    const mockHeaders = {
+      'x-mock-role': 'ADMIN',
+      'x-mock-employee-id': new mongoose.Types.ObjectId().toString(),
+      'x-mock-branch-id': '60d5ecb74d6bb8928a314111',
+      'x-mock-company-id': '60d5ecb74d6bb8928a314000'
+    };
+
     console.log('--- TEST 1: Reject server-derived field (firstResponseAt) ---');
     const res1 = await request(app)
       .post('/api/leads')
+      .set(mockHeaders)
       .send({
         customerId: customer._id.toString(),
         firstResponseAt: new Date()
@@ -57,6 +66,7 @@ async function runTests() {
     console.log('\n--- TEST 2: Successful Lead Creation ---');
     const res2 = await request(app)
       .post('/api/leads')
+      .set(mockHeaders)
       .send({
         customerId: customer._id.toString()
       });
@@ -79,6 +89,7 @@ async function runTests() {
     console.log('\n--- TEST 4: Lead to Inquiry Conversion ---');
     const res4 = await request(app)
       .post(`/api/leads/${leadId}/convert-to-inquiry`)
+      .set(mockHeaders)
       .send({});
     if (res4.status === 201 && res4.body.data.convertedFromLeadId === leadId) {
       console.log('✅ TEST 4 PASSED: Lead converted to Inquiry');
@@ -90,6 +101,7 @@ async function runTests() {
     console.log('\n--- TEST 5: Prevent Double Conversion (409 Conflict) ---');
     const res5 = await request(app)
       .post(`/api/leads/${leadId}/convert-to-inquiry`)
+      .set(mockHeaders)
       .send({});
     if (res5.status === 409) {
       console.log('✅ TEST 5 PASSED: Double conversion prevented with 409 Conflict');
@@ -100,6 +112,7 @@ async function runTests() {
     console.log('\n--- TEST 6: Inquiry to Quotation Conversion ---');
     const res6 = await request(app)
       .post(`/api/inquiries/${inquiryId}/convert-to-quotation`)
+      .set(mockHeaders)
       .send({});
     if (res6.status === 201) {
       console.log('✅ TEST 6 PASSED: Inquiry converted to Quotation');

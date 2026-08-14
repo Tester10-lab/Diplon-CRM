@@ -1,6 +1,11 @@
 const crypto = require('crypto');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'diplon_crm_secure_jwt_secret_key_2026_rs0';
+const isTestEnv = process.env.NODE_ENV === 'test';
+if (!process.env.JWT_SECRET && !isTestEnv) {
+  throw new Error('FATAL: JWT_SECRET environment variable is not defined.');
+}
+
+const JWT_SECRET = process.env.JWT_SECRET || (isTestEnv ? 'diplon_crm_secure_jwt_secret_key_2026_rs0' : '');
 
 /**
  * Hash a plain text password using PBKDF2 with salt.
@@ -20,7 +25,12 @@ function verifyPassword(password, storedHash) {
   }
   const [salt, originalHash] = storedHash.split(':');
   const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-  return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(originalHash, 'hex'));
+  const hashBuf = Buffer.from(hash, 'hex');
+  const originalBuf = Buffer.from(originalHash, 'hex');
+  if (hashBuf.length !== originalBuf.length) {
+    return false;
+  }
+  return crypto.timingSafeEqual(hashBuf, originalBuf);
 }
 
 /**
@@ -60,7 +70,10 @@ function verifyToken(token) {
     .update(`${encodedHeader}.${encodedPayload}`)
     .digest('base64url');
 
-  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+  const sigBuf = Buffer.from(signature);
+  const expectedSigBuf = Buffer.from(expectedSignature);
+
+  if (sigBuf.length !== expectedSigBuf.length || !crypto.timingSafeEqual(sigBuf, expectedSigBuf)) {
     return null;
   }
 

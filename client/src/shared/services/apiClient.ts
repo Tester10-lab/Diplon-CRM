@@ -12,7 +12,7 @@ class ApiClient {
   private baseUrl: string;
 
   constructor(config: ApiClientConfig = {}) {
-    const envApi = typeof import.meta !== 'undefined' ? import.meta?.env?.VITE_API_URL : undefined;
+    const envApi = typeof import.meta !== 'undefined' ? (import.meta as any)?.env?.VITE_API_URL : undefined;
     this.baseUrl = config.baseUrl || (envApi ? (envApi.endsWith('/api') ? envApi : `${envApi}/api`) : '/api');
   }
 

@@ -22,6 +22,15 @@ export function useBookings() {
 
   useEffect(() => {
     refetch();
+    const handleUpdate = () => {
+      refetch();
+    };
+    window.addEventListener('storage', handleUpdate);
+    window.addEventListener('diplon_data_changed', handleUpdate);
+    return () => {
+      window.removeEventListener('storage', handleUpdate);
+      window.removeEventListener('diplon_data_changed', handleUpdate);
+    };
   }, [refetch]);
 
   const createBooking = async (booking: Partial<Booking>): Promise<Booking> => {

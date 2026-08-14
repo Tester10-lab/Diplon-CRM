@@ -6,9 +6,8 @@ const departureController = require('../controllers/departureController');
 
 const router = express.Router();
 
-
-// View Departure instances (ADMIN, MANAGER, AGENT, OPERATIONS)
-router.get('/', departureController.listDepartures);
+// View Departure instances (ADMIN, MANAGER, AGENT, OPERATIONS, FINANCE)
+router.get('/', requireRole(['ADMIN', 'MANAGER', 'AGENT', 'OPERATIONS', 'FINANCE']), departureController.listDepartures);
 
 // Create/edit Departure (ADMIN, MANAGER, OPERATIONS)
 // AGENT cannot create or edit departures
