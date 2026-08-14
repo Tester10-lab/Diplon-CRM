@@ -36,7 +36,7 @@ const SearchableDriverSelect: React.FC<SearchableDriverSelectProps> = ({
 
   if (disabled) {
     return (
-      <span className="text-[10px] font-extrabold text-[#C8FF2D] bg-[#C8FF2D]/10 px-2.5 py-1 rounded-lg border border-[#C8FF2D]/20">
+      <span className="text-[10px] font-extrabold text-white bg-white/10 px-2.5 py-1 rounded-lg border border-white/20">
         Assigned
       </span>
     );

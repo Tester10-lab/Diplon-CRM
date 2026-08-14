@@ -215,7 +215,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             initial={{ opacity: 0, y: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-24 right-8 z-50 bg-[#C8FF2D] text-[#0B0E14] px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 font-black text-xs border border-[#C8FF2D]"
+            className="fixed top-24 right-8 z-50 bg-white text-black px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 font-black text-xs border border-[#C8FF2D]"
           >
             <Sparkles className="w-4 h-4 text-[#0B0E14] animate-spin" />
             <span>{toastMsg}</span>
@@ -235,13 +235,13 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400">Total Bookings</span>
-            <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D] text-[#0B0E14] flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
               <CalendarIcon className="w-5 h-5 stroke-[2.5]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="text-3xl font-black text-white tracking-tight">{totalBookingsCount.toLocaleString()}</div>
-            <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
+            <div className="flex items-center gap-1 text-xs font-black text-white mt-1">
               <ArrowUpRight className="w-4 h-4" />
               <span>{totalBookingsCount > 0 ? '12.5%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
@@ -258,13 +258,13 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400">Active Tours</span>
-            <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D] text-[#0B0E14] flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
               <Compass className="w-5 h-5 stroke-[2.5]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="text-3xl font-black text-white tracking-tight">{activeToursCount}</div>
-            <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
+            <div className="flex items-center gap-1 text-xs font-black text-white mt-1">
               <ArrowUpRight className="w-4 h-4" />
               <span>{activeToursCount > 0 ? '8.2%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
@@ -281,7 +281,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400">Revenue</span>
-            <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D] text-[#0B0E14] flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
               <DollarSign className="w-5 h-5 stroke-[2.5]" />
             </div>
           </div>
@@ -293,7 +293,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                   : `NPR ${totalRevenueAmount.toLocaleString()}`
                 : 'NPR 0'}
             </div>
-            <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
+            <div className="flex items-center gap-1 text-xs font-black text-white mt-1">
               <ArrowUpRight className="w-4 h-4" />
               <span>{totalRevenueAmount > 0 ? '15.3%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
@@ -310,13 +310,13 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400">Customers</span>
-            <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D] text-[#0B0E14] flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-white text-black flex items-center justify-center shadow-lg shadow-[#C8FF2D]/20 group-hover:scale-110 transition-transform">
               <Users className="w-5 h-5 stroke-[2.5]" />
             </div>
           </div>
           <div className="mt-3">
             <div className="text-3xl font-black text-white tracking-tight">{totalCustomersCount.toLocaleString()}</div>
-            <div className="flex items-center gap-1 text-xs font-black text-[#C8FF2D] mt-1">
+            <div className="flex items-center gap-1 text-xs font-black text-white mt-1">
               <ArrowUpRight className="w-4 h-4" />
               <span>{totalCustomersCount > 0 ? '10.1%' : '0%'}</span>
               <span className="text-slate-400 font-normal">vs last month</span>
@@ -333,7 +333,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         <motion.div variants={itemVariants} className="lg:col-span-4 rounded-3xl bg-[#111621] border border-white/10 p-6 flex flex-col justify-between space-y-4 shadow-xl hover:border-[#C8FF2D]/40 transition-all duration-300 backdrop-blur-xl">
           <div className="flex items-center justify-between border-b border-white/10 pb-3">
             <div className="flex items-center gap-2 text-xs font-black text-white">
-              <StickyNote className="w-4 h-4 text-[#C8FF2D]" />
+              <StickyNote className="w-4 h-4 text-white" />
               <span>Sticky Notes</span>
             </div>
             <Button
@@ -360,7 +360,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-xs font-semibold leading-relaxed">{n.text}</p>
                   <div className="flex items-center gap-1 shrink-0 opacity-80 group-hover:opacity-100">
-                    {n.pinned && <Pin className="w-3.5 h-3.5 text-[#C8FF2D] fill-[#C8FF2D]" />}
+                    {n.pinned && <Pin className="w-3.5 h-3.5 text-white fill-[#C8FF2D]" />}
                     <button
                       onClick={() => handleDeleteNote(n.id)}
                       className="p-1 hover:text-rose-400 transition-colors"
@@ -434,9 +434,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
               onClick={() => onNavigate('/calendar')}
               title="Click to view Full Operations Calendar"
             >
-              <CalendarIcon className="w-4 h-4 text-[#C8FF2D] group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-black text-white group-hover:text-[#C8FF2D] transition-colors">{adMonthYearStr}</span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
+              <CalendarIcon className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-black text-white group-hover:text-white transition-colors">{adMonthYearStr}</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C8FF2D]/15 text-white border border-[#C8FF2D]/35">
                 {bsDateInfo.monthNameEn} {bsDateInfo.year} BS
               </span>
             </div>
@@ -475,7 +475,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
                   disabled={!cd.isCurrent}
                   className={`py-1.5 rounded-xl text-xs font-bold transition-all relative ${
                     isSel
-                      ? 'bg-[#C8FF2D] text-[#0B0E14] font-black shadow-lg shadow-[#C8FF2D]/30 scale-105 z-10'
+                      ? 'bg-white text-black font-black shadow-lg shadow-[#C8FF2D]/30 scale-105 z-10'
                       : cd.isCurrent
                       ? 'text-slate-200 hover:bg-white/15 hover:text-white'
                       : 'text-slate-700 cursor-not-allowed opacity-40'
@@ -490,7 +490,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           {/* Selected Tour Departure Note */}
           <div className="p-3 rounded-2xl bg-[#0B0E14] border border-white/10 space-y-1">
             <div className="flex items-center justify-between text-[11px]">
-              <span className="font-extrabold text-[#C8FF2D]">
+              <span className="font-extrabold text-white">
                 {matchingDepartures.length > 0
                   ? `Departing ${selectedDateFullStr}`
                   : (calMonth === 7 && selectedDay === 1)
@@ -518,7 +518,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
             <Button
               variant="primary"
               onClick={() => openAddTourModal()}
-              className="flex-1 justify-center bg-[#C8FF2D] text-[#0B0E14] font-bold hover:bg-[#b0e61c]"
+              className="flex-1 justify-center bg-white text-black font-bold hover:bg-[#b0e61c]"
               icon={<Plus className="w-4 h-4 stroke-[3]" />}
             >
               + New Tour Departure
@@ -549,9 +549,9 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           <div>
             <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Upcoming Departures</div>
             <div className="text-xl font-black text-white mt-1">2 Active Tours</div>
-            <div className="text-[10px] text-[#C8FF2D] font-extrabold mt-0.5">Halesi (25 Pax) • Jiri (6 Pax)</div>
+            <div className="text-[10px] text-white font-extrabold mt-0.5">Halesi (25 Pax) • Jiri (6 Pax)</div>
           </div>
-          <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/30 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-2xl bg-[#C8FF2D]/15 text-white border border-[#C8FF2D]/30 flex items-center justify-center font-bold">
             <Compass className="w-5 h-5" />
           </div>
         </motion.div>
@@ -614,7 +614,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
             <h3 className="text-base font-black text-white tracking-tight flex items-center gap-2">
-              <Compass className="w-5 h-5 text-[#C8FF2D]" />
+              <Compass className="w-5 h-5 text-white" />
               Upcoming Tour Departures & Live Status
             </h3>
             <p className="text-xs text-slate-400 font-medium mt-0.5">Real-time status of active departures, assigned drivers, and seating capacity</p>
@@ -640,11 +640,11 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
               <tr className="hover:bg-white/5 transition-colors">
                 <td className="p-3 font-extrabold text-white">Halesi Tour Package (1N/2D)</td>
                 <td className="p-3 font-mono text-slate-300">2026-08-01</td>
-                <td className="p-3 text-[#C8FF2D]">Srijan (Bus Driver)</td>
+                <td className="p-3 text-white">Srijan (Bus Driver)</td>
                 <td className="p-3">28-Seater Sofa Bus</td>
                 <td className="p-3 font-bold text-emerald-400">25 / 25 Pax (100%)</td>
                 <td className="p-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-white border border-[#C8FF2D]/35">
                     READY FOR DISPATCH
                   </span>
                 </td>
@@ -652,11 +652,11 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
               <tr className="hover:bg-white/5 transition-colors">
                 <td className="p-3 font-extrabold text-white">Jiri Tour (1N/2D)</td>
                 <td className="p-3 font-mono text-slate-300">2026-08-01</td>
-                <td className="p-3 text-[#C8FF2D]">Tarak Driver</td>
+                <td className="p-3 text-white">Tarak Driver</td>
                 <td className="p-3">Scorpio 4WD Jeep</td>
                 <td className="p-3 font-bold text-emerald-400">6 / 6 Pax (100%)</td>
                 <td className="p-3">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/35">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#C8FF2D]/15 text-white border border-[#C8FF2D]/35">
                     READY FOR DISPATCH
                   </span>
                 </td>
@@ -698,7 +698,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           onClick={() => openBookingModal()}
           className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
-          <Plus className="w-5 h-5 text-[#C8FF2D] mb-1 group-hover:scale-110 transition-transform" />
+          <Plus className="w-5 h-5 text-white mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">New Booking</div>
           <div className="text-[10px] text-slate-400 mt-0.5">Confirm reservation</div>
         </motion.button>
@@ -709,7 +709,7 @@ export const SuperAdminDashboard: React.FC<{ onNavigate: (path: string) => void 
           onClick={() => onNavigate('/operations')}
           className="p-3.5 rounded-2xl bg-[#111621] border border-white/10 hover:border-[#C8FF2D]/50 text-left transition-all shadow-md group backdrop-blur-xl cursor-pointer"
         >
-          <Compass className="w-5 h-5 text-[#C8FF2D] mb-1 group-hover:scale-110 transition-transform" />
+          <Compass className="w-5 h-5 text-white mb-1 group-hover:scale-110 transition-transform" />
           <div className="text-xs font-black text-white">Add Departure</div>
           <div className="text-[10px] text-slate-400 mt-0.5">Schedule tour</div>
         </motion.button>

@@ -16,23 +16,23 @@ export const Badge: React.FC<BadgeProps> = ({
   className
 }) => {
   const variants = {
-    primary: 'bg-[#6366F1]/15 text-[#818CF8] border-[#6366F1]/30',
-    lime: 'bg-[#C8FF2D]/15 text-[#C8FF2D] border-[#C8FF2D]/35',
-    success: 'bg-[#10B981]/15 text-[#34D399] border-[#10B981]/30',
-    warning: 'bg-[#F59E0B]/15 text-[#FBBF24] border-[#F59E0B]/30',
-    danger: 'bg-[#EF4444]/15 text-[#F87171] border-[#EF4444]/30',
-    info: 'bg-[#38BDF8]/15 text-[#38BDF8] border-[#38BDF8]/30',
-    neutral: 'bg-white/5 text-slate-300 border-white/10'
+    primary: 'bg-white text-black font-extrabold border-white',
+    lime: 'bg-white/15 text-white border-white/30',
+    success: 'bg-white/10 text-white border-white/25',
+    warning: 'bg-neutral-800 text-neutral-200 border-white/20',
+    danger: 'bg-neutral-900 text-neutral-300 border-white/15',
+    info: 'bg-white/10 text-white border-white/20',
+    neutral: 'bg-white/5 text-neutral-300 border-white/15'
   };
 
   const dotColors = {
-    primary: 'bg-[#818CF8]',
-    lime: 'bg-[#C8FF2D]',
-    success: 'bg-[#34D399]',
-    warning: 'bg-[#FBBF24]',
-    danger: 'bg-[#F87171]',
-    info: 'bg-[#38BDF8]',
-    neutral: 'bg-slate-400'
+    primary: 'bg-black',
+    lime: 'bg-white',
+    success: 'bg-white',
+    warning: 'bg-neutral-300',
+    danger: 'bg-neutral-400',
+    info: 'bg-white',
+    neutral: 'bg-neutral-400'
   };
 
   return (

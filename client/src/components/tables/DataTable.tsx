@@ -115,28 +115,28 @@ export function DataTable<T extends { _id?: string; id?: string }>({
   return (
     <div className="w-full space-y-4">
       {/* Header Controls Card */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl bg-[#111621] border border-white/10 shadow-xl backdrop-blur-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl bg-neutral-950 border border-white/10 shadow-xl backdrop-blur-xl">
         <div>
           {title && <h3 className="text-base font-black text-white tracking-tight">{title}</h3>}
-          {description && <p className="text-xs text-slate-400 font-medium mt-0.5">{description}</p>}
+          {description && <p className="text-xs text-neutral-400 font-medium mt-0.5">{description}</p>}
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
           {/* Search Box */}
           <div className="relative flex-1 sm:w-64">
-            <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-2.5 text-neutral-400" />
             <input
               type="text"
               value={searchTerm}
               onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
               placeholder={searchPlaceholder}
-              className="w-full bg-[#0B0E14] text-white placeholder-slate-400 text-xs rounded-2xl pl-10 pr-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#C8FF2D] transition-all shadow-inner"
+              className="w-full bg-[#000000] text-white placeholder-neutral-500 text-xs rounded-2xl pl-10 pr-3.5 py-2.5 border border-white/15 focus:outline-none focus:border-white transition-all shadow-inner"
             />
           </div>
 
           {/* Column Menu Button */}
           <div className="relative">
-            <Button variant="secondary" size="sm" onClick={() => setShowColMenu(!showColMenu)} icon={<SlidersHorizontal className="w-3.5 h-3.5 text-[#C8FF2D]" />}>
+            <Button variant="secondary" size="sm" onClick={() => setShowColMenu(!showColMenu)} icon={<SlidersHorizontal className="w-3.5 h-3.5 text-white" />}>
               Columns
             </Button>
             <AnimatePresence>
@@ -146,16 +146,16 @@ export function DataTable<T extends { _id?: string; id?: string }>({
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 6 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-48 rounded-2xl bg-[#111621] border border-white/10 shadow-2xl p-2.5 z-30 backdrop-blur-xl"
+                  className="absolute right-0 mt-2 w-48 rounded-2xl bg-neutral-900 border border-white/15 shadow-2xl p-2.5 z-30 backdrop-blur-xl"
                 >
-                  <div className="text-[10px] font-extrabold uppercase text-[#C8FF2D] px-2 py-1">Toggle Columns</div>
+                  <div className="text-[10px] font-extrabold uppercase text-neutral-400 px-2 py-1">Toggle Columns</div>
                   {columns.map(c => (
-                    <label key={c.key} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/5 text-xs font-semibold text-slate-200 cursor-pointer">
+                    <label key={c.key} className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-white/10 text-xs font-semibold text-neutral-200 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={visibleColumns[c.key]}
                         onChange={e => setVisibleColumns(prev => ({ ...prev, [c.key]: e.target.checked }))}
-                        className="rounded text-[#C8FF2D] focus:ring-[#C8FF2D]"
+                        className="rounded text-white focus:ring-white"
                       />
                       <span>{c.header}</span>
                     </label>
@@ -166,7 +166,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
           </div>
 
           {/* Export CSV */}
-          <Button variant="outline" size="sm" onClick={exportCSV} icon={<Download className="w-3.5 h-3.5 text-[#C8FF2D]" />}>
+          <Button variant="outline" size="sm" onClick={exportCSV} icon={<Download className="w-3.5 h-3.5 text-white" />}>
             Export
           </Button>
 
@@ -175,10 +175,10 @@ export function DataTable<T extends { _id?: string; id?: string }>({
       </div>
 
       {/* Table Container */}
-      <div className="w-full overflow-x-auto rounded-3xl bg-[#111621] border border-white/10 shadow-2xl backdrop-blur-xl">
+      <div className="w-full overflow-x-auto rounded-3xl bg-neutral-950 border border-white/10 shadow-2xl backdrop-blur-xl">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-white/10 bg-[#0B0E14]/80 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 select-none">
+            <tr className="border-b border-white/10 bg-black/80 text-[10px] font-extrabold uppercase tracking-wider text-neutral-400 select-none">
               {columns.filter(c => visibleColumns[c.key]).map(c => (
                 <th
                   key={c.key}
@@ -187,7 +187,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
                 >
                   <div className="flex items-center gap-1.5">
                     <span>{c.header}</span>
-                    {c.sortable !== false && <ArrowUpDown className="w-3 h-3 opacity-60 text-[#C8FF2D]" />}
+                    {c.sortable !== false && <ArrowUpDown className="w-3 h-3 opacity-60 text-white" />}
                   </div>
                 </th>
               ))}
@@ -197,7 +197,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
           <tbody className="divide-y divide-white/5 text-xs">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="p-8 text-center text-slate-400 font-medium">
+                <td colSpan={columns.length} className="p-8 text-center text-neutral-400 font-medium">
                   No records match your criteria.
                 </td>
               </tr>
@@ -206,12 +206,12 @@ export function DataTable<T extends { _id?: string; id?: string }>({
                 <motion.tr
                   key={item._id || item.id || idx}
                   onClick={() => onRowClick && onRowClick(item)}
-                  whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                  whileHover={{ backgroundColor: 'rgba(255, 255, 255, 0.04)' }}
                   transition={{ duration: 0.15 }}
                   className={`transition-colors ${onRowClick ? 'cursor-pointer' : ''}`}
                 >
                   {columns.filter(c => visibleColumns[c.key]).map(c => (
-                    <td key={c.key} className="p-4 text-slate-200 font-semibold">
+                    <td key={c.key} className="p-4 text-neutral-200 font-semibold">
                       {c.accessor(item)}
                     </td>
                   ))}
@@ -223,7 +223,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
       </div>
 
       {/* Pagination Footer */}
-      <div className="flex items-center justify-between px-2 text-xs text-slate-400 font-medium">
+      <div className="flex items-center justify-between px-2 text-xs text-neutral-400 font-medium">
         <div>
           Showing {sortedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0} to{' '}
           {Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length} records
@@ -233,7 +233,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
           <select
             value={pageSize}
             onChange={e => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
-            className="bg-[#0B0E14] border border-white/10 rounded-xl px-2.5 py-1 text-xs text-slate-300 focus:outline-none focus:border-[#C8FF2D]"
+            className="bg-neutral-900 border border-white/15 rounded-xl px-2.5 py-1 text-xs text-neutral-300 focus:outline-none focus:border-white"
           >
             <option value={5}>5 per page</option>
             <option value={10}>10 per page</option>
@@ -250,7 +250,7 @@ export function DataTable<T extends { _id?: string; id?: string }>({
             <ChevronLeft className="w-4 h-4" />
           </Button>
 
-          <span className="font-extrabold text-slate-200">
+          <span className="font-extrabold text-white">
             Page {currentPage} of {totalPages}
           </span>
 

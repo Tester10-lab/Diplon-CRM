@@ -118,27 +118,27 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
       className="space-y-6 select-none"
     >
       {/* Header Controls Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-3xl bg-[#111621] border border-white/10 backdrop-blur-xl shadow-xl">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-3xl bg-neutral-950 border border-white/10 backdrop-blur-xl shadow-xl">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-black text-white flex items-center gap-2 tracking-tight">
-              <CalendarIcon className="w-5 h-5 text-[#C8FF2D]" />
+              <CalendarIcon className="w-5 h-5 text-white" />
               Enterprise Calendar & Resource Dispatch Timeline
             </h1>
-            <Badge variant="lime" dot>Live REST API</Badge>
+            <Badge variant="primary" dot>Live REST API</Badge>
           </div>
-          <p className="text-xs text-slate-400 font-medium">
+          <p className="text-xs text-neutral-400 font-medium">
             Dual Bikram Sambat (BS) & Gregorian (AD) scheduling engine with driver conflict detection
           </p>
         </div>
 
         {/* Month Navigation Controls & Dual Headers */}
-        <div className="flex items-center gap-3 bg-[#0B0E14] p-2 rounded-2xl border border-white/10 shadow-inner">
+        <div className="flex items-center gap-3 bg-black p-2 rounded-2xl border border-white/10 shadow-inner">
           <Button
             variant="secondary"
             size="sm"
             onClick={handlePrevMonth}
-            icon={<ChevronLeft className="w-4 h-4 text-slate-300" />}
+            icon={<ChevronLeft className="w-4 h-4 text-neutral-300" />}
             title="Previous Month"
           >
             Prev
@@ -148,21 +148,21 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
             variant="ghost"
             size="sm"
             onClick={handleToday}
-            icon={<RotateCcw className="w-3.5 h-3.5 text-[#C8FF2D]" />}
+            icon={<RotateCcw className="w-3.5 h-3.5 text-white" />}
           >
             Today
           </Button>
 
           <div className="text-center px-3">
-            <div className="text-sm font-black text-[#C8FF2D]">{bsMonthName}</div>
-            <div className="text-xs font-bold text-slate-300 font-mono">{adMonthName}</div>
+            <div className="text-sm font-black text-white">{bsMonthName}</div>
+            <div className="text-xs font-bold text-neutral-400 font-mono">{adMonthName}</div>
           </div>
 
           <Button
             variant="secondary"
             size="sm"
             onClick={handleNextMonth}
-            icon={<ChevronRight className="w-4 h-4 text-slate-300" />}
+            icon={<ChevronRight className="w-4 h-4 text-neutral-300" />}
             title="Next Month"
           >
             Next
@@ -171,11 +171,11 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
 
         {/* Dual Date Mode Selector & Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="p-1 rounded-2xl bg-[#0B0E14] border border-white/10 flex items-center text-xs">
+          <div className="p-1 rounded-2xl bg-black border border-white/10 flex items-center text-xs">
             <button
               onClick={() => setDisplayMode('BS_ONLY')}
               className={`px-3 py-1.5 rounded-xl font-extrabold transition-all ${
-                displayMode === 'BS_ONLY' ? 'bg-[#C8FF2D] text-[#0B0E14] shadow-md' : 'text-slate-400 hover:text-slate-200'
+                displayMode === 'BS_ONLY' ? 'bg-white text-black shadow-md' : 'text-neutral-400 hover:text-white'
               }`}
             >
               🇳🇵 BS Only
@@ -183,7 +183,7 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
             <button
               onClick={() => setDisplayMode('DUAL_BS_AD')}
               className={`px-3 py-1.5 rounded-xl font-extrabold transition-all ${
-                displayMode === 'DUAL_BS_AD' ? 'bg-[#6366F1] text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+                displayMode === 'DUAL_BS_AD' ? 'bg-neutral-800 text-white shadow-md' : 'text-neutral-400 hover:text-white'
               }`}
             >
               🇳🇵 + 🌍 Dual BS/AD
@@ -191,7 +191,7 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
             <button
               onClick={() => setDisplayMode('AD_ONLY')}
               className={`px-3 py-1.5 rounded-xl font-extrabold transition-all ${
-                displayMode === 'AD_ONLY' ? 'bg-white/10 text-white shadow-md' : 'text-slate-400 hover:text-slate-200'
+                displayMode === 'AD_ONLY' ? 'bg-white/10 text-white shadow-md' : 'text-neutral-400 hover:text-white'
               }`}
             >
               🌍 AD Only
@@ -199,13 +199,13 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
           </div>
 
           {/* View Switcher Tabs */}
-          <div className="p-1 rounded-2xl bg-[#0B0E14] border border-white/10 flex items-center text-xs">
+          <div className="p-1 rounded-2xl bg-black border border-white/10 flex items-center text-xs">
             {(['MONTH', 'WEEK', 'DAY', 'TIMELINE'] as const).map(v => (
               <button
                 key={v}
                 onClick={() => setViewType(v)}
                 className={`px-3 py-1.5 rounded-xl font-black uppercase text-[11px] transition-all ${
-                  viewType === v ? 'bg-[#C8FF2D]/20 text-[#C8FF2D] border border-[#C8FF2D]/40' : 'text-slate-400 hover:text-slate-200'
+                  viewType === v ? 'bg-white text-black' : 'text-neutral-400 hover:text-white'
                 }`}
               >
                 {v}
@@ -217,8 +217,8 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
           <Button
             variant="secondary"
             size="sm"
-            className="bg-amber-500/15 border-amber-500/30 text-amber-300 hover:bg-amber-500/25 font-black"
-            icon={<StickyNote className="w-4 h-4 text-amber-400" />}
+            className="bg-neutral-900 border-white/20 text-white hover:bg-neutral-800 font-bold"
+            icon={<StickyNote className="w-4 h-4 text-white" />}
             onClick={() => setIsAddNoteModalOpen(true)}
           >
             + Add Note
@@ -243,9 +243,9 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-[#C8FF2D] text-[#0B0E14] px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 font-black text-xs border border-[#C8FF2D]"
+            className="bg-white text-black px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 font-black text-xs border border-white"
           >
-            <Sparkles className="w-4 h-4 text-[#0B0E14] animate-spin" />
+            <Sparkles className="w-4 h-4 text-black animate-spin" />
             <span>{toastMsg}</span>
           </motion.div>
         )}
@@ -256,11 +256,11 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="p-4 rounded-3xl bg-[#EF4444]/15 border border-[#EF4444]/30 text-[#F87171] space-y-3 backdrop-blur-xl"
+          className="p-4 rounded-3xl bg-neutral-950 border border-rose-500/40 text-rose-300 space-y-3 backdrop-blur-xl"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-black">
-              <AlertTriangle className="w-5 h-5 text-[#EF4444] animate-bounce shrink-0" />
+            <div className="flex items-center gap-2 text-xs font-black text-white">
+              <AlertTriangle className="w-5 h-5 text-rose-400 animate-bounce shrink-0" />
               <span>⚠️ Operational Conflict Detected: {conflicts.length} Overlapping Driver/Vehicle Schedules</span>
             </div>
             <Badge variant="danger">{conflicts.length} Action Needed</Badge>
@@ -271,11 +271,11 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
               <div
                 key={c.id || idx}
                 onClick={() => handleConflictClick(c)}
-                className="p-3 rounded-2xl bg-[#0B0E14] border border-[#EF4444]/40 hover:border-[#EF4444] transition-all cursor-pointer flex items-center justify-between text-xs"
+                className="p-3 rounded-2xl bg-black border border-white/10 hover:border-white/30 transition-all cursor-pointer flex items-center justify-between text-xs"
               >
                 <div>
                   <div className="font-extrabold text-white">{c.description}</div>
-                  <div className="text-[11px] text-slate-400 mt-0.5 font-mono">{c.startDate} to {c.endDate}</div>
+                  <div className="text-[11px] text-neutral-400 mt-0.5 font-mono">{c.startDate} to {c.endDate}</div>
                 </div>
                 <Button size="sm" variant="danger">
                   Resolve
@@ -287,7 +287,7 @@ export const CalendarPage: React.FC<{ onNavigate?: (path: string) => void }> = (
       )}
 
       {/* Main Calendar View Display */}
-      <div className="rounded-3xl bg-[#111621] border border-white/10 p-5 shadow-2xl backdrop-blur-xl">
+      <div className="rounded-3xl bg-neutral-950 border border-white/10 p-5 shadow-2xl backdrop-blur-xl">
         {viewType === 'MONTH' && (
           <MonthView
             currentDate={currentMonth}

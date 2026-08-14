@@ -18,12 +18,12 @@ export const NotificationCenter: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'PAYMENTS': return <DollarSign className="w-4 h-4 text-[#C8FF2D]" />;
-      case 'TOURS': return <Compass className="w-4 h-4 text-[#6366F1]" />;
-      case 'DISPATCH': return <Truck className="w-4 h-4 text-amber-400" />;
-      case 'APPROVALS': return <ShieldCheck className="w-4 h-4 text-purple-400" />;
-      case 'VEHICLES': return <UserCheck className="w-4 h-4 text-[#10B981]" />;
-      default: return <Bell className="w-4 h-4 text-sky-400" />;
+      case 'PAYMENTS': return <DollarSign className="w-4 h-4 text-white" />;
+      case 'TOURS': return <Compass className="w-4 h-4 text-white" />;
+      case 'DISPATCH': return <Truck className="w-4 h-4 text-white" />;
+      case 'APPROVALS': return <ShieldCheck className="w-4 h-4 text-white" />;
+      case 'VEHICLES': return <UserCheck className="w-4 h-4 text-white" />;
+      default: return <Bell className="w-4 h-4 text-white" />;
     }
   };
 
@@ -34,7 +34,7 @@ export const NotificationCenter: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-[#0B0E14]/80 backdrop-blur-md cursor-pointer"
+        className="fixed inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
         onClick={() => setIsOpen(false)}
       />
 
@@ -45,18 +45,18 @@ export const NotificationCenter: React.FC = () => {
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-          className="w-screen max-w-md bg-[#111621] border-l border-white/10 shadow-2xl flex flex-col justify-between backdrop-blur-2xl"
+          className="w-screen max-w-md bg-neutral-950 border-l border-white/10 shadow-2xl flex flex-col justify-between backdrop-blur-2xl"
         >
           {/* Header */}
           <div>
             <div className="p-5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-2xl bg-[#C8FF2D]/15 text-[#C8FF2D] border border-[#C8FF2D]/30">
-                  <Bell className="w-5 h-5" />
+                <div className="p-2 rounded-2xl bg-white/10 text-white border border-white/20">
+                  <Bell className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h2 className="text-sm font-black text-white tracking-tight">Notification Center</h2>
-                  <p className="text-xs text-slate-400 font-medium">Real-time system events & alerts</p>
+                  <p className="text-xs text-neutral-400 font-medium">Real-time system events & alerts</p>
                 </div>
               </div>
               <Button variant="icon" size="sm" onClick={() => setIsOpen(false)}>
@@ -72,8 +72,8 @@ export const NotificationCenter: React.FC = () => {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-2.5 py-1 rounded-xl text-[10px] font-black uppercase transition-all whitespace-nowrap ${
                     activeCategory === cat
-                      ? 'bg-[#C8FF2D] text-[#0B0E14] shadow-md'
-                      : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+                      ? 'bg-white text-black shadow-md'
+                      : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   {cat}
@@ -82,11 +82,11 @@ export const NotificationCenter: React.FC = () => {
             </div>
 
             {/* Actions Bar */}
-            <div className="px-5 py-2.5 bg-[#0B0E14]/60 border-b border-white/10 flex items-center justify-between text-xs">
-              <span className="text-slate-400 font-medium">{filteredNotifications.length} notifications</span>
+            <div className="px-5 py-2.5 bg-black/60 border-b border-white/10 flex items-center justify-between text-xs">
+              <span className="text-neutral-400 font-medium">{filteredNotifications.length} notifications</span>
               <button
                 onClick={markAllAsRead}
-                className="flex items-center gap-1 text-[#C8FF2D] hover:underline font-bold text-xs"
+                className="flex items-center gap-1 text-white hover:underline font-bold text-xs"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 Mark all read
@@ -96,7 +96,7 @@ export const NotificationCenter: React.FC = () => {
             {/* Notification Items List */}
             <div className="p-4 space-y-2.5 overflow-y-auto max-h-[calc(100vh-210px)]">
               {filteredNotifications.length === 0 ? (
-                <div className="p-10 text-center text-slate-400 text-xs font-medium">
+                <div className="p-10 text-center text-neutral-400 text-xs font-medium">
                   No notifications in this category.
                 </div>
               ) : (
@@ -107,8 +107,8 @@ export const NotificationCenter: React.FC = () => {
                     whileHover={{ scale: 1.01 }}
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer relative group ${
                       n.read
-                        ? 'bg-[#0B0E14]/40 border-white/5 opacity-70'
-                        : 'bg-[#111621] border-[#C8FF2D]/35 shadow-lg'
+                        ? 'bg-black/40 border-white/5 opacity-70'
+                        : 'bg-neutral-900 border-white/20 shadow-lg'
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -118,9 +118,9 @@ export const NotificationCenter: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
                           <h4 className="text-xs font-black text-white truncate">{n.title}</h4>
-                          <span className="text-[10px] text-slate-400 shrink-0 font-mono">{n.timestamp}</span>
+                          <span className="text-[10px] text-neutral-400 shrink-0 font-mono">{n.timestamp}</span>
                         </div>
-                        <p className="text-xs text-slate-300 mt-1 leading-snug font-medium">{n.message}</p>
+                        <p className="text-xs text-neutral-300 mt-1 leading-snug font-medium">{n.message}</p>
                       </div>
                     </div>
                     <button
@@ -128,7 +128,7 @@ export const NotificationCenter: React.FC = () => {
                         e.stopPropagation();
                         archiveNotification(n.id);
                       }}
-                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-rose-400 transition-opacity"
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 p-1 text-neutral-400 hover:text-rose-400 transition-opacity"
                       title="Archive Notification"
                     >
                       <Archive className="w-3.5 h-3.5" />

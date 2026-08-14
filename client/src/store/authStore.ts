@@ -49,6 +49,34 @@ export const DEMO_USERS: Record<string, UserContext> = {
     branchName: 'Kathmandu Agency Branch',
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
     token: 'jwt_agency_token_778811'
+  },
+  'srijan@diplon.com': {
+    userId: 'usr_driver_005',
+    name: 'Srijan Maharjan (Driver)',
+    email: 'srijan@diplon.com',
+    role: 'DRIVER',
+    companyId: 'cmp_scorpio_drivers',
+    companyName: 'Scorpio Fleet Service',
+    branchId: 'br_garage_01',
+    branchName: 'Kathmandu Fleet Garage',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    token: 'jwt_driver_token_993322',
+    driverSn: 1,
+    assignedVehicleReg: 'Ba 21 Ch 4501'
+  },
+  'driver@diplon.com': {
+    userId: 'usr_driver_006',
+    name: 'Srijan Maharjan (Driver)',
+    email: 'driver@diplon.com',
+    role: 'DRIVER',
+    companyId: 'cmp_scorpio_drivers',
+    companyName: 'Scorpio Fleet Service',
+    branchId: 'br_garage_01',
+    branchName: 'Kathmandu Fleet Garage',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    token: 'jwt_driver_token_993323',
+    driverSn: 1,
+    assignedVehicleReg: 'Ba 21 Ch 4501'
   }
 };
 
@@ -113,7 +141,7 @@ export function useAuthStore() {
     let targetEmail = 'superadmin@diplon.com';
     if (newRole === 'ADMIN') targetEmail = 'admin@diplon.com';
     if (newRole === 'AGENCY') targetEmail = 'agency@hikeontrek.com';
-    if (newRole === 'DRIVER') targetEmail = 'admin@diplon.com';
+    if (newRole === 'DRIVER') targetEmail = 'srijan@diplon.com';
 
     const targetUser = DEMO_USERS[targetEmail] || DEMO_USERS['admin@diplon.com'];
     setGlobalUser(targetUser);

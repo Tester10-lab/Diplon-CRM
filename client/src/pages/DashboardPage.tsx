@@ -38,23 +38,23 @@ export const DashboardPage: React.FC<{ onNavigate: (path: string) => void }> = (
   return (
     <div className="space-y-4 animate-fade-in select-none">
       {/* Top View Selector Tab */}
-      <div className="flex items-center justify-between bg-[#111621] p-2 rounded-2xl border border-white/10 shadow-lg">
-        <div className="flex items-center gap-2 text-xs font-extrabold text-[#C8FF2D] px-3">
-          <Layers className="w-4 h-4 text-[#C8FF2D]" />
+      <div className="flex items-center justify-between bg-neutral-950 p-2 rounded-2xl border border-white/10 shadow-lg">
+        <div className="flex items-center gap-2 text-xs font-extrabold text-white px-3">
+          <Layers className="w-4 h-4 text-white" />
           <span>Dashboard View Center</span>
         </div>
 
-        <div className="p-1 rounded-xl bg-[#0B0E14] border border-white/10 flex items-center gap-1 text-xs relative">
+        <div className="p-1 rounded-xl bg-black border border-white/10 flex items-center gap-1 text-xs relative">
           <button
             onClick={() => setActiveTab('EXECUTIVE')}
             className={`relative px-4 py-2 rounded-lg font-extrabold transition-all flex items-center gap-2 z-10 ${
-              activeTab === 'EXECUTIVE' ? 'text-[#0B0E14]' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'EXECUTIVE' ? 'text-black' : 'text-neutral-400 hover:text-white'
             }`}
           >
             {activeTab === 'EXECUTIVE' && (
               <motion.div
                 layoutId="activeDashboardTab"
-                className="absolute inset-0 bg-[#C8FF2D] rounded-lg shadow-md shadow-[#C8FF2D]/20 z-[-1]"
+                className="absolute inset-0 bg-white rounded-lg shadow-md shadow-white/10 z-[-1]"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
@@ -65,13 +65,13 @@ export const DashboardPage: React.FC<{ onNavigate: (path: string) => void }> = (
           <button
             onClick={() => setActiveTab('OPERATIONS')}
             className={`relative px-4 py-2 rounded-lg font-extrabold transition-all flex items-center gap-2 z-10 ${
-              activeTab === 'OPERATIONS' ? 'text-[#0B0E14]' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'OPERATIONS' ? 'text-black' : 'text-neutral-400 hover:text-white'
             }`}
           >
             {activeTab === 'OPERATIONS' && (
               <motion.div
                 layoutId="activeDashboardTab"
-                className="absolute inset-0 bg-[#C8FF2D] rounded-lg shadow-md shadow-[#C8FF2D]/20 z-[-1]"
+                className="absolute inset-0 bg-white rounded-lg shadow-md shadow-white/10 z-[-1]"
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}

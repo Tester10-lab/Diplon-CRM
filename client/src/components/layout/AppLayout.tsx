@@ -45,7 +45,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, currentPath, onN
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0E14] text-slate-100 flex antialiased selection:bg-[#C8FF2D] selection:text-[#0B0E14]">
+    <div className="min-h-screen bg-black text-white flex antialiased selection:bg-white selection:text-black">
       {/* Sidebar Navigation */}
       <Sidebar
         currentPath={currentPath}
@@ -59,7 +59,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children, currentPath, onN
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#0B0E14] pb-20 md:pb-0">
+      <div className="flex-1 flex flex-col min-w-0 bg-black pb-20 md:pb-0">
         {/* Header Topbar */}
         <Topbar
           onLogout={handleLogout}
