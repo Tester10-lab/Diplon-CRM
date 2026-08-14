@@ -321,6 +321,48 @@ export const FleetPage: React.FC = () => {
   const existingJeepGroups = scorpioData.filter(s => s.sn === formSN);
   const isJeepPrivateBlocked = existingJeepGroups.some(g => g.isPrivate) && existingJeepGroups.length >= 1;
 
+  // Quick Action: Open Modal pre-filled to add a guest directly to an existing vehicle unit
+  const handleOpenAddGuestToVehicle = (sn: number, items: ScorpioAssignment[]) => {
+    const mainItem = items[0];
+    const totalJeepPax = items.reduce((sum, it) => sum + (it.pax || 0), 0);
+    const capacity = mainItem?.vehicleCapacity || 7;
+    const remainingSeats = Math.max(1, capacity - totalJeepPax);
+
+    setFormSN(sn);
+    setFormTour(mainItem?.tour || formTour || (tourOptions[0] || 'Tour Package'));
+    setFormDate(mainItem?.date || formDate || '2026-08-14');
+    setFormVehicleType(mainItem?.vehicleType || formVehicleType || 'Bus');
+    setFormVehicleCapacity(capacity);
+    setFormDriver(mainItem?.driver || '');
+    setFormPax(remainingSeats);
+    setFormRooms('1 room');
+    setFormCustomerName('');
+    setFormContactNumber('');
+    setFormIsPrivate(false);
+    setGuestSearchQuery('');
+    setIsGuestDropdownOpen(false);
+    setIsAddModalOpen(true);
+  };
+
+  // Quick Action: Open Modal for a fresh new vehicle unit
+  const handleOpenNewVehicleModal = () => {
+    const maxSN = scorpioData.length > 0 ? Math.max(...scorpioData.map(s => s.sn)) : 0;
+    setFormSN(maxSN + 1);
+    setFormTour(tourOptions[0] || 'Tour Package');
+    setFormDate(new Date().toISOString().split('T')[0] || '2026-08-14');
+    setFormDriver('');
+    setFormVehicleType('Bus');
+    setFormVehicleCapacity(28);
+    setFormCustomerName('');
+    setFormContactNumber('');
+    setFormPax(2);
+    setFormRooms('1 room');
+    setFormIsPrivate(false);
+    setGuestSearchQuery('');
+    setIsGuestDropdownOpen(false);
+    setIsAddModalOpen(true);
+  };
+
   // Handle Preset Vehicle Type Selection
   const handleSelectVehicleType = (type: string) => {
     setFormVehicleType(type);
@@ -355,7 +397,7 @@ export const FleetPage: React.FC = () => {
   const handleSelectGuest = (booking: any) => {
     setFormCustomerName(booking.customerName);
     setFormContactNumber(booking.contactPhone || booking.customerPhone || '');
-    setFormPax(booking.seatsReserved || booking.pax || 7);
+    setFormPax(booking.seatsReserved || booking.pax || 2);
     if (booking.roomDetails) setFormRooms(booking.roomDetails);
     if (booking.packageName) setFormTour(booking.packageName);
     if (booking.departureDate) setFormDate(booking.departureDate);
@@ -367,29 +409,37 @@ export const FleetPage: React.FC = () => {
 
   const handleCreateVehicleAssignment = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isJeepPrivateBlocked) return;
-    if (!formDriver.trim() && !formCustomerName.trim()) return;
+    const guestName = formCustomerName.trim() || guestSearchQuery.trim();
+    if (!guestName && !formDriver.trim()) {
+      showToast('⚠️ Please enter a Guest Name or assign a Driver.');
+      return;
+    }
 
     const newAssignment: ScorpioAssignment = {
       id: `veh_${Date.now()}`,
-      tour: formTour,
-      date: formDate,
-      sn: formSN,
+      tour: formTour || tourOptions[0] || 'Tour Package',
+      date: formDate || '2026-08-14',
+      sn: formSN || 1,
       driver: formDriver || 'Unassigned Driver',
-      pax: formPax,
-      rooms: formRooms,
-      name: formCustomerName || 'Guest Group',
-      number: formContactNumber || '-',
+      pax: Number(formPax) || 1,
+      rooms: formRooms || '1 room',
+      name: guestName || 'Guest Group',
+      number: formContactNumber.trim() || '-',
       isPrivate: formIsPrivate,
-      vehicleType: formVehicleType,
-      vehicleCapacity: formVehicleCapacity
+      vehicleType: formVehicleType || 'Vehicle',
+      vehicleCapacity: Number(formVehicleCapacity) || 7
     };
 
-    const updated = [...scorpioData, newAssignment];
+    // If adding to a vehicle that was previously marked private, switch all items on this unit to sharing if user is adding multiple groups
+    let updated = [...scorpioData];
+    if (formIsPrivate === false) {
+      updated = updated.map(item => item.sn === formSN ? { ...item, isPrivate: false } : item);
+    }
+    updated.push(newAssignment);
     setScorpioData(updated);
     saveScorpioAssignments(updated);
     setIsAddModalOpen(false);
-    showToast(`✅ Vehicle Unit #${formSN} (${formVehicleType} - Driver ${formDriver || 'Assigned'}) saved!`);
+    showToast(`✅ Guest "${newAssignment.name}" (${newAssignment.pax} Pax) added to Vehicle #${formSN}!`);
   };
 
   const handleDriverChangeBySN = (sn: number, newDriver: string) => {
@@ -683,9 +733,9 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 <Button
                   variant="primary"
                   size="sm"
-                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-md shadow-amber-500/20"
+                  className="bg-white text-black hover:bg-neutral-200 font-bold shadow-md shadow-white/10"
                   icon={<Plus className="w-4 h-4" />}
-                  onClick={() => setIsAddModalOpen(true)}
+                  onClick={handleOpenNewVehicleModal}
                 >
                   + Assign Vehicle
                 </Button>
@@ -853,9 +903,22 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
 
                     {/* Guest Breakdown List inside this Vehicle Unit */}
                     <div className="space-y-2 pt-1 border-t border-slate-800/60">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                        Guest Bookings Assigned ({items.length} Group)
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                          Guest Bookings Assigned ({items.length} Group{items.length !== 1 ? 's' : ''})
+                        </span>
+                        {!isAgency && (
+                          <button
+                            type="button"
+                            onClick={() => handleOpenAddGuestToVehicle(sn, items)}
+                            className="px-2.5 py-1 rounded-xl bg-white text-black hover:bg-neutral-200 font-extrabold text-[11px] flex items-center gap-1 shadow-sm transition-all"
+                            title={`Add a new guest group to Vehicle Unit #${sn}`}
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>+ Add Guest</span>
+                          </button>
+                        )}
+                      </div>
                       {items.map(guest => {
                         const isMine = isOwnAgencyGuest((guest as any).agencyName);
                         return (
@@ -954,6 +1017,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                           {!isAgency ? (
                             <>
                               <button
+                                onClick={() => handleOpenAddGuestToVehicle(item.sn, [item])}
+                                className="p-1.5 rounded-lg bg-white/10 text-white border border-white/20 hover:bg-white/20 font-bold text-[11px] flex items-center gap-1"
+                                title="Add guest to this vehicle unit"
+                              >
+                                <Plus className="w-3 h-3" />
+                                <span>+ Guest</span>
+                              </button>
+                              <button
                                 onClick={() => handleSendDriverDispatchSMS(item.sn, [item])}
                                 className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-bold text-[11px] flex items-center gap-1"
                               >
@@ -1045,12 +1116,12 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 />
               </div>
 
-              {/* Searchable Driver Selection */}
+              {/* Searchable Driver & Vehicle Unit Selection */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
                     <span>Assigned Driver Name</span>
-                    <span className="text-[10px] text-amber-400 font-normal">Click to search</span>
+                    <span className="text-[10px] text-white/70 font-normal">Click to search</span>
                   </label>
                   <SearchableDriverSelect
                     currentDriver={formDriver}
@@ -1059,20 +1130,49 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   />
                 </div>
 
-                <Input
-                  label="Vehicle S.N. #"
-                  type="number"
-                  value={formSN}
-                  onChange={e => setFormSN(Number(e.target.value))}
-                  helperText="Auto-linked by Driver"
-                  required
-                />
+                <div>
+                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1.5 flex items-center justify-between">
+                    <span>Target Vehicle Unit</span>
+                    <span className="text-[10px] text-white font-mono font-bold">Unit #{formSN}</span>
+                  </label>
+                  <select
+                    value={formSN}
+                    onChange={(e) => {
+                      const chosenSN = Number(e.target.value);
+                      setFormSN(chosenSN);
+                      const found = scorpioData.find(s => s.sn === chosenSN);
+                      if (found) {
+                        if (found.tour) setFormTour(found.tour);
+                        if (found.date) setFormDate(found.date);
+                        if (found.vehicleType) setFormVehicleType(found.vehicleType);
+                        if (found.vehicleCapacity) setFormVehicleCapacity(found.vehicleCapacity);
+                        if (found.driver) setFormDriver(found.driver);
+                        setFormIsPrivate(found.isPrivate || false);
+                      }
+                    }}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-2 focus:ring-white"
+                  >
+                    {jeepsList.map(([snNum, groupItems]) => {
+                      const vType = groupItems[0]?.vehicleType || 'Vehicle';
+                      const paxTotal = groupItems.reduce((acc, it) => acc + (it.pax || 0), 0);
+                      const cap = groupItems[0]?.vehicleCapacity || 7;
+                      return (
+                        <option key={snNum} value={snNum}>
+                          Unit #{snNum}: {vType} ({paxTotal}/{cap} Pax - {groupItems[0]?.tour || 'Tour'})
+                        </option>
+                      );
+                    })}
+                    <option value={(scorpioData.length > 0 ? Math.max(...scorpioData.map(s => s.sn)) : 0) + 1}>
+                      + Create New Vehicle Unit #{(scorpioData.length > 0 ? Math.max(...scorpioData.map(s => s.sn)) : 0) + 1}
+                    </option>
+                  </select>
+                </div>
               </div>
 
               {/* Searchable Type & Filter Guest Input (Package Specific Filter) */}
-              <div className="space-y-1.5 bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-500/30 relative">
+              <div className="space-y-1.5 bg-slate-900 p-3.5 rounded-2xl border border-slate-800 relative">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-indigo-300 uppercase tracking-wider">
+                  <label className="text-xs font-bold text-slate-200 uppercase tracking-wider">
                     Type & Search Guest Bookings
                   </label>
                   
@@ -1082,7 +1182,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                     onClick={() => setFilterOnlySelectedTourGuests(!filterOnlySelectedTourGuests)}
                     className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all flex items-center gap-1 ${
                       filterOnlySelectedTourGuests
-                        ? 'bg-amber-500 text-slate-950 border-amber-400'
+                        ? 'bg-white text-black border-white'
                         : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-white'
                     }`}
                   >
@@ -1104,7 +1204,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                       setIsGuestDropdownOpen(true);
                     }}
                     placeholder={`Type guest name for ${formTour || 'selected tour'}...`}
-                    className="w-full bg-slate-900 text-amber-300 font-bold border border-indigo-500/40 rounded-xl pl-9 pr-8 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full bg-slate-950 text-white font-bold border border-slate-800 rounded-xl pl-9 pr-8 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-white"
                   />
                   {guestSearchQuery && (
                     <button
@@ -1122,18 +1222,18 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
 
                 {/* Dropdown Overlay with Matching Package Guests */}
                 {isGuestDropdownOpen && (
-                  <div className="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-indigo-500/50 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-800 animate-fade-in">
+                  <div className="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-800 animate-fade-in">
                     {filteredBookedGuests.length > 0 ? (
                       filteredBookedGuests.map(b => (
                         <div
                           key={b._id || (b as any).id}
                           onClick={() => handleSelectGuest(b)}
-                          className="p-2.5 hover:bg-indigo-600/30 cursor-pointer text-xs transition-all flex items-center justify-between"
+                          className="p-2.5 hover:bg-slate-800 cursor-pointer text-xs transition-all flex items-center justify-between"
                         >
                           <div>
                             <div className="font-bold text-white flex items-center gap-1.5">
                               <span>{b.customerName}</span>
-                              <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono">
+                              <span className="text-[9px] bg-white/10 text-white px-1.5 py-0.2 rounded font-mono">
                                 {b.packageName}
                               </span>
                             </div>
@@ -1141,14 +1241,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                               📞 {b.contactPhone || (b as any).customerPhone || 'No Phone'}
                             </div>
                           </div>
-                          <span className="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">
+                          <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded font-mono font-bold">
                             {b.seatsReserved || (b as any).pax || 1} Pax
                           </span>
                         </div>
                       ))
                     ) : (
                       <div className="p-3 text-xs text-slate-400 text-center">
-                        No guest bookings found matching "{formTour}". Click "Show All Guests" above or type manually below.
+                        No guest bookings found matching "{formTour}". Click "Show All Guests" above or enter manually below.
                       </div>
                     )}
                   </div>
@@ -1159,17 +1259,17 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
               <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <Lock className="w-4 h-4 text-amber-400" />
+                    <Lock className="w-4 h-4 text-white" />
                     Private Tour Group Only
                   </div>
-                  <div className="text-[11px] text-slate-400">If enabled, no other customer groups can be added to Vehicle #{formSN}</div>
+                  <div className="text-[11px] text-slate-400">If enabled, Vehicle #{formSN} is reserved exclusively for this private booking</div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setFormIsPrivate(!formIsPrivate)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
                     formIsPrivate
-                      ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/20'
+                      ? 'bg-white text-black border-white shadow-md shadow-white/10'
                       : 'bg-slate-950 text-slate-400 border-slate-800 hover:text-white'
                   }`}
                 >
@@ -1177,11 +1277,25 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 </button>
               </div>
 
-              {/* Warning Banner if current Vehicle S.N. is already Private */}
-              {isJeepPrivateBlocked && (
-                <div className="bg-rose-500/10 border border-rose-500/30 p-3 rounded-xl flex items-center gap-2.5 text-rose-300 text-xs font-semibold animate-fade-in">
-                  <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0 animate-bounce" />
-                  <span>🔒 Vehicle #{formSN} is reserved for a Private Tour group. Additional guest groups cannot be added to this vehicle!</span>
+              {/* Informative Banner if existing Vehicle S.N. has Private enabled */}
+              {isJeepPrivateBlocked && !formIsPrivate && (
+                <div className="bg-white/10 border border-white/20 p-3 rounded-xl flex items-center justify-between gap-2.5 text-white text-xs font-semibold animate-fade-in">
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-white shrink-0" />
+                    <span>Vehicle #{formSN} was previously marked Private. Adding this guest will convert it to a Sharing vehicle.</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = scorpioData.map(s => s.sn === formSN ? { ...s, isPrivate: false } : s);
+                      setScorpioData(updated);
+                      saveScorpioAssignments(updated);
+                      showToast(`🔓 Vehicle #${formSN} converted to Sharing Tour mode!`);
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-white text-black hover:bg-neutral-200 font-extrabold text-[10px] shrink-0"
+                  >
+                    Convert & Allow
+                  </button>
                 </div>
               )}
 
@@ -1191,15 +1305,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   label="Guest / Group Lead Name"
                   value={formCustomerName}
                   onChange={e => setFormCustomerName(e.target.value)}
-                  placeholder="e.g. Chandra man Maharjan"
+                  placeholder="e.g. Sujata Bhujel or Group Name"
                   required
                 />
                 <Input
                   label="Contact Number"
                   value={formContactNumber}
                   onChange={e => setFormContactNumber(e.target.value)}
-                  placeholder="e.g. 9802100125"
-                  required
+                  placeholder="e.g. 9845940693"
                 />
               </div>
 
@@ -1226,10 +1339,9 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 <Button
                   type="submit"
                   variant="primary"
-                  disabled={isJeepPrivateBlocked}
-                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-white hover:bg-neutral-200 text-black font-bold shadow-lg shadow-white/10 cursor-pointer"
                 >
-                  Save Vehicle Assignment
+                  Save Vehicle & Guest Assignment
                 </Button>
               </div>
             </form>
