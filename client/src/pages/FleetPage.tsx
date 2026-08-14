@@ -11,7 +11,7 @@ import { Input } from '../components/ui/Input';
 import { PageSkeleton } from '../components/feedback/Skeleton';
 import { ErrorState } from '../components/feedback/ErrorState';
 import { getScorpioAssignments, saveScorpioAssignments, ScorpioAssignment } from '../features/fleet/scorpioStore';
-import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2, CheckCircle2 } from 'lucide-react';
+import { Car, Plus, Download, Copy, Search, UserCheck, Send, LayoutGrid, Table, ShieldAlert, X, Calendar, Filter, Bus, Lock, Users, Bed, Layers, Sparkles, Phone, Trash2, CheckCircle2, CheckSquare, Square, ListPlus, ClipboardPaste, UserPlus, Check } from 'lucide-react';
 
 interface SearchableDriverSelectProps {
   currentDriver: string;
@@ -218,6 +218,21 @@ export const FleetPage: React.FC = () => {
     }
   }, [tourOptions, formTour]);
 
+  // Modal Tab Mode: 'BULK_BOOKINGS' | 'BATCH_ROWS' | 'SINGLE'
+  const [assignTab, setAssignTab] = useState<'BULK_BOOKINGS' | 'BATCH_ROWS' | 'SINGLE'>('BULK_BOOKINGS');
+
+  // Selected Booking IDs for Bulk CRM Assignment
+  const [selectedBookingIds, setSelectedBookingIds] = useState<string[]>([]);
+
+  // Manual Batch Rows for Walk-ins
+  const [batchGuestRows, setBatchGuestRows] = useState<Array<{ id: string; name: string; phone: string; pax: number; rooms: string }>>([
+    { id: 'row_1', name: '', phone: '', pax: 2, rooms: '1 room' },
+    { id: 'row_2', name: '', phone: '', pax: 2, rooms: '1 room' }
+  ]);
+
+  // Batch Paste Textarea
+  const [batchPasteText, setBatchPasteText] = useState<string>('');
+
   // Guest Searchable Type-and-Select State
   const [guestSearchQuery, setGuestSearchQuery] = useState('');
   const [isGuestDropdownOpen, setIsGuestDropdownOpen] = useState(false);
@@ -257,6 +272,17 @@ export const FleetPage: React.FC = () => {
     );
   }, [bookings, formTour, filterOnlySelectedTourGuests, guestSearchQuery]);
 
+  // Total Pax of currently selected bookings in Bulk Select tab
+  const selectedBulkPax = useMemo(() => {
+    return filteredBookedGuests
+      .filter(b => selectedBookingIds.includes((b._id || (b as any).id) as string))
+      .reduce((sum, b) => sum + Number(b.seatsReserved || (b as any).pax || (b as any).travelersCount || 1), 0);
+  }, [filteredBookedGuests, selectedBookingIds]);
+
+  const currentUnitAssignedPax = useMemo(() => {
+    return scorpioData.filter(s => s.sn === formSN).reduce((sum, s) => sum + (s.pax || 0), 0);
+  }, [scorpioData, formSN]);
+
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3500);
@@ -264,7 +290,6 @@ export const FleetPage: React.FC = () => {
 
   if (isLoading) return <PageSkeleton />;
   if (error) return <ErrorState message={error.message} onRetry={() => {}} />;
-
 
   const driverOptions = Array.from(
     new Set([
@@ -321,15 +346,69 @@ export const FleetPage: React.FC = () => {
   const existingJeepGroups = scorpioData.filter(s => s.sn === formSN);
   const isJeepPrivateBlocked = existingJeepGroups.some(g => g.isPrivate) && existingJeepGroups.length >= 1;
 
+  // Toggle individual booking in bulk list
+  const toggleSelectBooking = (id: string) => {
+    setSelectedBookingIds(prev => 
+      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+    );
+  };
+
+  // Select All / Deselect All Matching Bookings
+  const handleSelectAllBookings = () => {
+    const allIds = filteredBookedGuests.map(b => (b._id || (b as any).id) as string);
+    if (selectedBookingIds.length === allIds.length && allIds.length > 0) {
+      setSelectedBookingIds([]);
+    } else {
+      setSelectedBookingIds(allIds);
+    }
+  };
+
+  // Auto-Fill up to Vehicle Capacity
+  const handleAutoFillCapacity = () => {
+    const remainingSeats = Math.max(0, formVehicleCapacity - currentUnitAssignedPax);
+    
+    let accumulatedPax = 0;
+    const toSelect: string[] = [];
+
+    for (const b of filteredBookedGuests) {
+      const bId = (b._id || (b as any).id) as string;
+      const bookingPax = Number(b.seatsReserved || (b as any).pax || (b as any).travelersCount || 1);
+      if (accumulatedPax + bookingPax <= remainingSeats || toSelect.length === 0) {
+        toSelect.push(bId);
+        accumulatedPax += bookingPax;
+      }
+    }
+
+    setSelectedBookingIds(toSelect);
+    showToast(`⚡ Auto-selected ${toSelect.length} bookings (${accumulatedPax} Pax) to fill vehicle capacity!`);
+  };
+
+  // Batch Row Management
+  const handleAddBatchRow = () => {
+    setBatchGuestRows(prev => [
+      ...prev,
+      { id: `row_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`, name: '', phone: '', pax: 2, rooms: '1 room' }
+    ]);
+  };
+
+  const handleRemoveBatchRow = (id: string) => {
+    setBatchGuestRows(prev => prev.filter(r => r.id !== id));
+  };
+
+  const handleUpdateBatchRow = (id: string, field: 'name' | 'phone' | 'pax' | 'rooms', value: any) => {
+    setBatchGuestRows(prev => prev.map(r => r.id === id ? { ...r, [field]: value } : r));
+  };
+
   // Quick Action: Open Modal pre-filled to add a guest directly to an existing vehicle unit
   const handleOpenAddGuestToVehicle = (sn: number, items: ScorpioAssignment[]) => {
     const mainItem = items[0];
     const totalJeepPax = items.reduce((sum, it) => sum + (it.pax || 0), 0);
     const capacity = mainItem?.vehicleCapacity || 7;
     const remainingSeats = Math.max(1, capacity - totalJeepPax);
+    const currentTour = mainItem?.tour || formTour || (tourOptions[0] || 'Tour Package');
 
     setFormSN(sn);
-    setFormTour(mainItem?.tour || formTour || (tourOptions[0] || 'Tour Package'));
+    setFormTour(currentTour);
     setFormDate(mainItem?.date || formDate || '2026-08-14');
     setFormVehicleType(mainItem?.vehicleType || formVehicleType || 'Bus');
     setFormVehicleCapacity(capacity);
@@ -341,14 +420,27 @@ export const FleetPage: React.FC = () => {
     setFormIsPrivate(false);
     setGuestSearchQuery('');
     setIsGuestDropdownOpen(false);
+
+    // Auto-select all bookings for this tour package
+    const matchingBookings = (bookings || []).filter(b => {
+      if (!b.packageName) return false;
+      const bLower = b.packageName.toLowerCase().trim();
+      const tLower = currentTour.toLowerCase().trim();
+      return bLower.includes(tLower) || tLower.includes(bLower);
+    });
+
+    const matchingIds = matchingBookings.map(b => (b._id || (b as any).id) as string);
+    setSelectedBookingIds(matchingIds);
+    setAssignTab(matchingIds.length > 0 ? 'BULK_BOOKINGS' : 'SINGLE');
     setIsAddModalOpen(true);
   };
 
   // Quick Action: Open Modal for a fresh new vehicle unit
   const handleOpenNewVehicleModal = () => {
     const maxSN = scorpioData.length > 0 ? Math.max(...scorpioData.map(s => s.sn)) : 0;
+    const initialTour = tourOptions[0] || 'Tour Package';
     setFormSN(maxSN + 1);
-    setFormTour(tourOptions[0] || 'Tour Package');
+    setFormTour(initialTour);
     setFormDate(new Date().toISOString().split('T')[0] || '2026-08-14');
     setFormDriver('');
     setFormVehicleType('Bus');
@@ -360,6 +452,17 @@ export const FleetPage: React.FC = () => {
     setFormIsPrivate(false);
     setGuestSearchQuery('');
     setIsGuestDropdownOpen(false);
+
+    // Pre-select all bookings for the initial tour package
+    const matchingBookings = (bookings || []).filter(b => {
+      if (!b.packageName) return false;
+      const bLower = b.packageName.toLowerCase().trim();
+      const tLower = initialTour.toLowerCase().trim();
+      return bLower.includes(tLower) || tLower.includes(bLower);
+    });
+    const matchingIds = matchingBookings.map(b => (b._id || (b as any).id) as string);
+    setSelectedBookingIds(matchingIds);
+    setAssignTab(matchingIds.length > 0 ? 'BULK_BOOKINGS' : 'SINGLE');
     setIsAddModalOpen(true);
   };
 
@@ -393,7 +496,7 @@ export const FleetPage: React.FC = () => {
     }
   };
 
-  // Handle Guest Selection from Search Dropdown
+  // Handle Guest Selection from Search Dropdown (for Single tab)
   const handleSelectGuest = (booking: any) => {
     setFormCustomerName(booking.customerName);
     setFormContactNumber(booking.contactPhone || booking.customerPhone || '');
@@ -407,6 +510,137 @@ export const FleetPage: React.FC = () => {
     showToast(`✨ Selected guest ${booking.customerName}`);
   };
 
+  // Bulk Save Bookings Handler
+  const handleSaveBulkBookings = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (selectedBookingIds.length === 0) {
+      showToast('⚠️ Please select at least one guest booking from the list.');
+      return;
+    }
+
+    const selectedBookings = filteredBookedGuests.filter(b => 
+      selectedBookingIds.includes((b._id || (b as any).id) as string)
+    );
+
+    const newAssignments: ScorpioAssignment[] = selectedBookings.map((b, idx) => ({
+      id: `veh_${Date.now()}_${idx}_${Math.random().toString(36).substring(2, 6)}`,
+      tour: formTour || b.packageName || 'Tour Package',
+      date: formDate || b.departureDate || '2026-08-14',
+      sn: formSN || 1,
+      driver: formDriver || 'Unassigned Driver',
+      pax: Number(b.seatsReserved || (b as any).pax || (b as any).travelersCount || 1),
+      rooms: b.roomDetails || `${Math.ceil(Number(b.seatsReserved || 1) / 2)} room`,
+      name: b.customerName || 'Guest Group',
+      number: b.contactPhone || (b as any).customerPhone || '-',
+      isPrivate: formIsPrivate,
+      vehicleType: formVehicleType || 'Vehicle',
+      vehicleCapacity: Number(formVehicleCapacity) || 7
+    }));
+
+    let updated = [...scorpioData];
+    if (formIsPrivate === false) {
+      updated = updated.map(item => item.sn === formSN ? { ...item, isPrivate: false } : item);
+    }
+    updated.push(...newAssignments);
+
+    setScorpioData(updated);
+    saveScorpioAssignments(updated);
+    setIsAddModalOpen(false);
+    const totalAddedPax = newAssignments.reduce((s, a) => s + a.pax, 0);
+    showToast(`🎉 Added all ${newAssignments.length} guest groups (${totalAddedPax} Pax) to Vehicle #${formSN} at once!`);
+  };
+
+  // Batch Save Manual Rows
+  const handleSaveBatchRows = (e: React.FormEvent) => {
+    e.preventDefault();
+    const validRows = batchGuestRows.filter(r => r.name.trim().length > 0);
+    if (validRows.length === 0) {
+      showToast('⚠️ Please enter at least one guest name in the rows.');
+      return;
+    }
+
+    const newAssignments: ScorpioAssignment[] = validRows.map((r, idx) => ({
+      id: `veh_${Date.now()}_${idx}_${Math.random().toString(36).substring(2, 6)}`,
+      tour: formTour || tourOptions[0] || 'Tour Package',
+      date: formDate || '2026-08-14',
+      sn: formSN || 1,
+      driver: formDriver || 'Unassigned Driver',
+      pax: Number(r.pax) || 1,
+      rooms: r.rooms || '1 room',
+      name: r.name.trim(),
+      number: r.phone.trim() || '-',
+      isPrivate: formIsPrivate,
+      vehicleType: formVehicleType || 'Vehicle',
+      vehicleCapacity: Number(formVehicleCapacity) || 7
+    }));
+
+    let updated = [...scorpioData];
+    if (formIsPrivate === false) {
+      updated = updated.map(item => item.sn === formSN ? { ...item, isPrivate: false } : item);
+    }
+    updated.push(...newAssignments);
+
+    setScorpioData(updated);
+    saveScorpioAssignments(updated);
+    setIsAddModalOpen(false);
+    const totalAddedPax = newAssignments.reduce((s, a) => s + a.pax, 0);
+    showToast(`🎉 Added all ${newAssignments.length} guests (${totalAddedPax} Pax) to Vehicle #${formSN} at once!`);
+  };
+
+  // Batch Save Paste Text
+  const handleSaveBatchPaste = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!batchPasteText.trim()) {
+      showToast('⚠️ Please paste guest details (Name, Phone, Pax, Rooms).');
+      return;
+    }
+
+    const lines = batchPasteText.split('\n').filter(l => l.trim().length > 0);
+    const newAssignments: ScorpioAssignment[] = [];
+
+    lines.forEach((line, idx) => {
+      const parts = line.split(/[,;\t]+/).map(p => p.trim());
+      const name = parts[0] || `Guest ${idx + 1}`;
+      const number = parts[1] || '-';
+      const pax = Number(parts[2]) || 2;
+      const rooms = parts[3] || '1 room';
+
+      newAssignments.push({
+        id: `veh_${Date.now()}_${idx}_${Math.random().toString(36).substring(2, 6)}`,
+        tour: formTour || tourOptions[0] || 'Tour Package',
+        date: formDate || '2026-08-14',
+        sn: formSN || 1,
+        driver: formDriver || 'Unassigned Driver',
+        pax: pax,
+        rooms: rooms,
+        name: name,
+        number: number,
+        isPrivate: formIsPrivate,
+        vehicleType: formVehicleType || 'Vehicle',
+        vehicleCapacity: Number(formVehicleCapacity) || 7
+      });
+    });
+
+    if (newAssignments.length === 0) {
+      showToast('⚠️ No valid guest rows found.');
+      return;
+    }
+
+    let updated = [...scorpioData];
+    if (formIsPrivate === false) {
+      updated = updated.map(item => item.sn === formSN ? { ...item, isPrivate: false } : item);
+    }
+    updated.push(...newAssignments);
+
+    setScorpioData(updated);
+    saveScorpioAssignments(updated);
+    setIsAddModalOpen(false);
+    setBatchPasteText('');
+    const totalAddedPax = newAssignments.reduce((s, a) => s + a.pax, 0);
+    showToast(`🎉 Parsed & added ${newAssignments.length} guests (${totalAddedPax} Pax) to Vehicle #${formSN} at once!`);
+  };
+
+  // Single Guest Save Handler
   const handleCreateVehicleAssignment = (e: React.FormEvent) => {
     e.preventDefault();
     const guestName = formCustomerName.trim() || guestSearchQuery.trim();
@@ -430,7 +664,6 @@ export const FleetPage: React.FC = () => {
       vehicleCapacity: Number(formVehicleCapacity) || 7
     };
 
-    // If adding to a vehicle that was previously marked private, switch all items on this unit to sharing if user is adding multiple groups
     let updated = [...scorpioData];
     if (formIsPrivate === false) {
       updated = updated.map(item => item.sn === formSN ? { ...item, isPrivate: false } : item);
@@ -1052,15 +1285,15 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
             </div>
           )}
 
-          {/* Modal Dialog: + Assign Vehicle & Driver */}
+          {/* Modal Dialog: + Assign Vehicle & Driver (Supports Bulk Select & Batch Add) */}
           <Modal
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
-            title="Assign Vehicle & Driver"
-            description="Select tour package, vehicle type, seating capacity, filter guest pipeline, and assign typable driver."
-            maxWidth="lg"
+            title="Assign Vehicle & Guests"
+            description="Assign multiple customer bookings at once, add batches of guests, or assign individual groups."
+            maxWidth="xl"
           >
-            <form onSubmit={handleCreateVehicleAssignment} className="space-y-4">
+            <div className="space-y-4">
               
               {/* Tour Package Selection & Date */}
               <div className="grid grid-cols-2 gap-4">
@@ -1071,7 +1304,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   <select
                     value={formTour}
                     onChange={(e) => setFormTour(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-2 focus:ring-white"
                   >
                     {tourOptions.map(t => (
                       <option key={t} value={t}>{t}</option>
@@ -1097,7 +1330,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                   <select
                     value={formVehicleType}
                     onChange={(e) => handleSelectVehicleType(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-amber-300 font-bold focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-2 focus:ring-white"
                   >
                     {vehiclePresets.map(v => (
                       <option key={v.type} value={v.type}>{v.type} ({v.capacity} Seats)</option>
@@ -1116,7 +1349,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 />
               </div>
 
-              {/* Searchable Driver & Vehicle Unit Selection */}
+              {/* Searchable Driver & Target Vehicle Unit Selection */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
@@ -1133,7 +1366,9 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 <div>
                   <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1.5 flex items-center justify-between">
                     <span>Target Vehicle Unit</span>
-                    <span className="text-[10px] text-white font-mono font-bold">Unit #{formSN}</span>
+                    <span className="text-[10px] text-white font-mono font-bold">
+                      Unit #{formSN} ({currentUnitAssignedPax} Pax assigned)
+                    </span>
                   </label>
                   <select
                     value={formSN}
@@ -1169,100 +1404,14 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 </div>
               </div>
 
-              {/* Searchable Type & Filter Guest Input (Package Specific Filter) */}
-              <div className="space-y-1.5 bg-slate-900 p-3.5 rounded-2xl border border-slate-800 relative">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-                    Type & Search Guest Bookings
-                  </label>
-                  
-                  {/* Toggle: Filter only selected tour guests */}
-                  <button
-                    type="button"
-                    onClick={() => setFilterOnlySelectedTourGuests(!filterOnlySelectedTourGuests)}
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all flex items-center gap-1 ${
-                      filterOnlySelectedTourGuests
-                        ? 'bg-white text-black border-white'
-                        : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-white'
-                    }`}
-                  >
-                    <Filter className="w-3 h-3" />
-                    {filterOnlySelectedTourGuests 
-                      ? `Filter: ${formTour ? (formTour.length > 20 ? formTour.slice(0, 20) + '...' : formTour) : 'Selected Tour'} Only` 
-                      : 'Show All Guests'}
-                  </button>
-                </div>
-
-                <div className="relative">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={guestSearchQuery}
-                    onFocus={() => setIsGuestDropdownOpen(true)}
-                    onChange={e => {
-                      setGuestSearchQuery(e.target.value);
-                      setIsGuestDropdownOpen(true);
-                    }}
-                    placeholder={`Type guest name for ${formTour || 'selected tour'}...`}
-                    className="w-full bg-slate-950 text-white font-bold border border-slate-800 rounded-xl pl-9 pr-8 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-white"
-                  />
-                  {guestSearchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setGuestSearchQuery('');
-                        setIsGuestDropdownOpen(true);
-                      }}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-
-                {/* Dropdown Overlay with Matching Package Guests */}
-                {isGuestDropdownOpen && (
-                  <div className="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-800 animate-fade-in">
-                    {filteredBookedGuests.length > 0 ? (
-                      filteredBookedGuests.map(b => (
-                        <div
-                          key={b._id || (b as any).id}
-                          onClick={() => handleSelectGuest(b)}
-                          className="p-2.5 hover:bg-slate-800 cursor-pointer text-xs transition-all flex items-center justify-between"
-                        >
-                          <div>
-                            <div className="font-bold text-white flex items-center gap-1.5">
-                              <span>{b.customerName}</span>
-                              <span className="text-[9px] bg-white/10 text-white px-1.5 py-0.2 rounded font-mono">
-                                {b.packageName}
-                              </span>
-                            </div>
-                            <div className="text-[11px] text-slate-400 font-mono">
-                              📞 {b.contactPhone || (b as any).customerPhone || 'No Phone'}
-                            </div>
-                          </div>
-                          <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded font-mono font-bold">
-                            {b.seatsReserved || (b as any).pax || 1} Pax
-                          </span>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="p-3 text-xs text-slate-400 text-center">
-                        No guest bookings found matching "{formTour}". Click "Show All Guests" above or enter manually below.
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
               {/* Private Tour Group Toggle Button */}
-              <div className="bg-slate-900/90 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between">
+              <div className="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <Lock className="w-4 h-4 text-white" />
+                    <Lock className="w-3.5 h-3.5 text-white" />
                     Private Tour Group Only
                   </div>
-                  <div className="text-[11px] text-slate-400">If enabled, Vehicle #{formSN} is reserved exclusively for this private booking</div>
+                  <div className="text-[11px] text-slate-400">If enabled, Vehicle #{formSN} is reserved exclusively for one private booking</div>
                 </div>
                 <button
                   type="button"
@@ -1282,7 +1431,7 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 <div className="bg-white/10 border border-white/20 p-3 rounded-xl flex items-center justify-between gap-2.5 text-white text-xs font-semibold animate-fade-in">
                   <div className="flex items-center gap-2">
                     <Lock className="w-4 h-4 text-white shrink-0" />
-                    <span>Vehicle #{formSN} was previously marked Private. Adding this guest will convert it to a Sharing vehicle.</span>
+                    <span>Vehicle #{formSN} was previously marked Private. Adding guests will convert it to a Sharing vehicle.</span>
                   </div>
                   <button
                     type="button"
@@ -1299,52 +1448,441 @@ Please report to Kathmandu Departure Spot by 06:00 AM!`;
                 </div>
               )}
 
-              {/* Guest / Group Lead Name & Contact Number */}
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="Guest / Group Lead Name"
-                  value={formCustomerName}
-                  onChange={e => setFormCustomerName(e.target.value)}
-                  placeholder="e.g. Sujata Bhujel or Group Name"
-                  required
-                />
-                <Input
-                  label="Contact Number"
-                  value={formContactNumber}
-                  onChange={e => setFormContactNumber(e.target.value)}
-                  placeholder="e.g. 9845940693"
-                />
-              </div>
-
-              {/* Passenger Count & Rooms Allocation */}
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="Passenger Count (Pax)"
-                  type="number"
-                  value={formPax}
-                  onChange={e => setFormPax(Number(e.target.value))}
-                  required
-                />
-                <Input
-                  label="Rooms Allocation"
-                  value={formRooms}
-                  onChange={e => setFormRooms(e.target.value)}
-                  placeholder="e.g. 2 rooms / 4-5"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  className="bg-white hover:bg-neutral-200 text-black font-bold shadow-lg shadow-white/10 cursor-pointer"
+              {/* Mode Tabs: Bulk Select CRM vs Multi-Row Batch vs Single Guest */}
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setAssignTab('BULK_BOOKINGS')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+                    assignTab === 'BULK_BOOKINGS'
+                      ? 'bg-white text-black shadow-md shadow-white/10'
+                      : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  }`}
                 >
-                  Save Vehicle & Guest Assignment
-                </Button>
+                  <CheckSquare className="w-3.5 h-3.5" />
+                  <span>Bulk Select All Bookings ({filteredBookedGuests.length})</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setAssignTab('BATCH_ROWS')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+                    assignTab === 'BATCH_ROWS'
+                      ? 'bg-white text-black shadow-md shadow-white/10'
+                      : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  }`}
+                >
+                  <ListPlus className="w-3.5 h-3.5" />
+                  <span>Multi-Row Quick Add</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setAssignTab('SINGLE')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all ${
+                    assignTab === 'SINGLE'
+                      ? 'bg-white text-black shadow-md shadow-white/10'
+                      : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
+                  }`}
+                >
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Single Guest Form</span>
+                </button>
               </div>
-            </form>
+
+              {/* TAB 1: BULK SELECT CRM BOOKINGS */}
+              {assignTab === 'BULK_BOOKINGS' && (
+                <form onSubmit={handleSaveBulkBookings} className="space-y-3">
+                  {/* Toolbar */}
+                  <div className="flex items-center justify-between gap-3 bg-slate-900 p-3 rounded-2xl border border-slate-800">
+                    <div className="relative flex-1">
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={guestSearchQuery}
+                        onChange={e => setGuestSearchQuery(e.target.value)}
+                        placeholder={`Filter bookings for ${formTour || 'selected package'}...`}
+                        className="w-full bg-slate-950 text-white font-bold border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSelectAllBookings}
+                        className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold border border-slate-700 flex items-center gap-1.5 transition-all"
+                      >
+                        <CheckSquare className="w-3.5 h-3.5" />
+                        <span>
+                          {selectedBookingIds.length === filteredBookedGuests.length && filteredBookedGuests.length > 0
+                            ? 'Deselect All'
+                            : 'Select All Bookings'}
+                        </span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleAutoFillCapacity}
+                        className="px-2.5 py-1.5 rounded-xl bg-white text-black hover:bg-neutral-200 text-xs font-extrabold flex items-center gap-1.5 transition-all"
+                        title="Select bookings up to vehicle capacity"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" />
+                        <span>Auto-Fill Capacity</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Checklist Table of Bookings */}
+                  <div className="border border-slate-800 rounded-2xl bg-slate-950 overflow-hidden max-h-56 overflow-y-auto divide-y divide-slate-800/80">
+                    {filteredBookedGuests.length > 0 ? (
+                      filteredBookedGuests.map(b => {
+                        const bId = (b._id || (b as any).id) as string;
+                        const isSelected = selectedBookingIds.includes(bId);
+                        const bPax = Number(b.seatsReserved || (b as any).pax || (b as any).travelersCount || 1);
+                        const isAlreadyAssigned = scorpioData.some(s => s.name.toLowerCase().trim() === b.customerName.toLowerCase().trim());
+
+                        return (
+                          <div
+                            key={bId}
+                            onClick={() => toggleSelectBooking(bId)}
+                            className={`p-3 flex items-center justify-between cursor-pointer transition-all ${
+                              isSelected ? 'bg-white/10 hover:bg-white/15' : 'hover:bg-slate-900/60'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${
+                                isSelected ? 'bg-white text-black border-white' : 'border-slate-700 bg-slate-900'
+                              }`}>
+                                {isSelected ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : null}
+                              </div>
+
+                              <div>
+                                <div className="font-extrabold text-white text-xs flex items-center gap-2">
+                                  <span>{b.customerName}</span>
+                                  <span className="text-[10px] text-slate-400 font-mono">
+                                    📞 {b.contactPhone || (b as any).customerPhone || 'No Phone'}
+                                  </span>
+                                  {isAlreadyAssigned && (
+                                    <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.2 rounded font-mono">
+                                      Assigned
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                                  <span>{b.packageName}</span>
+                                  <span>•</span>
+                                  <span>{b.roomDetails || '1 room'}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="text-right">
+                              <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-white text-black font-mono">
+                                {bPax} Pax
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="p-6 text-center text-xs text-slate-400">
+                        No bookings found for "{formTour}". Switch to "Multi-Row Quick Add" above to add walk-in guests.
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Projected Capacity Gauge */}
+                  <div className="p-3 bg-slate-900 rounded-2xl border border-slate-800 space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-300 font-bold">
+                        Selected: <span className="text-white font-mono">{selectedBookingIds.length} Bookings ({selectedBulkPax} Pax)</span>
+                      </span>
+                      <span className="text-slate-300 font-mono font-bold">
+                        Projected Load: {currentUnitAssignedPax + selectedBulkPax} / {formVehicleCapacity} Seats ({Math.min(100, Math.round(((currentUnitAssignedPax + selectedBulkPax) / formVehicleCapacity) * 100))}%)
+                      </span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          currentUnitAssignedPax + selectedBulkPax > formVehicleCapacity
+                            ? 'bg-rose-500'
+                            : currentUnitAssignedPax + selectedBulkPax === formVehicleCapacity
+                            ? 'bg-white'
+                            : 'bg-white'
+                        }`}
+                        style={{
+                          width: `${Math.min(100, Math.round(((currentUnitAssignedPax + selectedBulkPax) / formVehicleCapacity) * 100))}%`
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bottom Actions */}
+                  <div className="flex justify-end gap-2 pt-1">
+                    <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      disabled={selectedBookingIds.length === 0}
+                      className="bg-white hover:bg-neutral-200 text-black font-extrabold shadow-lg shadow-white/10 cursor-pointer disabled:opacity-40"
+                    >
+                      ✓ Put All Selected ({selectedBookingIds.length} Groups • {selectedBulkPax} Pax) in Vehicle #{formSN}
+                    </Button>
+                  </div>
+                </form>
+              )}
+
+              {/* TAB 2: MULTI-ROW BATCH ADD / PASTE */}
+              {assignTab === 'BATCH_ROWS' && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        Enter Multiple Guests Simultaneously
+                      </label>
+                      <button
+                        type="button"
+                        onClick={handleAddBatchRow}
+                        className="px-2.5 py-1 rounded-xl bg-white text-black hover:bg-neutral-200 text-xs font-bold flex items-center gap-1 transition-all"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ Add Row</span>
+                      </button>
+                    </div>
+
+                    <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                      {batchGuestRows.map((row, idx) => (
+                        <div key={row.id} className="grid grid-cols-12 gap-2 bg-slate-900 p-2 rounded-xl border border-slate-800 items-center">
+                          <span className="col-span-1 text-[11px] font-bold text-slate-500 text-center font-mono">
+                            #{idx + 1}
+                          </span>
+                          <div className="col-span-4">
+                            <input
+                              type="text"
+                              value={row.name}
+                              onChange={e => handleUpdateBatchRow(row.id, 'name', e.target.value)}
+                              placeholder="Guest Name (e.g. Sujata Bhujel)"
+                              className="w-full bg-slate-950 text-white font-bold border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white"
+                            />
+                          </div>
+                          <div className="col-span-3">
+                            <input
+                              type="text"
+                              value={row.phone}
+                              onChange={e => handleUpdateBatchRow(row.id, 'phone', e.target.value)}
+                              placeholder="Phone (e.g. 9845940693)"
+                              className="w-full bg-slate-950 text-white font-mono border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white"
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <input
+                              type="number"
+                              value={row.pax}
+                              onChange={e => handleUpdateBatchRow(row.id, 'pax', Number(e.target.value))}
+                              placeholder="Pax"
+                              className="w-full bg-slate-950 text-white font-mono font-bold border border-slate-800 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white text-center"
+                            />
+                          </div>
+                          <div className="col-span-1">
+                            <input
+                              type="text"
+                              value={row.rooms}
+                              onChange={e => handleUpdateBatchRow(row.id, 'rooms', e.target.value)}
+                              placeholder="Rooms"
+                              className="w-full bg-slate-950 text-slate-300 border border-slate-800 rounded-lg px-1.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-white text-center"
+                            />
+                          </div>
+                          <div className="col-span-1 text-center">
+                            {batchGuestRows.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveBatchRow(row.id)}
+                                className="text-slate-500 hover:text-rose-400 p-1 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Optional Quick Paste Box */}
+                  <div className="bg-slate-900/60 p-3 rounded-2xl border border-slate-800/80 space-y-1.5">
+                    <div className="flex items-center justify-between text-xs font-bold text-slate-300">
+                      <span className="flex items-center gap-1.5">
+                        <ClipboardPaste className="w-3.5 h-3.5 text-white" />
+                        Or Quick Paste Multiple Guests (CSV / Text)
+                      </span>
+                    </div>
+                    <textarea
+                      rows={2}
+                      value={batchPasteText}
+                      onChange={e => setBatchPasteText(e.target.value)}
+                      placeholder="Paste lines: Name, Phone, Pax, Rooms (e.g. Sujata Bhujel, 9845940693, 2, 1 room)"
+                      className="w-full bg-slate-950 text-white font-mono border border-slate-800 rounded-xl p-2 text-xs focus:outline-none focus:ring-1 focus:ring-white"
+                    />
+                    {batchPasteText.trim() && (
+                      <button
+                        type="button"
+                        onClick={handleSaveBatchPaste}
+                        className="px-3 py-1.5 rounded-xl bg-white text-black font-extrabold text-xs hover:bg-neutral-200 transition-all"
+                      >
+                        Parse & Add All Pasted Guests to Vehicle #{formSN}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-1">
+                    <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      onClick={handleSaveBatchRows}
+                      className="bg-white hover:bg-neutral-200 text-black font-bold shadow-lg shadow-white/10 cursor-pointer"
+                    >
+                      ✓ Save All Rows to Vehicle #{formSN} at Once
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: SINGLE GUEST FORM */}
+              {assignTab === 'SINGLE' && (
+                <form onSubmit={handleCreateVehicleAssignment} className="space-y-4">
+                  {/* Searchable Type & Filter Guest Input (Package Specific Filter) */}
+                  <div className="space-y-1.5 bg-slate-900 p-3.5 rounded-2xl border border-slate-800 relative">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                        Search or Pick a CRM Booking
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setFilterOnlySelectedTourGuests(!filterOnlySelectedTourGuests)}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all flex items-center gap-1 ${
+                          filterOnlySelectedTourGuests
+                            ? 'bg-white text-black border-white'
+                            : 'bg-slate-900 text-slate-400 border-slate-700 hover:text-white'
+                        }`}
+                      >
+                        <Filter className="w-3 h-3" />
+                        {filterOnlySelectedTourGuests 
+                          ? `Filter: ${formTour ? (formTour.length > 20 ? formTour.slice(0, 20) + '...' : formTour) : 'Selected Tour'} Only` 
+                          : 'Show All Guests'}
+                      </button>
+                    </div>
+
+                    <div className="relative">
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={guestSearchQuery}
+                        onFocus={() => setIsGuestDropdownOpen(true)}
+                        onChange={e => {
+                          setGuestSearchQuery(e.target.value);
+                          setIsGuestDropdownOpen(true);
+                        }}
+                        placeholder={`Type guest name for ${formTour || 'selected tour'}...`}
+                        className="w-full bg-slate-950 text-white font-bold border border-slate-800 rounded-xl pl-9 pr-8 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-white"
+                      />
+                      {guestSearchQuery && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setGuestSearchQuery('');
+                            setIsGuestDropdownOpen(true);
+                          }}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+
+                    {isGuestDropdownOpen && (
+                      <div className="absolute left-0 right-0 top-full mt-1 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto divide-y divide-slate-800 animate-fade-in">
+                        {filteredBookedGuests.length > 0 ? (
+                          filteredBookedGuests.map(b => (
+                            <div
+                              key={b._id || (b as any).id}
+                              onClick={() => handleSelectGuest(b)}
+                              className="p-2.5 hover:bg-slate-800 cursor-pointer text-xs transition-all flex items-center justify-between"
+                            >
+                              <div>
+                                <div className="font-bold text-white flex items-center gap-1.5">
+                                  <span>{b.customerName}</span>
+                                  <span className="text-[9px] bg-white/10 text-white px-1.5 py-0.2 rounded font-mono">
+                                    {b.packageName}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] text-slate-400 font-mono">
+                                  📞 {b.contactPhone || (b as any).customerPhone || 'No Phone'}
+                                </div>
+                              </div>
+                              <span className="text-[10px] bg-white/10 text-white px-2 py-0.5 rounded font-mono font-bold">
+                                {b.seatsReserved || (b as any).pax || 1} Pax
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-3 text-xs text-slate-400 text-center">
+                            No guest bookings found matching "{formTour}". Type manually below.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Guest / Group Lead Name & Contact Number */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      label="Guest / Group Lead Name"
+                      value={formCustomerName}
+                      onChange={e => setFormCustomerName(e.target.value)}
+                      placeholder="e.g. Sujata Bhujel or Group Name"
+                      required
+                    />
+                    <Input
+                      label="Contact Number"
+                      value={formContactNumber}
+                      onChange={e => setFormContactNumber(e.target.value)}
+                      placeholder="e.g. 9845940693"
+                    />
+                  </div>
+
+                  {/* Passenger Count & Rooms Allocation */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Input
+                      label="Passenger Count (Pax)"
+                      type="number"
+                      value={formPax}
+                      onChange={e => setFormPax(Number(e.target.value))}
+                      required
+                    />
+                    <Input
+                      label="Rooms Allocation"
+                      value={formRooms}
+                      onChange={e => setFormRooms(e.target.value)}
+                      placeholder="e.g. 2 rooms / 4-5"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button variant="secondary" onClick={() => setIsAddModalOpen(false)}>Cancel</Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      className="bg-white hover:bg-neutral-200 text-black font-bold shadow-lg shadow-white/10 cursor-pointer"
+                    >
+                      Save Vehicle & Guest Assignment
+                    </Button>
+                  </div>
+                </form>
+              )}
+
+            </div>
           </Modal>
 
         </div>
